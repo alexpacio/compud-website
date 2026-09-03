@@ -1,0 +1,296 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+  <style>
+    body { margin: 0; background: #0D0F11; color: #E9ECEE; font-family: Archivo, "Helvetica Neue", Helvetica, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #3ED28A; text-decoration: none; }
+    a:hover { color: #7BE3B2; }
+    h1, h2, h3 { font-family: "Space Grotesk", "Helvetica Neue", Helvetica, sans-serif; margin: 0; letter-spacing: -0.02em; text-wrap: pretty; }
+    p { margin: 0; }
+  </style>
+</helmet>
+
+<div style="width: 1440px; background: #0D0F11; display: flex; flex-direction: column;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; height: 74px; padding: 0 120px; border-bottom: 1px solid #1B1F23;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="24" height="24" rx="3" stroke="#3ED28A" stroke-width="1.5"></rect><rect x="7.5" y="7.5" width="11" height="11" rx="1.5" stroke="#E9ECEE" stroke-width="1.5"></rect><path d="M10 1v5M16 1v5M10 20v5M16 20v5M1 10h5M1 16h5M20 10h5M20 16h5" stroke="#3ED28A" stroke-width="1.5"></path></svg>
+      <div style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.03em;">Compud</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <div style="display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="9" width="12" height="8" rx="2" stroke="#6E767D" stroke-width="1.5"></rect><path d="M7 9V6.5a3 3 0 016 0V9" stroke="#6E767D" stroke-width="1.5"></path></svg>
+        <span>{{t.secure}}</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 2px; border: 1px solid #2A2F35; border-radius: 3px; padding: 2px;">
+        <div onClick="{{setIt}}" style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.08em; padding: 4px 9px; border-radius: 2px; cursor: pointer; background: {{v.itBg}}; color: {{v.itFg}};">IT</div>
+        <div onClick="{{setEn}}" style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.08em; padding: 4px 9px; border-radius: 2px; cursor: pointer; background: {{v.enBg}}; color: {{v.enFg}};">EN</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 0; padding: 26px 120px; border-bottom: 1px solid #16191C;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="width: 22px; height: 22px; border-radius: 50%; background: #1F2429; border: 1px solid #2A2F35; display: flex; align-items: center; justify-content: center;">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 6.2l2.4 2.4L9.6 3.6" stroke="#3ED28A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </div>
+      <span style="font-size: 13px; color: #98A0A8;">{{t.stepCart}}</span>
+    </div>
+    <div style="flex-grow: 1; height: 1px; background: #23282D; margin: 0 16px;"></div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="width: 22px; height: 22px; border-radius: 50%; background: #1F2429; border: 1px solid #2A2F35; display: flex; align-items: center; justify-content: center;">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 6.2l2.4 2.4L9.6 3.6" stroke="#3ED28A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </div>
+      <span style="font-size: 13px; color: #98A0A8;">{{t.stepData}}</span>
+    </div>
+    <div style="flex-grow: 1; height: 1px; background: #23282D; margin: 0 16px;"></div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="width: 22px; height: 22px; border-radius: 50%; background: #3ED28A; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #06120C;">3</div>
+      <span style="font-size: 13px; color: #E9ECEE; font-weight: 500;">{{t.stepPay}}</span>
+    </div>
+    <div style="flex-grow: 1; height: 1px; background: #23282D; margin: 0 16px;"></div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="width: 22px; height: 22px; border-radius: 50%; border: 1px solid #2A2F35; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #4A5259;">4</div>
+      <span style="font-size: 13px; color: #4A5259;">{{t.stepShip}}</span>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1.35fr 1fr; gap: 48px; padding: 48px 120px 70px;">
+
+    <div style="display: flex; flex-direction: column; gap: 26px;">
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <h1 style="font-size: 32px; font-weight: 700;">{{t.title}}</h1>
+        <p style="font-size: 15px; line-height: 1.6; color: #A8B0B7; max-width: 560px;">{{t.intro}}</p>
+      </div>
+
+      <div style="border: 1px solid {{s.panelBd}}; background: #131619; border-radius: 8px; overflow: hidden;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 22px; background: {{s.headBg}}; border-bottom: 1px solid {{s.panelBd}};">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="width: 7px; height: 7px; border-radius: 50%; background: {{s.dot}}; display: block;"></span>
+            <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: {{s.dot}};">{{s.statusLabel}}</span>
+          </div>
+          <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">{{s.statusMeta}}</span>
+        </div>
+
+        <div style="padding: 26px 22px; display: flex; flex-direction: column; gap: 20px;">
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 7px; border: 1px solid #23282D; border-radius: 5px; padding: 15px 16px; background: #15181B;">
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #6E767D;">{{t.fBenef}}</div>
+              <div style="font-size: 15px;">Compud S.r.l.</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 7px; border: 1px solid #23282D; border-radius: 5px; padding: 15px 16px; background: #15181B;">
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #6E767D;">{{t.fBank}}</div>
+              <div style="font-size: 15px;">[NOME BANCA]</div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 7px; border: 1px solid #23282D; border-radius: 5px; padding: 15px 16px; background: #15181B;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #6E767D;">IBAN</div>
+              <div style="display: flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #3ED28A;">
+                <svg width="13" height="13" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4.5" y="4.5" width="8" height="8" rx="1.5" stroke="#3ED28A" stroke-width="1.3"></rect><path d="M9.5 4.5v-1a2 2 0 00-2-2h-4a2 2 0 00-2 2v4a2 2 0 002 2h1" stroke="#3ED28A" stroke-width="1.3"></path></svg>
+                <span>{{t.copy}}</span>
+              </div>
+            </div>
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 19px; letter-spacing: 0.04em;">[IT00 A000 0000 0000 0000 0000 000]</div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 7px; border: 1px solid #3ED28A; border-radius: 5px; padding: 15px 16px; background: #0F1A15;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #3ED28A;">{{t.fRef}}</div>
+                <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #3ED28A;">{{t.copy}}</div>
+              </div>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 19px; color: #E9ECEE;">CPD-2431-8F</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 7px; border: 1px solid #23282D; border-radius: 5px; padding: 15px 16px; background: #15181B;">
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #6E767D;">{{t.fAmount}}</div>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 19px;">1.828,78 &euro;</div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; align-items: flex-start; border-top: 1px solid #1F2429; padding-top: 18px;">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0; margin-top: 1px;"><circle cx="10" cy="10" r="7.5" stroke="#E0A33C" stroke-width="1.4"></circle><path d="M10 6.2v4.4M10 13.4v.6" stroke="#E0A33C" stroke-width="1.6" stroke-linecap="round"></path></svg>
+            <p style="font-size: 13px; line-height: 1.6; color: #C6CCD1;">{{t.refWarning}}</p>
+          </div>
+
+          <sc-if value="{{s.pending}}" hint-placeholder-val="{{true}}">
+            <div onClick="{{markPaid}}" style="background: #3ED28A; color: #06120C; font-weight: 600; font-size: 15px; padding: 16px 22px; border-radius: 4px; text-align: center; cursor: pointer;">{{t.markPaid}}</div>
+          </sc-if>
+          <sc-if value="{{s.paid}}" hint-placeholder-val="{{false}}">
+            <div style="display: flex; align-items: center; gap: 12px; background: #0F1A15; border: 1px solid #2A4F3C; border-radius: 5px; padding: 16px 18px;">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;"><circle cx="10" cy="10" r="8" fill="#3ED28A"></circle><path d="M6.2 10.2l2.6 2.6 5-5.2" stroke="#06120C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <div style="font-size: 15px; font-weight: 600; color: #3ED28A;">{{t.paidTitle}}</div>
+                <div style="font-size: 13px; color: #A8B0B7;">{{t.paidBody}}</div>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px;">
+        <div style="display: flex; flex-direction: column; gap: 8px; border: 1px solid #23282D; border-radius: 6px; padding: 18px; background: #101316;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h11M11 4.5L14.5 8 11 11.5" stroke="#3ED28A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path><path d="M17 12H6M9 15.5L5.5 12 9 8.5" stroke="#3ED28A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <div style="font-size: 14px; font-weight: 500;">{{t.b1t}}</div>
+          <p style="font-size: 12px; line-height: 1.6; color: #98A0A8;">{{t.b1b}}</p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; border: 1px solid #23282D; border-radius: 6px; padding: 18px; background: #101316;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="7.5" stroke="#3ED28A" stroke-width="1.4"></circle><path d="M10 5.6V10l3 1.8" stroke="#3ED28A" stroke-width="1.4" stroke-linecap="round"></path></svg>
+          <div style="font-size: 14px; font-weight: 500;">{{t.b2t}}</div>
+          <p style="font-size: 12px; line-height: 1.6; color: #98A0A8;">{{t.b2b}}</p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; border: 1px solid #23282D; border-radius: 6px; padding: 18px; background: #101316;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="14" height="10" rx="2" stroke="#3ED28A" stroke-width="1.4"></rect><path d="M3 8.5h14" stroke="#3ED28A" stroke-width="1.4"></path></svg>
+          <div style="font-size: 14px; font-weight: 500;">{{t.b3t}}</div>
+          <p style="font-size: 12px; line-height: 1.6; color: #98A0A8;">{{t.b3b}}</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="border: 1px solid #23282D; background: #131619; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 18px;">
+        <div style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-size: 18px; font-weight: 500;">{{t.summary}}</div>
+
+        <div style="display: flex; gap: 14px; align-items: flex-start; border-bottom: 1px solid #1F2429; padding-bottom: 16px;">
+          <div style="width: 58px; height: 58px; border-radius: 5px; background: #1B1F23; border: 1px solid #2A2F35; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+            <svg width="34" height="24" viewBox="0 0 34 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="4" width="28" height="16" rx="3" fill="#232930" stroke="#3A4147"></rect><circle cx="9" cy="16" r="2" fill="#3ED28A"></circle></svg>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px; flex-grow: 1;">
+            <div style="font-size: 14px; font-weight: 500;">Minisforum AI X1 Pro</div>
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #98A0A8;">32 GB · 1 TB · Win 11 Pro</div>
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">{{t.qty}} 1</div>
+          </div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 14px;">1.444 &euro;</div>
+        </div>
+
+        <div style="display: flex; gap: 14px; align-items: flex-start; border-bottom: 1px solid #1F2429; padding-bottom: 16px;">
+          <div style="width: 58px; height: 58px; border-radius: 5px; background: #1B1F23; border: 1px solid #2A2F35; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+            <svg width="34" height="24" viewBox="0 0 34 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="8" width="28" height="9" rx="2" fill="#232930" stroke="#3A4147"></rect><rect x="7" y="11" width="5" height="3" fill="#3A4147"></rect><rect x="14" y="11" width="5" height="3" fill="#3A4147"></rect><circle cx="27" cy="12.5" r="1.6" fill="#3ED28A"></circle></svg>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px; flex-grow: 1;">
+            <div style="font-size: 14px; font-weight: 500;">{{t.railKit}}</div>
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #98A0A8;">VESA + [MODELLO]</div>
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">{{t.qty}} 1</div>
+          </div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 14px;">55 &euro;</div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div style="display: flex; justify-content: space-between; font-size: 13px; color: #98A0A8;"><span>{{t.subtotal}}</span><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; color: #C6CCD1;">1.499 &euro;</span></div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; color: #98A0A8;"><span>{{t.shipping}}</span><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; color: #3ED28A;">{{t.free}}</span></div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; color: #98A0A8;"><span>{{t.payFee}}</span><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; color: #3ED28A;">0,00 &euro;</span></div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; color: #98A0A8;"><span>{{t.vat}}</span><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; color: #C6CCD1;">329,78 &euro;</span></div>
+        </div>
+
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; border-top: 1px solid #2A2F35; padding-top: 16px;">
+          <div style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-size: 17px; font-weight: 500;">{{t.total}}</div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 26px; font-weight: 500;">1.828,78 &euro;</div>
+        </div>
+      </div>
+
+      <div style="border: 1px solid #23282D; background: #101316; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #6E767D;">{{t.deliverTo}}</div>
+        <div style="display: flex; flex-direction: column; gap: 3px; font-size: 13px; color: #C6CCD1; line-height: 1.55;">
+          <div>[NOME CLIENTE]</div>
+          <div>[VIA E NUMERO]</div>
+          <div>[CAP] [CITTÀ] ([PROVINCIA])</div>
+        </div>
+        <div style="font-size: 13px; color: #3ED28A; font-weight: 500;">{{t.edit}}</div>
+      </div>
+
+      <div style="display: flex; gap: 10px; align-items: flex-start; padding: 4px 2px;">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0; margin-top: 2px;"><rect x="4" y="9" width="12" height="8" rx="2" stroke="#6E767D" stroke-width="1.5"></rect><path d="M7 9V6.5a3 3 0 016 0V9" stroke="#6E767D" stroke-width="1.5"></path></svg>
+        <p style="font-size: 12px; line-height: 1.6; color: #6E767D;">{{t.privacy}}</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"lang":{"editor":"enum","options":["it","en"],"default":"it","tsType":"string"},"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { lang: null, paid: false };
+  }
+  renderVals() {
+    var self = this;
+    var st = this.state || {};
+    var lang = st.lang || this.props.lang || 'it';
+    var isIt = lang !== 'en';
+    var paid = !!st.paid;
+    var IT = {
+      secure: "PAGINA PROTETTA",
+      stepCart: "Carrello", stepData: "Dati", stepPay: "Pagamento", stepShip: "Spedizione",
+      title: "Paga con bonifico istantaneo",
+      intro: "Copia i dati qui sotto nel tuo home banking e scegli il bonifico SEPA Instant. L’ordine resta impegnato per 72 ore: appena vediamo l’accredito la macchina entra in preparazione.",
+      fBenef: "Beneficiario", fBank: "Banca", fRef: "Causale obbligatoria", fAmount: "Importo esatto",
+      copy: "COPIA",
+      refWarning: "Inserisci la causale esattamente come indicata: è il codice con cui il bonifico viene abbinato al tuo ordine in automatico. Senza causale l’abbinamento richiede una verifica manuale.",
+      markPaid: "Ho eseguito il bonifico",
+      paidTitle: "Accredito rilevato",
+      paidBody: "Bonifico abbinato all’ordine CPD-2431-8F. Ti arriva l’email di conferma con fattura e tracking.",
+      pendingLabel: "In attesa di accredito", pendingMeta: "ORDINE CPD-2431-8F · SCADE FRA 71:48",
+      paidLabel: "Pagamento ricevuto", paidMeta: "ACCREDITATO IN 4 SECONDI · SEPA INSTANT",
+      b1t: "SEPA Instant", b1b: "Accredito in pochi secondi, 24 ore su 24, anche nei festivi.",
+      b2t: "Ordine impegnato 72 h", b2b: "Teniamo la macchina da parte finché non arriva il bonifico.",
+      b3t: "Nessun dato di carta", b3b: "Non trattiamo né conserviamo numeri di carta: paghi dalla tua banca.",
+      summary: "Riepilogo ordine", qty: "Q.tà", railKit: "Kit di montaggio",
+      subtotal: "Imponibile", shipping: "Spedizione", free: "Gratuita", payFee: "Commissioni di pagamento", vat: "IVA 22%", total: "Totale",
+      deliverTo: "Consegna a", edit: "Modifica",
+      privacy: "I dati bancari mostrati sono quelli del beneficiario Compud. Nessun dato di pagamento viene richiesto o memorizzato su questo sito."
+    };
+    var EN = {
+      secure: "SECURE PAGE",
+      stepCart: "Cart", stepData: "Details", stepPay: "Payment", stepShip: "Shipping",
+      title: "Pay by instant bank transfer",
+      intro: "Copy the details below into your online banking and pick SEPA Instant. We hold the order for 72 hours: as soon as the credit lands, the machine goes into prep.",
+      fBenef: "Beneficiary", fBank: "Bank", fRef: "Required reference", fAmount: "Exact amount",
+      copy: "COPY",
+      refWarning: "Enter the reference exactly as shown: it is the code that matches your transfer to your order automatically. Without it, matching needs a manual check.",
+      markPaid: "I have sent the transfer",
+      paidTitle: "Credit received",
+      paidBody: "Transfer matched to order CPD-2431-8F. A confirmation email with invoice and tracking is on its way.",
+      pendingLabel: "Awaiting credit", pendingMeta: "ORDER CPD-2431-8F · EXPIRES IN 71:48",
+      paidLabel: "Payment received", paidMeta: "CREDITED IN 4 SECONDS · SEPA INSTANT",
+      b1t: "SEPA Instant", b1b: "Credit lands in seconds, 24/7, holidays included.",
+      b2t: "Order held 72 h", b2b: "We keep the machine reserved until your transfer arrives.",
+      b3t: "No card data", b3b: "We never handle or store card numbers: you pay from your own bank.",
+      summary: "Order summary", qty: "Qty", railKit: "Mounting kit",
+      subtotal: "Net", shipping: "Shipping", free: "Free", payFee: "Payment fees", vat: "VAT 22%", total: "Total",
+      deliverTo: "Deliver to", edit: "Edit",
+      privacy: "The bank details shown belong to the beneficiary, Compud. No payment data is requested or stored on this site."
+    };
+    var t = isIt ? IT : EN;
+    return {
+      t: t,
+      s: {
+        pending: !paid,
+        paid: paid,
+        dot: paid ? '#3ED28A' : '#E0A33C',
+        headBg: paid ? '#0F1A15' : '#1A1509',
+        panelBd: paid ? '#2A4F3C' : '#3A2F16',
+        statusLabel: paid ? t.paidLabel : t.pendingLabel,
+        statusMeta: paid ? t.paidMeta : t.pendingMeta
+      },
+      v: {
+        itBg: isIt ? '#3ED28A' : 'transparent', itFg: isIt ? '#06120C' : '#98A0A8',
+        enBg: isIt ? 'transparent' : '#3ED28A', enFg: isIt ? '#98A0A8' : '#06120C'
+      },
+      markPaid: function () { self.setState({ paid: true }); },
+      setIt: function () { self.setState({ lang: 'it' }); },
+      setEn: function () { self.setState({ lang: 'en' }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

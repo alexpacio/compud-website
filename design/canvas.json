@@ -1,0 +1,22 @@
+{
+  "pages": [
+    { "id": "page-1", "name": "Sito" },
+    { "id": "page-2", "name": "Sistema e direzioni" }
+  ],
+  "artboards": [
+    { "file": "Main.dc.html", "title": "Home", "x": 0, "y": 0, "w": 1440, "h": 3260, "page": "page-1", "is_interactive": true },
+    { "file": "Product.dc.html", "title": "Scheda prodotto", "x": 1560, "y": 0, "w": 1440, "h": 1980, "page": "page-1", "is_interactive": true },
+    { "file": "Servers.dc.html", "title": "Server rack", "x": 3120, "y": 0, "w": 1440, "h": 1900, "page": "page-1", "is_interactive": true },
+    { "file": "Checkout.dc.html", "title": "Checkout bonifico", "x": 4680, "y": 0, "w": 1440, "h": 1300, "page": "page-1", "is_interactive": true },
+    { "file": "MobileHome.dc.html", "title": "Home mobile", "x": 6240, "y": 0, "w": 390, "h": 1860, "page": "page-1", "is_interactive": true },
+    { "file": "System.dc.html", "title": "Design system", "x": 0, "y": 0, "w": 1200, "h": 1080, "page": "page-2" },
+    { "file": "DirectionEditorial.dc.html", "title": "Direzione A", "x": 1320, "y": 0, "w": 720, "h": 900, "page": "page-2" },
+    { "file": "DirectionConfigurator.dc.html", "title": "Direzione B", "x": 2160, "y": 0, "w": 720, "h": 900, "page": "page-2" }
+  ],
+  "annotations": [
+    { "id": "nota-prezzi", "x": 0, "y": -190, "w": 620, "page": "page-1", "text": "Prezzi, quantità a magazzino, IBAN e dati aziendali sono valori di esempio o segnaposto fra [parentesi quadre]: vanno sostituiti con i dati reali prima di andare online.\nIT / EN si cambia dal selettore in alto a destra di ogni schermata." },
+    { "id": "nota-foto", "x": 660, "y": -190, "w": 620, "page": "page-1", "text": "Le macchine sono disegni vettoriali al posto delle foto: sostituiscili con la fotografia reale dei prodotti (o con le immagini fornite dal distributore, verificando la licenza)." },
+    { "id": "nota-direzioni", "x": 1320, "y": -190, "w": 1560, "page": "page-2", "text": "Due direzioni alternative, tenute a livello di schizzo. Se una convince più della strada scura e tecnica del sito, la sviluppo al posto di quella attuale." }
+  ],
+  "launch": { "view": "canvas", "page": "page-1" }
+}

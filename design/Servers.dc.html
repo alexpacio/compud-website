@@ -1,0 +1,324 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+  <style>
+    body { margin: 0; background: #0D0F11; color: #E9ECEE; font-family: Archivo, "Helvetica Neue", Helvetica, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #3ED28A; text-decoration: none; }
+    a:hover { color: #7BE3B2; }
+    h1, h2, h3 { font-family: "Space Grotesk", "Helvetica Neue", Helvetica, sans-serif; margin: 0; letter-spacing: -0.02em; text-wrap: pretty; }
+    p { margin: 0; }
+  </style>
+</helmet>
+
+<div style="width: 1440px; background: #0D0F11; display: flex; flex-direction: column;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; height: 74px; padding: 0 120px; border-bottom: 1px solid #1B1F23;">
+    <div style="display: flex; align-items: center; gap: 44px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="24" height="24" rx="3" stroke="#3ED28A" stroke-width="1.5"></rect><rect x="7.5" y="7.5" width="11" height="11" rx="1.5" stroke="#E9ECEE" stroke-width="1.5"></rect><path d="M10 1v5M16 1v5M10 20v5M16 20v5M1 10h5M1 16h5M20 10h5M20 16h5" stroke="#3ED28A" stroke-width="1.5"></path></svg>
+        <div style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.03em;">Compud</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 26px; font-size: 14px; font-weight: 500; color: #C6CCD1;">
+        <div>{{t.navMini}}</div>
+        <div style="color: #3ED28A;">{{t.navRack}}</div>
+        <div>{{t.navConfig}}</div>
+        <div>{{t.navSupport}}</div>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 2px; border: 1px solid #2A2F35; border-radius: 3px; padding: 2px;">
+      <div onClick="{{setIt}}" style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.08em; padding: 4px 9px; border-radius: 2px; cursor: pointer; background: {{v.itBg}}; color: {{v.itFg}};">IT</div>
+      <div onClick="{{setEn}}" style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.08em; padding: 4px 9px; border-radius: 2px; cursor: pointer; background: {{v.enBg}}; color: {{v.enFg}};">EN</div>
+    </div>
+  </div>
+
+  <div style="padding: 64px 120px 52px; border-bottom: 1px solid #1B1F23; display: flex; flex-direction: column; gap: 20px;">
+    <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #E0A33C;">{{t.kicker}}</div>
+    <h1 style="font-size: 48px; font-weight: 700; line-height: 1.05; max-width: 700px;">{{t.h1}}</h1>
+    <p style="font-size: 17px; line-height: 1.6; color: #A8B0B7; max-width: 640px;">{{t.sub}}</p>
+  </div>
+
+  <div style="padding: 52px 120px 64px; border-bottom: 1px solid #1B1F23; display: flex; flex-direction: column; gap: 28px;">
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #6E767D;">{{t.pickWorkload}}</div>
+      <div style="display: flex; gap: 12px;">
+        <sc-for list="{{workloads}}" as="w" hint-placeholder-count="4">
+          <div onClick="{{w.pick}}" style="flex-grow: 1; cursor: pointer; border: 1px solid {{w.bd}}; background: {{w.bg}}; border-radius: 6px; padding: 18px 20px; display: flex; flex-direction: column; gap: 6px;">
+            <div style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-size: 17px; font-weight: 500; color: {{w.fg}};">{{w.name}}</div>
+            <div style="font-size: 13px; color: #98A0A8;">{{w.tag}}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1.05fr; gap: 40px; border: 1px solid #23282D; background: #131619; border-radius: 8px; padding: 32px;">
+      <div style="display: flex; flex-direction: column; gap: 22px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #06120C; background: #C6CCD1; padding: 3px 9px; border-radius: 2px;">{{build.u}}</span>
+          <h2 style="font-size: 26px; font-weight: 700;">{{build.title}}</h2>
+        </div>
+        <p style="font-size: 14px; line-height: 1.65; color: #A8B0B7;">{{build.blurb}}</p>
+
+        <div style="display: flex; flex-direction: column; border: 1px solid #23282D; border-radius: 6px; overflow: hidden;">
+          <sc-for list="{{build.rows}}" as="row" hint-placeholder-count="6">
+            <div style="display: flex; justify-content: space-between; gap: 20px; padding: 13px 16px; background: #15181B; border-bottom: 1px solid #1F2429;">
+              <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; color: #6E767D; text-transform: uppercase;">{{row.k}}</span>
+              <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 13px; color: #C6CCD1; text-align: right;">{{row.val}}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px;">
+          <div style="display: flex; flex-direction: column; gap: 3px;">
+            <div style="font-size: 12px; color: #6E767D;">{{t.fromLabel}}</div>
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 30px; font-weight: 500;">{{build.price}} &euro;</div>
+          </div>
+          <div style="background: #3ED28A; color: #06120C; font-weight: 600; font-size: 15px; padding: 15px 22px; border-radius: 4px;">{{t.askQuote}}</div>
+        </div>
+      </div>
+
+      <div style="background: #15181B; border: 1px solid #23282D; border-radius: 6px; display: flex; align-items: center; justify-content: center; position: relative; min-height: 420px;">
+        <svg width="460" height="330" viewBox="0 0 460 330" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="26" y="18" width="408" height="294" rx="6" fill="#101315" stroke="#2A2F35" stroke-width="1.5"></rect>
+          <rect x="34" y="26" width="392" height="10" rx="2" fill="#181C20"></rect>
+          <rect x="34" y="44" width="392" height="44" rx="3" fill="#1F2429" stroke="#3A4147" stroke-width="1.2"></rect>
+          <rect x="44" y="54" width="10" height="24" rx="1.5" fill="#333A40"></rect>
+          <rect x="406" y="54" width="10" height="24" rx="1.5" fill="#333A40"></rect>
+          <rect x="64" y="53" width="32" height="26" rx="2" fill="#12161A" stroke="#3A4147"></rect>
+          <rect x="100" y="53" width="32" height="26" rx="2" fill="#12161A" stroke="#3A4147"></rect>
+          <rect x="136" y="53" width="32" height="26" rx="2" fill="#12161A" stroke="#3A4147"></rect>
+          <rect x="172" y="53" width="32" height="26" rx="2" fill="#12161A" stroke="#3A4147"></rect>
+          <rect x="208" y="53" width="32" height="26" rx="2" fill="#12161A" stroke="#3A4147"></rect>
+          <rect x="244" y="53" width="32" height="26" rx="2" fill="#12161A" stroke="#3A4147"></rect>
+          <rect x="280" y="53" width="32" height="26" rx="2" fill="#12161A" stroke="#3A4147"></rect>
+          <rect x="316" y="53" width="32" height="26" rx="2" fill="#12161A" stroke="#3A4147"></rect>
+          <circle cx="368" cy="60" r="3" fill="#3ED28A"></circle>
+          <circle cx="368" cy="72" r="3" fill="#2A3036"></circle>
+          <rect x="34" y="96" width="392" height="44" rx="3" fill="#1F2429" stroke="#3A4147" stroke-width="1.2"></rect>
+          <rect x="44" y="106" width="10" height="24" rx="1.5" fill="#333A40"></rect>
+          <rect x="406" y="106" width="10" height="24" rx="1.5" fill="#333A40"></rect>
+          <rect x="64" y="105" width="32" height="26" rx="2" fill="#12161A" stroke="#3A4147"></rect>
+          <rect x="100" y="105" width="32" height="26" rx="2" fill="#12161A" stroke="#3A4147"></rect>
+          <rect x="136" y="105" width="32" height="26" rx="2" fill="#12161A" stroke="#3A4147"></rect>
+          <rect x="172" y="105" width="32" height="26" rx="2" fill="#12161A" stroke="#3A4147"></rect>
+          <rect x="208" y="105" width="32" height="26" rx="2" fill="#12161A" stroke="#3A4147"></rect>
+          <rect x="244" y="105" width="32" height="26" rx="2" fill="#12161A" stroke="#3A4147"></rect>
+          <rect x="280" y="105" width="32" height="26" rx="2" fill="#12161A" stroke="#3A4147"></rect>
+          <rect x="316" y="105" width="32" height="26" rx="2" fill="#12161A" stroke="#3A4147"></rect>
+          <circle cx="368" cy="112" r="3" fill="#3ED28A"></circle>
+          <circle cx="368" cy="124" r="3" fill="#3ED28A"></circle>
+          <rect x="34" y="148" width="392" height="28" rx="3" fill="#181C20" stroke="#2A2F35" stroke-width="1.2"></rect>
+          <path d="M56 162h150M226 162h70" stroke="#2A3036" stroke-width="2" stroke-linecap="round"></path>
+          <circle cx="368" cy="162" r="3" fill="#333A40"></circle>
+          <rect x="34" y="184" width="392" height="28" rx="3" fill="#181C20" stroke="#2A2F35" stroke-width="1.2"></rect>
+          <path d="M56 198h150M226 198h70" stroke="#2A3036" stroke-width="2" stroke-linecap="round"></path>
+          <circle cx="368" cy="198" r="3" fill="#333A40"></circle>
+          <rect x="34" y="220" width="392" height="36" rx="3" fill="#1F2429" stroke="#3A4147" stroke-width="1.2"></rect>
+          <rect x="60" y="230" width="60" height="16" rx="2" fill="#12161A" stroke="#3A4147"></rect>
+          <rect x="128" y="230" width="60" height="16" rx="2" fill="#12161A" stroke="#3A4147"></rect>
+          <rect x="196" y="230" width="60" height="16" rx="2" fill="#12161A" stroke="#3A4147"></rect>
+          <circle cx="368" cy="238" r="3" fill="#E0A33C"></circle>
+          <rect x="34" y="264" width="392" height="40" rx="3" fill="#16191C" stroke="#2A2F35" stroke-width="1.2"></rect>
+          <path d="M64 284h80M164 284h40" stroke="#242A30" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+        <div style="position: absolute; top: 18px; left: 20px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; color: #4A5259; text-transform: uppercase;">{{t.figNote}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 62px 120px; border-bottom: 1px solid #1B1F23; display: flex; flex-direction: column; gap: 30px;">
+    <h2 style="font-size: 30px; font-weight: 700;">{{t.processTitle}}</h2>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px;">
+      <div style="display: flex; flex-direction: column; gap: 10px; border-top: 2px solid #3ED28A; padding-top: 16px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #3ED28A;">01</div>
+        <h3 style="font-size: 17px; font-weight: 500;">{{t.p1t}}</h3>
+        <p style="font-size: 13px; line-height: 1.6; color: #98A0A8;">{{t.p1b}}</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; border-top: 2px solid #2A2F35; padding-top: 16px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">02</div>
+        <h3 style="font-size: 17px; font-weight: 500;">{{t.p2t}}</h3>
+        <p style="font-size: 13px; line-height: 1.6; color: #98A0A8;">{{t.p2b}}</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; border-top: 2px solid #2A2F35; padding-top: 16px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">03</div>
+        <h3 style="font-size: 17px; font-weight: 500;">{{t.p3t}}</h3>
+        <p style="font-size: 13px; line-height: 1.6; color: #98A0A8;">{{t.p3b}}</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; border-top: 2px solid #2A2F35; padding-top: 16px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">04</div>
+        <h3 style="font-size: 17px; font-weight: 500;">{{t.p4t}}</h3>
+        <p style="font-size: 13px; line-height: 1.6; color: #98A0A8;">{{t.p4b}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 56px 120px; background: #101316; display: flex; align-items: center; justify-content: space-between; gap: 40px;">
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <h2 style="font-size: 28px; font-weight: 700; max-width: 620px;">{{t.ctaTitle}}</h2>
+      <p style="font-size: 14px; color: #98A0A8;">{{t.ctaSub}}</p>
+    </div>
+    <div style="display: flex; gap: 12px; flex-shrink: 0;">
+      <div style="background: #3ED28A; color: #06120C; font-weight: 600; font-size: 15px; padding: 15px 24px; border-radius: 4px;">{{t.askQuote}}</div>
+      <div style="border: 1px solid #2A2F35; color: #E9ECEE; font-weight: 500; font-size: 15px; padding: 14px 22px; border-radius: 4px;">{{t.callUs}}</div>
+    </div>
+  </div>
+
+  <div style="padding: 30px 120px 40px; background: #0A0C0E; display: flex; align-items: center; justify-content: space-between; gap: 30px;">
+    <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #4A5259;">Compud &middot; P.IVA [P.IVA]</div>
+    <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #4A5259;">{{t.footLegal}}</div>
+  </div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"lang":{"editor":"enum","options":["it","en"],"default":"it","tsType":"string"},"$preview":{"width":1440,"height":1900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { lang: null, wl: 'virt' };
+  }
+  renderVals() {
+    var self = this;
+    var st = this.state || {};
+    var lang = st.lang || this.props.lang || 'it';
+    var isIt = lang !== 'en';
+    var IT = {
+      navMini: "Mini PC", navRack: "Server rack", navConfig: "Configuratore", navSupport: "Assistenza",
+      kicker: "Su commessa",
+      h1: "Server rack assemblati sul tuo carico di lavoro.",
+      sub: "Non vendiamo configurazioni a catalogo. Partiamo dal carico che devi reggere, scegliamo i componenti, montiamo, cabliamo e collaudiamo sotto carico. Poi te lo consegniamo pronto da rackizzare.",
+      pickWorkload: "Da cosa parti?",
+      fromLabel: "Configurazione base, IVA esclusa",
+      askQuote: "Richiedi il preventivo", callUs: "Parla con un tecnico",
+      figNote: "Rendering illustrativo",
+      processTitle: "Come lavoriamo",
+      p1t: "Chiamata tecnica", p1b: "Trenta minuti per capire carichi, ridondanza, spazio nel rack e budget.",
+      p2t: "Proposta scritta", p2b: "Configurazione dettagliata, alternative, tempi di consegna e prezzo bloccato.",
+      p3t: "Montaggio e collaudo", p3b: "Assemblaggio, cablaggio ordinato, 48 ore sotto carico con log allegato.",
+      p4t: "Consegna e supporto", p4b: "Spedizione su pallet o installazione in sede. Poi parli sempre con chi l’ha montato.",
+      ctaTitle: "Raccontaci cosa deve reggere. Ti rispondiamo con una configurazione, non con un listino.",
+      ctaSub: "Risposta entro un giorno lavorativo.",
+      footLegal: "Privacy · Cookie · Condizioni di vendita"
+    };
+    var EN = {
+      navMini: "Mini PCs", navRack: "Rack servers", navConfig: "Configurator", navSupport: "Support",
+      kicker: "Built to order",
+      h1: "Rack servers assembled around your workload.",
+      sub: "We do not sell catalogue configurations. We start from the load you need to carry, choose the parts, assemble, cable and test under load. Then we hand it over ready to rack.",
+      pickWorkload: "Where are you starting from?",
+      fromLabel: "Base configuration, excl. VAT",
+      askQuote: "Request a quote", callUs: "Talk to an engineer",
+      figNote: "Illustrative rendering",
+      processTitle: "How we work",
+      p1t: "Technical call", p1b: "Thirty minutes to understand load, redundancy, rack space and budget.",
+      p2t: "Written proposal", p2b: "Detailed configuration, alternatives, lead times and a locked price.",
+      p3t: "Assembly and testing", p3b: "Build, tidy cabling, 48 hours under load with the log attached.",
+      p4t: "Delivery and support", p4b: "Pallet shipping or on-site installation. Afterwards you always talk to the person who built it.",
+      ctaTitle: "Tell us what it has to carry. We answer with a configuration, not a price list.",
+      ctaSub: "Reply within one working day.",
+      footLegal: "Privacy · Cookies · Terms of sale"
+    };
+    var t = isIt ? IT : EN;
+
+    var defs = [
+      {
+        id: 'virt',
+        name: isIt ? "Virtualizzazione" : "Virtualisation",
+        tag: isIt ? "Proxmox, VMware, Hyper-V" : "Proxmox, VMware, Hyper-V",
+        u: "2U", price: "4.500",
+        title: isIt ? "Nodo di virtualizzazione" : "Virtualisation node",
+        blurb: isIt ? "Pensato per far girare venti o trenta macchine virtuali con margine: molti core, tanta RAM ECC e storage NVMe ridondato." : "Built to run twenty or thirty virtual machines with headroom: plenty of cores, ECC memory and redundant NVMe storage.",
+        rows: [
+          { k: "CPU", val: "AMD EPYC 9354 (32c)" },
+          { k: "RAM", val: "256 GB DDR5 ECC" },
+          { k: "STORAGE", val: "8×3,84 TB NVMe U.2" },
+          { k: "RAID", val: "ZFS mirror + spare" },
+          { k: isIt ? "RETE" : "NETWORK", val: "2×25 GbE + IPMI" },
+          { k: isIt ? "ALIMENTAZIONE" : "POWER", val: isIt ? "2×800 W ridondati" : "2×800 W redundant" }
+        ]
+      },
+      {
+        id: 'storage',
+        name: "Storage",
+        tag: isIt ? "NAS, archivi, video" : "NAS, archives, video",
+        u: "4U", price: "7.200",
+        title: isIt ? "Nodo di archiviazione" : "Storage node",
+        blurb: isIt ? "Capacità prima di tutto: ventiquattro slot da 3,5 pollici, cache NVMe e controller HBA in IT mode per ZFS o TrueNAS." : "Capacity first: twenty-four 3.5-inch bays, NVMe cache and an HBA in IT mode for ZFS or TrueNAS.",
+        rows: [
+          { k: "CPU", val: "AMD EPYC 9124 (16c)" },
+          { k: "RAM", val: "512 GB DDR5 ECC" },
+          { k: isIt ? "DISCHI" : "DRIVES", val: "24×22 TB SAS" },
+          { k: "CACHE", val: "2×1,6 TB NVMe" },
+          { k: "HBA", val: "SAS3 IT mode" },
+          { k: isIt ? "RETE" : "NETWORK", val: "2×25 GbE + IPMI" }
+        ]
+      },
+      {
+        id: 'backup',
+        name: "Backup",
+        tag: isIt ? "Veeam, PBS, immutabile" : "Veeam, PBS, immutable",
+        u: "2U", price: "5.400",
+        title: isIt ? "Target di backup" : "Backup target",
+        blurb: isIt ? "Destinazione di backup con snapshot immutabili e rete separata dalla produzione, per resistere anche a un ransomware in casa." : "A backup destination with immutable snapshots on a network separated from production, so it survives ransomware on the main estate.",
+        rows: [
+          { k: "CPU", val: "AMD EPYC 8224P (24c)" },
+          { k: "RAM", val: "128 GB DDR5 ECC" },
+          { k: isIt ? "DISCHI" : "DRIVES", val: "12×18 TB SAS" },
+          { k: isIt ? "IMMUTABILITÀ" : "IMMUTABILITY", val: "ZFS snapshot lock" },
+          { k: isIt ? "RETE" : "NETWORK", val: "2×10 GbE + IPMI" },
+          { k: isIt ? "ALIMENTAZIONE" : "POWER", val: isIt ? "2×800 W ridondati" : "2×800 W redundant" }
+        ]
+      },
+      {
+        id: 'edge',
+        name: isIt ? "Edge e firewall" : "Edge and firewall",
+        tag: isIt ? "pfSense, OPNsense, VPN" : "pfSense, OPNsense, VPN",
+        u: "1U", price: "1.890",
+        title: isIt ? "Nodo di frontiera" : "Edge node",
+        blurb: isIt ? "Poco profondo, silenzioso e con tante porte: sta in un rack da ufficio e regge firewall, VPN e routing senza scaldare." : "Shallow, quiet and port-dense: it fits an office rack and handles firewall, VPN and routing without running hot.",
+        rows: [
+          { k: "CPU", val: "Intel Xeon E-2478 (8c)" },
+          { k: "RAM", val: "64 GB DDR5 ECC" },
+          { k: "STORAGE", val: "2×960 GB NVMe" },
+          { k: isIt ? "RETE" : "NETWORK", val: "4×10 GbE SFP+ + 2×2,5 GbE" },
+          { k: isIt ? "PROFONDITÀ" : "DEPTH", val: "430 mm" },
+          { k: isIt ? "ALIMENTAZIONE" : "POWER", val: isIt ? "2×500 W ridondati" : "2×500 W redundant" }
+        ]
+      }
+    ];
+
+    var current = st.wl || 'virt';
+    var build = defs[0];
+    var workloads = defs.map(function (d) {
+      var on = d.id === current;
+      if (on) { build = d; }
+      return {
+        name: d.name, tag: d.tag,
+        bd: on ? '#3ED28A' : '#23282D',
+        bg: on ? '#0F1A15' : '#131619',
+        fg: on ? '#3ED28A' : '#E9ECEE',
+        pick: function () { self.setState({ wl: d.id }); }
+      };
+    });
+
+    return {
+      t: t,
+      v: {
+        itBg: isIt ? '#3ED28A' : 'transparent', itFg: isIt ? '#06120C' : '#98A0A8',
+        enBg: isIt ? 'transparent' : '#3ED28A', enFg: isIt ? '#98A0A8' : '#06120C'
+      },
+      workloads: workloads,
+      build: { u: build.u, title: build.title, blurb: build.blurb, rows: build.rows, price: build.price },
+      setIt: function () { self.setState({ lang: 'it' }); },
+      setEn: function () { self.setState({ lang: 'en' }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

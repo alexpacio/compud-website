@@ -1,0 +1,313 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+  <style>
+    body { margin: 0; background: #0D0F11; color: #E9ECEE; font-family: Archivo, "Helvetica Neue", Helvetica, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #E9ECEE; text-decoration: none; }
+    a:hover { color: #3ED28A; }
+    h1, h2, h3 { font-family: "Space Grotesk", "Helvetica Neue", Helvetica, sans-serif; margin: 0; letter-spacing: -0.02em; text-wrap: pretty; }
+    p { margin: 0; }
+  </style>
+</helmet>
+
+<div style="width: 1440px; background: #0D0F11; display: flex; flex-direction: column;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; height: 74px; padding: 0 120px; border-bottom: 1px solid #1B1F23;">
+    <div style="display: flex; align-items: center; gap: 44px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="24" height="24" rx="3" stroke="#3ED28A" stroke-width="1.5"></rect><rect x="7.5" y="7.5" width="11" height="11" rx="1.5" stroke="#E9ECEE" stroke-width="1.5"></rect><path d="M10 1v5M16 1v5M10 20v5M16 20v5M1 10h5M1 16h5M20 10h5M20 16h5" stroke="#3ED28A" stroke-width="1.5"></path></svg>
+        <div style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.03em;">Compud</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 26px; font-size: 14px; font-weight: 500; color: #C6CCD1;">
+        <div style="color: #3ED28A;">{{t.navMini}}</div>
+        <div>{{t.navRack}}</div>
+        <div>{{t.navConfig}}</div>
+        <div>{{t.navSupport}}</div>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <div style="display: flex; align-items: center; gap: 2px; border: 1px solid #2A2F35; border-radius: 3px; padding: 2px;">
+        <div onClick="{{setIt}}" style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.08em; padding: 4px 9px; border-radius: 2px; cursor: pointer; background: {{v.itBg}}; color: {{v.itFg}};">IT</div>
+        <div onClick="{{setEn}}" style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.08em; padding: 4px 9px; border-radius: 2px; cursor: pointer; background: {{v.enBg}}; color: {{v.enFg}};">EN</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px; border: 1px solid #2A2F35; border-radius: 4px; padding: 8px 12px;">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h2.6l2 10.5h9.1L17.5 6H5.2" stroke="#E9ECEE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="8" cy="17" r="1.3" fill="#E9ECEE"></circle><circle cx="15" cy="17" r="1.3" fill="#E9ECEE"></circle></svg>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px;">2</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 18px 120px; border-bottom: 1px solid #16191C; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D; letter-spacing: 0.04em;">{{t.crumbs}}</div>
+
+  <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 56px; padding: 44px 120px 64px; border-bottom: 1px solid #1B1F23;">
+
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div style="height: 430px; background: #15181B; border: 1px solid #23282D; border-radius: 8px; display: flex; align-items: center; justify-content: center; position: relative;">
+        <svg width="400" height="270" viewBox="0 0 400 270" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="52" y="34" width="296" height="188" rx="12" fill="#1F2429" stroke="#3A4147" stroke-width="1.5"></rect>
+          <rect x="52" y="34" width="296" height="188" rx="12" fill="none" stroke="#4A5259" stroke-width="0.5"></rect>
+          <rect x="76" y="58" width="248" height="112" rx="6" fill="#14181B" stroke="#2F353B"></rect>
+          <path d="M100 76h200M100 90h200M100 104h200M100 118h200M100 132h200M100 146h200" stroke="#242A30" stroke-width="3" stroke-linecap="round"></path>
+          <circle cx="86" cy="196" r="5" fill="#3ED28A"></circle>
+          <rect x="106" y="191" width="24" height="10" rx="5" fill="#2A3036"></rect>
+          <rect x="140" y="191" width="24" height="10" rx="5" fill="#2A3036"></rect>
+          <rect x="176" y="190" width="14" height="12" rx="2" fill="#2A3036"></rect>
+          <rect x="200" y="190" width="14" height="12" rx="2" fill="#2A3036"></rect>
+          <rect x="286" y="189" width="38" height="14" rx="2" fill="#2A3036"></rect>
+          <rect x="90" y="222" width="220" height="8" rx="3" fill="#101315"></rect>
+        </svg>
+        <div style="position: absolute; top: 18px; left: 20px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; color: #4A5259; text-transform: uppercase;">{{t.figNote}}</div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;">
+        <div style="height: 88px; background: #15181B; border: 1px solid #3ED28A; border-radius: 6px;"></div>
+        <div style="height: 88px; background: #15181B; border: 1px solid #23282D; border-radius: 6px;"></div>
+        <div style="height: 88px; background: #15181B; border: 1px solid #23282D; border-radius: 6px;"></div>
+        <div style="height: 88px; background: #15181B; border: 1px solid #23282D; border-radius: 6px;"></div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 22px;">
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 7px; background: #0F1A15; border: 1px solid #2A4F3C; border-radius: 3px; padding: 5px 9px;">
+            <span style="width: 5px; height: 5px; border-radius: 50%; background: #3ED28A; display: block;"></span>
+            <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.06em; color: #3ED28A; text-transform: uppercase;">{{t.stock}}</span>
+          </div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">SKU CPD-X1P-32-1T</div>
+        </div>
+        <h1 style="font-size: 38px; font-weight: 700; line-height: 1.08;">Minisforum AI X1 Pro</h1>
+        <p style="font-size: 15px; line-height: 1.6; color: #A8B0B7;">{{t.pdpSub}}</p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #6E767D;">{{t.optRam}}</div>
+        <div style="display: flex; gap: 10px;">
+          <sc-for list="{{ramOptions}}" as="opt" hint-placeholder-count="3">
+            <div onClick="{{opt.pick}}" style="flex-grow: 1; cursor: pointer; border: 1px solid {{opt.bd}}; background: {{opt.bg}}; border-radius: 5px; padding: 13px 14px; display: flex; flex-direction: column; gap: 4px;">
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 14px; color: {{opt.fg}};">{{opt.label}}</div>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">{{opt.delta}}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #6E767D;">{{t.optSsd}}</div>
+        <div style="display: flex; gap: 10px;">
+          <sc-for list="{{ssdOptions}}" as="opt" hint-placeholder-count="3">
+            <div onClick="{{opt.pick}}" style="flex-grow: 1; cursor: pointer; border: 1px solid {{opt.bd}}; background: {{opt.bg}}; border-radius: 5px; padding: 13px 14px; display: flex; flex-direction: column; gap: 4px;">
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 14px; color: {{opt.fg}};">{{opt.label}}</div>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">{{opt.delta}}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #6E767D;">{{t.optOs}}</div>
+        <div style="display: flex; gap: 10px;">
+          <sc-for list="{{osOptions}}" as="opt" hint-placeholder-count="3">
+            <div onClick="{{opt.pick}}" style="flex-grow: 1; cursor: pointer; border: 1px solid {{opt.bd}}; background: {{opt.bg}}; border-radius: 5px; padding: 13px 14px; display: flex; flex-direction: column; gap: 4px;">
+              <div style="font-size: 14px; color: {{opt.fg}};">{{opt.label}}</div>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">{{opt.delta}}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="border: 1px solid #23282D; background: #131619; border-radius: 8px; padding: 22px; display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;">
+          <div style="display: flex; flex-direction: column; gap: 3px;">
+            <div style="font-size: 12px; color: #6E767D;">{{t.vatNote}}</div>
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 36px; font-weight: 500; line-height: 1;">{{price}} &euro;</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 3px; align-items: flex-end;">
+            <div style="font-size: 12px; color: #6E767D;">{{t.vatIncl}}</div>
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 16px; color: #98A0A8;">{{priceVat}} &euro;</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; border-top: 1px solid #1F2429; padding-top: 14px;">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 7.5l7-4 7 4M4.5 8.5v6M8.2 8.5v6M11.8 8.5v6M15.5 8.5v6M2.5 16.5h15" stroke="#3ED28A" stroke-width="1.4" stroke-linecap="round"></path></svg>
+          <div style="font-size: 13px; color: #C6CCD1;">{{t.payLine}}</div>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <div style="flex-grow: 1; background: #3ED28A; color: #06120C; font-weight: 600; font-size: 15px; padding: 15px 20px; border-radius: 4px; text-align: center;">{{t.buyNow}}</div>
+          <div style="border: 1px solid #2A2F35; color: #E9ECEE; font-weight: 500; font-size: 15px; padding: 14px 18px; border-radius: 4px;">{{t.addCart}}</div>
+        </div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">{{t.shipLine}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 56px; padding: 60px 120px 70px; border-bottom: 1px solid #1B1F23;">
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+      <h2 style="font-size: 26px; font-weight: 700;">{{t.specTitle}}</h2>
+      <div style="display: flex; flex-direction: column; border: 1px solid #23282D; border-radius: 6px; overflow: hidden;">
+        <div style="display: flex; justify-content: space-between; gap: 20px; padding: 14px 18px; background: #131619; border-bottom: 1px solid #1F2429;"><span style="font-size: 13px; color: #98A0A8;">{{t.sCpu}}</span><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 13px;">AMD Ryzen AI 9 HX 370</span></div>
+        <div style="display: flex; justify-content: space-between; gap: 20px; padding: 14px 18px; border-bottom: 1px solid #1F2429;"><span style="font-size: 13px; color: #98A0A8;">{{t.sGpu}}</span><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 13px;">Radeon 890M</span></div>
+        <div style="display: flex; justify-content: space-between; gap: 20px; padding: 14px 18px; background: #131619; border-bottom: 1px solid #1F2429;"><span style="font-size: 13px; color: #98A0A8;">{{t.sRam}}</span><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 13px;">{{ramSpec}}</span></div>
+        <div style="display: flex; justify-content: space-between; gap: 20px; padding: 14px 18px; border-bottom: 1px solid #1F2429;"><span style="font-size: 13px; color: #98A0A8;">{{t.sSsd}}</span><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 13px;">{{ssdSpec}}</span></div>
+        <div style="display: flex; justify-content: space-between; gap: 20px; padding: 14px 18px; background: #131619; border-bottom: 1px solid #1F2429;"><span style="font-size: 13px; color: #98A0A8;">{{t.sNet}}</span><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 13px;">2,5 GbE + Wi-Fi 7</span></div>
+        <div style="display: flex; justify-content: space-between; gap: 20px; padding: 14px 18px; border-bottom: 1px solid #1F2429;"><span style="font-size: 13px; color: #98A0A8;">{{t.sPorts}}</span><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 13px;">2&times;USB4 &middot; 4&times;USB-A &middot; 2&times;HDMI</span></div>
+        <div style="display: flex; justify-content: space-between; gap: 20px; padding: 14px 18px; background: #131619;"><span style="font-size: 13px; color: #98A0A8;">{{t.sSize}}</span><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 13px;">[DIMENSIONI] &middot; [PESO]</span></div>
+      </div>
+      <p style="font-size: 12px; line-height: 1.6; color: #6E767D;">{{t.specNote}}</p>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <h2 style="font-size: 26px; font-weight: 700;">{{t.prepTitle}}</h2>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; gap: 14px; align-items: flex-start; border: 1px solid #23282D; background: #131619; border-radius: 6px; padding: 18px;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;"><circle cx="10" cy="10" r="7.5" stroke="#3ED28A" stroke-width="1.4"></circle><path d="M10 5.6V10l3 1.8" stroke="#3ED28A" stroke-width="1.4" stroke-linecap="round"></path></svg>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-size: 16px; font-weight: 500;">{{t.prep1t}}</div>
+            <p style="font-size: 13px; line-height: 1.6; color: #98A0A8;">{{t.prep1b}}</p>
+          </div>
+        </div>
+        <div style="display: flex; gap: 14px; align-items: flex-start; border: 1px solid #23282D; background: #131619; border-radius: 6px; padding: 18px;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;"><rect x="3" y="3" width="14" height="14" rx="2" stroke="#3ED28A" stroke-width="1.4"></rect><path d="M6.5 7.5h7M6.5 10.5h7M6.5 13.5h3.5" stroke="#3ED28A" stroke-width="1.4" stroke-linecap="round"></path></svg>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-size: 16px; font-weight: 500;">{{t.prep2t}}</div>
+            <p style="font-size: 13px; line-height: 1.6; color: #98A0A8;">{{t.prep2b}}</p>
+          </div>
+        </div>
+        <div style="display: flex; gap: 14px; align-items: flex-start; border: 1px solid #23282D; background: #131619; border-radius: 6px; padding: 18px;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;"><path d="M10 2l6.5 2.4v5.1c0 3.9-2.6 7.2-6.5 8.5-3.9-1.3-6.5-4.6-6.5-8.5V4.4L10 2z" stroke="#3ED28A" stroke-width="1.4" stroke-linejoin="round"></path><path d="M7.2 9.9l2 2 3.6-3.8" stroke="#3ED28A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-size: 16px; font-weight: 500;">{{t.prep3t}}</div>
+            <p style="font-size: 13px; line-height: 1.6; color: #98A0A8;">{{t.prep3b}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 40px 120px 56px; background: #0A0C0E; display: flex; align-items: center; justify-content: space-between; gap: 30px;">
+    <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #4A5259;">Compud &middot; P.IVA [P.IVA]</div>
+    <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #4A5259;">{{t.footLegal}}</div>
+  </div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"lang":{"editor":"enum","options":["it","en"],"default":"it","tsType":"string"},"$preview":{"width":1440,"height":1980}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { lang: null, ram: 32, ssd: 1000, os: 'none' };
+  }
+  renderVals() {
+    var self = this;
+    var st = this.state || {};
+    var lang = st.lang || this.props.lang || 'it';
+    var isIt = lang !== 'en';
+    var IT = {
+      navMini: "Mini PC", navRack: "Server rack", navConfig: "Configuratore", navSupport: "Assistenza",
+      crumbs: "HOME / MINI PC / MINISFORUM AI X1 PRO",
+      figNote: "Rendering illustrativo",
+      stock: "Disponibile — 6 pz",
+      pdpSub: "Workstation compatta da 1,2 litri con Ryzen AI 9 HX 370. Assemblata, aggiornata nel firmware e collaudata 48 ore prima della spedizione.",
+      optRam: "Memoria", optSsd: "Archiviazione", optOs: "Sistema operativo",
+      vatNote: "IVA esclusa", vatIncl: "IVA 22% inclusa",
+      payLine: "Bonifico istantaneo SEPA — nessuna commissione",
+      buyNow: "Acquista con bonifico", addCart: "Carrello",
+      shipLine: "SPEDIZIONE ENTRO 24 H DALL’ACCREDITO · GARANZIA 3 ANNI",
+      specTitle: "Scheda tecnica",
+      sCpu: "Processore", sGpu: "Grafica", sRam: "Memoria", sSsd: "Archiviazione", sNet: "Rete", sPorts: "Porte", sSize: "Dimensioni",
+      specNote: "Le voci fra parentesi quadre vanno completate con i dati definitivi di catalogo.",
+      prepTitle: "Cosa facciamo prima di spedirla",
+      prep1t: "Collaudo 48 ore", prep1b: "Stress test su CPU, memoria e NVMe con log delle temperature allegato alla macchina.",
+      prep2t: "Firmware e driver", prep2b: "BIOS e firmware aggiornati alla release stabile, profilo ventole tarato per l’uso in ufficio.",
+      prep3t: "Garanzia e RMA", prep3b: "Tre anni gestiti da noi in Italia, con sostituzione anticipata sui contratti business.",
+      footLegal: "Privacy · Cookie · Condizioni di vendita"
+    };
+    var EN = {
+      navMini: "Mini PCs", navRack: "Rack servers", navConfig: "Configurator", navSupport: "Support",
+      crumbs: "HOME / MINI PCS / MINISFORUM AI X1 PRO",
+      figNote: "Illustrative rendering",
+      stock: "In stock — 6 units",
+      pdpSub: "A 1.2-litre compact workstation built on the Ryzen AI 9 HX 370. Assembled, firmware-updated and burn-in tested for 48 hours before it ships.",
+      optRam: "Memory", optSsd: "Storage", optOs: "Operating system",
+      vatNote: "excl. VAT", vatIncl: "incl. 22% VAT",
+      payLine: "Instant SEPA transfer — no payment fees",
+      buyNow: "Buy by bank transfer", addCart: "Add to cart",
+      shipLine: "SHIPS WITHIN 24 H OF THE CREDIT · 3-YEAR WARRANTY",
+      specTitle: "Specification",
+      sCpu: "Processor", sGpu: "Graphics", sRam: "Memory", sSsd: "Storage", sNet: "Network", sPorts: "Ports", sSize: "Dimensions",
+      specNote: "Items in square brackets need to be filled in with your final catalogue data.",
+      prepTitle: "What we do before it ships",
+      prep1t: "48-hour burn-in", prep1b: "Stress tests across CPU, memory and NVMe, with the temperature log shipped alongside the machine.",
+      prep2t: "Firmware and drivers", prep2b: "BIOS and firmware on the stable release, fan curve tuned for office use.",
+      prep3t: "Warranty and RMA", prep3b: "Three years handled by us in Italy, with advance replacement on business contracts.",
+      footLegal: "Privacy · Cookies · Terms of sale"
+    };
+    var t = isIt ? IT : EN;
+
+    var basePrice = 1299;
+    var ramList = [
+      { id: 16, label: "16 GB", add: -120, spec: "16 GB DDR5-5600 (2×8)" },
+      { id: 32, label: "32 GB", add: 0, spec: "32 GB DDR5-5600 (2×16)" },
+      { id: 64, label: "64 GB", add: 210, spec: "64 GB DDR5-5600 (2×32)" }
+    ];
+    var ssdList = [
+      { id: 512, label: "512 GB", add: -90, spec: "512 GB NVMe Gen4" },
+      { id: 1000, label: "1 TB", add: 0, spec: "1 TB NVMe Gen4" },
+      { id: 2000, label: "2 TB", add: 130, spec: "2 TB NVMe Gen4" }
+    ];
+    var osList = [
+      { id: 'none', label: isIt ? "Nessuno" : "None", add: 0 },
+      { id: 'win', label: "Windows 11 Pro", add: 145 },
+      { id: 'linux', label: "Ubuntu LTS", add: 0 }
+    ];
+
+    var ram = st.ram || 32, ssd = st.ssd || 1000, os = st.os || 'none';
+    function deco(list, current, setter) {
+      return list.map(function (o) {
+        var on = o.id === current;
+        return {
+          label: o.label,
+          delta: o.add === 0 ? (isIt ? "incluso" : "included") : (o.add > 0 ? "+" + o.add + " €" : o.add + " €"),
+          bd: on ? '#3ED28A' : '#2A2F35',
+          bg: on ? '#0F1A15' : '#131619',
+          fg: on ? '#3ED28A' : '#C6CCD1',
+          pick: function () { setter(o.id); }
+        };
+      });
+    }
+    function find(list, id) {
+      for (var i = 0; i < list.length; i++) { if (list[i].id === id) return list[i]; }
+      return list[0];
+    }
+    var total = basePrice + find(ramList, ram).add + find(ssdList, ssd).add + find(osList, os).add;
+    function money(n) {
+      var s = Math.round(n).toString();
+      return s.length > 3 ? s.slice(0, s.length - 3) + "." + s.slice(s.length - 3) : s;
+    }
+
+    return {
+      t: t,
+      v: {
+        itBg: isIt ? '#3ED28A' : 'transparent', itFg: isIt ? '#06120C' : '#98A0A8',
+        enBg: isIt ? 'transparent' : '#3ED28A', enFg: isIt ? '#98A0A8' : '#06120C'
+      },
+      ramOptions: deco(ramList, ram, function (id) { self.setState({ ram: id }); }),
+      ssdOptions: deco(ssdList, ssd, function (id) { self.setState({ ssd: id }); }),
+      osOptions: deco(osList, os, function (id) { self.setState({ os: id }); }),
+      ramSpec: find(ramList, ram).spec,
+      ssdSpec: find(ssdList, ssd).spec,
+      price: money(total),
+      priceVat: money(total * 1.22),
+      setIt: function () { self.setState({ lang: 'it' }); },
+      setEn: function () { self.setState({ lang: 'en' }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

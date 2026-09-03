@@ -1,0 +1,478 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+  <style>
+    body { margin: 0; background: #0D0F11; color: #E9ECEE; font-family: Archivo, "Helvetica Neue", Helvetica, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #E9ECEE; text-decoration: none; }
+    a:hover { color: #3ED28A; }
+    h1, h2, h3 { font-family: "Space Grotesk", "Helvetica Neue", Helvetica, sans-serif; margin: 0; letter-spacing: -0.02em; text-wrap: pretty; }
+    p { margin: 0; }
+  </style>
+</helmet>
+
+<div style="width: 1440px; background: #0D0F11; display: flex; flex-direction: column;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; height: 38px; padding: 0 120px; border-bottom: 1px solid #1B1F23; background: #0A0C0E;">
+    <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; color: #98A0A8; text-transform: uppercase;">{{t.ticker}}</div>
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <div style="display: flex; align-items: center; gap: 2px; border: 1px solid #2A2F35; border-radius: 3px; padding: 2px;">
+        <div onClick="{{setIt}}" style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.08em; padding: 3px 9px; border-radius: 2px; cursor: pointer; background: {{v.itBg}}; color: {{v.itFg}};">IT</div>
+        <div onClick="{{setEn}}" style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.08em; padding: 3px 9px; border-radius: 2px; cursor: pointer; background: {{v.enBg}}; color: {{v.enFg}};">EN</div>
+      </div>
+      <div style="font-size: 12px; color: #98A0A8;">{{t.support}}</div>
+    </div>
+  </div>
+
+  <div style="display: flex; align-items: center; justify-content: space-between; height: 74px; padding: 0 120px; border-bottom: 1px solid #1B1F23;">
+    <div style="display: flex; align-items: center; gap: 44px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="24" height="24" rx="3" stroke="#3ED28A" stroke-width="1.5"></rect>
+          <rect x="7.5" y="7.5" width="11" height="11" rx="1.5" stroke="#E9ECEE" stroke-width="1.5"></rect>
+          <path d="M10 1v5M16 1v5M10 20v5M16 20v5M1 10h5M1 16h5M20 10h5M20 16h5" stroke="#3ED28A" stroke-width="1.5"></path>
+        </svg>
+        <div style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.03em;">Compud</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 26px; font-size: 14px; font-weight: 500; color: #C6CCD1;">
+        <div>{{t.navMini}}</div>
+        <div>{{t.navRack}}</div>
+        <div>{{t.navConfig}}</div>
+        <div>{{t.navSupport}}</div>
+        <div>{{t.navCompany}}</div>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 18px;">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="6" stroke="#98A0A8" stroke-width="1.5"></circle><path d="M13.5 13.5L18 18" stroke="#98A0A8" stroke-width="1.5" stroke-linecap="round"></path></svg>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="6.5" r="3.5" stroke="#98A0A8" stroke-width="1.5"></circle><path d="M3.5 17c0-3.3 2.9-5.5 6.5-5.5s6.5 2.2 6.5 5.5" stroke="#98A0A8" stroke-width="1.5" stroke-linecap="round"></path></svg>
+      <div style="display: flex; align-items: center; gap: 8px; border: 1px solid #2A2F35; border-radius: 4px; padding: 8px 12px;">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h2.6l2 10.5h9.1L17.5 6H5.2" stroke="#E9ECEE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="8" cy="17" r="1.3" fill="#E9ECEE"></circle><circle cx="15" cy="17" r="1.3" fill="#E9ECEE"></circle></svg>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px;">2</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 64px; padding: 82px 120px 78px; align-items: center; border-bottom: 1px solid #1B1F23; background-image: linear-gradient(#14181B 1px, transparent 1px), linear-gradient(90deg, #14181B 1px, transparent 1px); background-size: 48px 48px; background-position: -1px -1px;">
+    <div style="display: flex; flex-direction: column; gap: 26px; align-items: flex-start;">
+      <div style="display: flex; align-items: center; gap: 9px; border: 1px solid #2A4F3C; background: #0F1A15; border-radius: 3px; padding: 6px 11px;">
+        <span style="width: 6px; height: 6px; border-radius: 50%; background: #3ED28A; display: block;"></span>
+        <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #3ED28A;">{{t.eyebrow}}</span>
+      </div>
+      <h1 style="font-size: 60px; line-height: 1.02; font-weight: 700; max-width: 560px;">{{t.h1}}</h1>
+      <p style="font-size: 17px; line-height: 1.55; color: #A8B0B7; max-width: 500px;">{{t.heroSub}}</p>
+      <div style="display: flex; align-items: center; gap: 12px; padding-top: 6px;">
+        <div style="background: #3ED28A; color: #06120C; font-weight: 600; font-size: 15px; padding: 15px 24px; border-radius: 4px;">{{t.ctaPrimary}}</div>
+        <div style="border: 1px solid #2A2F35; color: #E9ECEE; font-weight: 500; font-size: 15px; padding: 14px 22px; border-radius: 4px;">{{t.ctaSecondary}}</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 26px; padding-top: 14px; border-top: 1px solid #1B1F23; width: 100%; margin-top: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px; padding-top: 16px;">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 2l6.5 2.4v5.1c0 3.9-2.6 7.2-6.5 8.5-3.9-1.3-6.5-4.6-6.5-8.5V4.4L10 2z" stroke="#3ED28A" stroke-width="1.4" stroke-linejoin="round"></path><path d="M7.2 9.9l2 2 3.6-3.8" stroke="#3ED28A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span style="font-size: 13px; color: #C6CCD1;">{{t.trust1}}</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; padding-top: 16px;">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="7.5" stroke="#3ED28A" stroke-width="1.4"></circle><path d="M10 5.6V10l3 1.8" stroke="#3ED28A" stroke-width="1.4" stroke-linecap="round"></path></svg>
+          <span style="font-size: 13px; color: #C6CCD1;">{{t.trust2}}</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; padding-top: 16px;">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 7.5l7-4 7 4M4.5 8.5v6M8.2 8.5v6M11.8 8.5v6M15.5 8.5v6M2.5 16.5h15" stroke="#3ED28A" stroke-width="1.4" stroke-linecap="round"></path></svg>
+          <span style="font-size: 13px; color: #C6CCD1;">{{t.trust3}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: center;">
+      <div style="position: relative; width: 540px; height: 400px; background: #121619; border: 1px solid #23282D; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+        <svg width="440" height="320" viewBox="0 0 440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="40" y="196" width="360" height="30" rx="3" fill="#1C2024" stroke="#333A40" stroke-width="1.5"></rect>
+          <rect x="52" y="204" width="8" height="14" rx="1" fill="#333A40"></rect>
+          <rect x="380" y="204" width="8" height="14" rx="1" fill="#333A40"></rect>
+          <rect x="74" y="203" width="26" height="16" rx="1.5" fill="#0F1315" stroke="#3A4147"></rect>
+          <rect x="104" y="203" width="26" height="16" rx="1.5" fill="#0F1315" stroke="#3A4147"></rect>
+          <rect x="134" y="203" width="26" height="16" rx="1.5" fill="#0F1315" stroke="#3A4147"></rect>
+          <rect x="164" y="203" width="26" height="16" rx="1.5" fill="#0F1315" stroke="#3A4147"></rect>
+          <rect x="194" y="203" width="26" height="16" rx="1.5" fill="#0F1315" stroke="#3A4147"></rect>
+          <rect x="224" y="203" width="26" height="16" rx="1.5" fill="#0F1315" stroke="#3A4147"></rect>
+          <circle cx="366" cy="211" r="2.5" fill="#3ED28A"></circle>
+          <rect x="40" y="234" width="360" height="30" rx="3" fill="#1C2024" stroke="#333A40" stroke-width="1.5"></rect>
+          <rect x="52" y="242" width="8" height="14" rx="1" fill="#333A40"></rect>
+          <rect x="380" y="242" width="8" height="14" rx="1" fill="#333A40"></rect>
+          <rect x="74" y="241" width="26" height="16" rx="1.5" fill="#0F1315" stroke="#3A4147"></rect>
+          <rect x="104" y="241" width="26" height="16" rx="1.5" fill="#0F1315" stroke="#3A4147"></rect>
+          <rect x="134" y="241" width="26" height="16" rx="1.5" fill="#0F1315" stroke="#3A4147"></rect>
+          <rect x="164" y="241" width="26" height="16" rx="1.5" fill="#0F1315" stroke="#3A4147"></rect>
+          <rect x="194" y="241" width="26" height="16" rx="1.5" fill="#0F1315" stroke="#3A4147"></rect>
+          <rect x="224" y="241" width="26" height="16" rx="1.5" fill="#0F1315" stroke="#3A4147"></rect>
+          <circle cx="366" cy="249" r="2.5" fill="#3ED28A"></circle>
+          <rect x="40" y="272" width="360" height="30" rx="3" fill="#16191C" stroke="#2A2F35" stroke-width="1.5"></rect>
+          <path d="M60 287h120M200 287h60" stroke="#2A2F35" stroke-width="1.5" stroke-linecap="round"></path>
+          <circle cx="366" cy="287" r="2.5" fill="#333A40"></circle>
+          <rect x="118" y="44" width="204" height="132" rx="7" fill="#1C2024" stroke="#3A4147" stroke-width="1.5"></rect>
+          <rect x="118" y="44" width="204" height="132" rx="7" fill="none" stroke="#4A5259" stroke-width="0.5"></rect>
+          <path d="M138 66h60M138 78h60M138 90h60M138 102h60M138 114h60M138 126h60M138 138h60M138 150h60" stroke="#2A3036" stroke-width="2" stroke-linecap="round"></path>
+          <rect x="228" y="64" width="74" height="94" rx="4" fill="#12161A" stroke="#333A40"></rect>
+          <rect x="240" y="80" width="50" height="8" rx="4" fill="#2A3036"></rect>
+          <rect x="240" y="98" width="34" height="8" rx="4" fill="#2A3036"></rect>
+          <circle cx="246" cy="130" r="4" fill="#3ED28A"></circle>
+          <circle cx="262" cy="130" r="4" fill="#2A3036"></circle>
+          <rect x="146" y="176" width="148" height="6" rx="2" fill="#15181B"></rect>
+        </svg>
+        <div style="position: absolute; left: 20px; top: 18px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; color: #4A5259; text-transform: uppercase;">{{t.figNote}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 68px 120px; border-bottom: 1px solid #1B1F23; background: #101316; display: flex; flex-direction: column; gap: 40px;">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 40px;">
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #3ED28A;">{{t.payKicker}}</div>
+        <h2 style="font-size: 34px; font-weight: 700; line-height: 1.12; max-width: 620px;">{{t.payTitle}}</h2>
+      </div>
+      <p style="font-size: 14px; line-height: 1.6; color: #98A0A8; max-width: 360px;">{{t.payNote}}</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px;">
+      <div style="border: 1px solid #23282D; background: #15181B; border-radius: 6px; padding: 26px; display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #06120C; background: #3ED28A; width: 22px; height: 22px; border-radius: 3px; display: flex; align-items: center; justify-content: center;">1</div>
+          <div style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-size: 18px; font-weight: 500;">{{t.step1t}}</div>
+        </div>
+        <p style="font-size: 14px; line-height: 1.6; color: #98A0A8;">{{t.step1b}}</p>
+      </div>
+      <div style="border: 1px solid #23282D; background: #15181B; border-radius: 6px; padding: 26px; display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #06120C; background: #3ED28A; width: 22px; height: 22px; border-radius: 3px; display: flex; align-items: center; justify-content: center;">2</div>
+          <div style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-size: 18px; font-weight: 500;">{{t.step2t}}</div>
+        </div>
+        <p style="font-size: 14px; line-height: 1.6; color: #98A0A8;">{{t.step2b}}</p>
+      </div>
+      <div style="border: 1px solid #23282D; background: #15181B; border-radius: 6px; padding: 26px; display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #06120C; background: #3ED28A; width: 22px; height: 22px; border-radius: 3px; display: flex; align-items: center; justify-content: center;">3</div>
+          <div style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-size: 18px; font-weight: 500;">{{t.step3t}}</div>
+        </div>
+        <p style="font-size: 14px; line-height: 1.6; color: #98A0A8;">{{t.step3b}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 76px 120px 82px; border-bottom: 1px solid #1B1F23; display: flex; flex-direction: column; gap: 34px;">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; border-bottom: 1px solid #1B1F23; padding-bottom: 22px;">
+      <h2 style="font-size: 34px; font-weight: 700;">{{t.miniTitle}}</h2>
+      <div style="display: flex; align-items: center; gap: 8px; font-size: 14px; color: #3ED28A; font-weight: 500;">
+        <span>{{t.miniAll}}</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h10M9 4l4 4-4 4" stroke="#3ED28A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px;">
+
+      <div style="border: 1px solid #23282D; background: #131619; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+        <div style="height: 210px; background: #181C20; border-bottom: 1px solid #23282D; display: flex; align-items: center; justify-content: center; position: relative;">
+          <svg width="220" height="150" viewBox="0 0 220 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="30" y="24" width="160" height="102" rx="8" fill="#1F2429" stroke="#3A4147" stroke-width="1.5"></rect>
+            <rect x="44" y="38" width="132" height="60" rx="4" fill="#14181B" stroke="#2F353B"></rect>
+            <path d="M56 50h108M56 60h108M56 70h108M56 80h108" stroke="#242A30" stroke-width="2" stroke-linecap="round"></path>
+            <circle cx="54" cy="112" r="4" fill="#3ED28A"></circle>
+            <rect x="70" y="108" width="18" height="8" rx="4" fill="#2A3036"></rect>
+            <rect x="96" y="108" width="18" height="8" rx="4" fill="#2A3036"></rect>
+            <rect x="126" y="107" width="10" height="10" rx="2" fill="#2A3036"></rect>
+            <rect x="52" y="126" width="116" height="5" rx="2" fill="#101315"></rect>
+          </svg>
+          <div style="position: absolute; top: 14px; left: 16px; display: flex; align-items: center; gap: 7px; background: #0F1A15; border: 1px solid #2A4F3C; border-radius: 3px; padding: 5px 9px;">
+            <span style="width: 5px; height: 5px; border-radius: 50%; background: #3ED28A; display: block;"></span>
+            <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.06em; color: #3ED28A; text-transform: uppercase;">{{t.badgeReady}}</span>
+          </div>
+        </div>
+        <div style="padding: 22px; display: flex; flex-direction: column; gap: 14px; flex-grow: 1;">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; color: #6E767D; text-transform: uppercase;">Mini PC</div>
+            <h3 style="font-size: 20px; font-weight: 500;">Minisforum AI X1 Pro</h3>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #98A0A8;">
+            <div style="display: flex; justify-content: space-between; gap: 10px;"><span>CPU</span><span style="color: #C6CCD1;">Ryzen AI 9 HX 370</span></div>
+            <div style="display: flex; justify-content: space-between; gap: 10px;"><span>RAM</span><span style="color: #C6CCD1;">32 GB DDR5-5600</span></div>
+            <div style="display: flex; justify-content: space-between; gap: 10px;"><span>SSD</span><span style="color: #C6CCD1;">1 TB NVMe Gen4</span></div>
+          </div>
+          <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 8px; border-top: 1px solid #1F2429;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <div style="font-size: 11px; color: #6E767D;">{{t.vatNote}}</div>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 22px; font-weight: 500;">1.299 &euro;</div>
+            </div>
+            <div style="background: #3ED28A; color: #06120C; font-weight: 600; font-size: 14px; padding: 11px 16px; border-radius: 4px;">{{t.addCart}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border: 1px solid #23282D; background: #131619; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+        <div style="height: 210px; background: #181C20; border-bottom: 1px solid #23282D; display: flex; align-items: center; justify-content: center; position: relative;">
+          <svg width="220" height="150" viewBox="0 0 220 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="42" y="30" width="136" height="92" rx="8" fill="#1F2429" stroke="#3A4147" stroke-width="1.5"></rect>
+            <rect x="56" y="44" width="108" height="52" rx="4" fill="#14181B" stroke="#2F353B"></rect>
+            <path d="M68 56h84M68 66h84M68 76h84" stroke="#242A30" stroke-width="2" stroke-linecap="round"></path>
+            <circle cx="66" cy="108" r="4" fill="#3ED28A"></circle>
+            <rect x="82" y="104" width="18" height="8" rx="4" fill="#2A3036"></rect>
+            <rect x="108" y="104" width="18" height="8" rx="4" fill="#2A3036"></rect>
+            <rect x="62" y="122" width="96" height="5" rx="2" fill="#101315"></rect>
+          </svg>
+          <div style="position: absolute; top: 14px; left: 16px; display: flex; align-items: center; gap: 7px; background: #0F1A15; border: 1px solid #2A4F3C; border-radius: 3px; padding: 5px 9px;">
+            <span style="width: 5px; height: 5px; border-radius: 50%; background: #3ED28A; display: block;"></span>
+            <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.06em; color: #3ED28A; text-transform: uppercase;">{{t.badgeReady}}</span>
+          </div>
+        </div>
+        <div style="padding: 22px; display: flex; flex-direction: column; gap: 14px; flex-grow: 1;">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; color: #6E767D; text-transform: uppercase;">Mini PC</div>
+            <h3 style="font-size: 20px; font-weight: 500;">Minisforum AI X1</h3>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #98A0A8;">
+            <div style="display: flex; justify-content: space-between; gap: 10px;"><span>CPU</span><span style="color: #C6CCD1;">Ryzen AI 9 365</span></div>
+            <div style="display: flex; justify-content: space-between; gap: 10px;"><span>RAM</span><span style="color: #C6CCD1;">16 GB DDR5-5600</span></div>
+            <div style="display: flex; justify-content: space-between; gap: 10px;"><span>SSD</span><span style="color: #C6CCD1;">512 GB NVMe Gen4</span></div>
+          </div>
+          <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 8px; border-top: 1px solid #1F2429;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <div style="font-size: 11px; color: #6E767D;">{{t.vatNote}}</div>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 22px; font-weight: 500;">949 &euro;</div>
+            </div>
+            <div style="background: #3ED28A; color: #06120C; font-weight: 600; font-size: 14px; padding: 11px 16px; border-radius: 4px;">{{t.addCart}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border: 1px solid #23282D; background: #131619; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+        <div style="height: 210px; background: #181C20; border-bottom: 1px solid #23282D; display: flex; align-items: center; justify-content: center; position: relative;">
+          <svg width="220" height="150" viewBox="0 0 220 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="38" y="28" width="144" height="96" rx="6" fill="#1F2429" stroke="#3A4147" stroke-width="1.5"></rect>
+            <rect x="50" y="40" width="120" height="44" rx="3" fill="#14181B" stroke="#2F353B"></rect>
+            <rect x="60" y="52" width="26" height="20" rx="2" fill="#0F1315" stroke="#3ED28A" stroke-width="1.2"></rect>
+            <rect x="94" y="52" width="26" height="20" rx="2" fill="#0F1315" stroke="#3ED28A" stroke-width="1.2"></rect>
+            <rect x="128" y="52" width="30" height="20" rx="2" fill="#0F1315" stroke="#2F353B"></rect>
+            <circle cx="58" cy="104" r="4" fill="#3ED28A"></circle>
+            <rect x="74" y="100" width="18" height="8" rx="4" fill="#2A3036"></rect>
+            <rect x="100" y="100" width="18" height="8" rx="4" fill="#2A3036"></rect>
+            <rect x="126" y="99" width="34" height="10" rx="2" fill="#2A3036"></rect>
+            <rect x="58" y="124" width="104" height="5" rx="2" fill="#101315"></rect>
+          </svg>
+          <div style="position: absolute; top: 14px; left: 16px; display: flex; align-items: center; gap: 7px; background: #1C1508; border: 1px solid #574220; border-radius: 3px; padding: 5px 9px;">
+            <span style="width: 5px; height: 5px; border-radius: 50%; background: #E0A33C; display: block;"></span>
+            <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.06em; color: #E0A33C; text-transform: uppercase;">{{t.badgeLast}}</span>
+          </div>
+        </div>
+        <div style="padding: 22px; display: flex; flex-direction: column; gap: 14px; flex-grow: 1;">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; color: #6E767D; text-transform: uppercase;">Mini PC &middot; 10 GbE</div>
+            <h3 style="font-size: 20px; font-weight: 500;">Minisforum MS-01</h3>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #98A0A8;">
+            <div style="display: flex; justify-content: space-between; gap: 10px;"><span>CPU</span><span style="color: #C6CCD1;">Core i9-13900H</span></div>
+            <div style="display: flex; justify-content: space-between; gap: 10px;"><span>NET</span><span style="color: #C6CCD1;">2&times;10GbE SFP+</span></div>
+            <div style="display: flex; justify-content: space-between; gap: 10px;"><span>RAM</span><span style="color: #C6CCD1;">64 GB DDR5</span></div>
+          </div>
+          <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 8px; border-top: 1px solid #1F2429;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <div style="font-size: 11px; color: #6E767D;">{{t.vatNote}}</div>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 22px; font-weight: 500;">1.149 &euro;</div>
+            </div>
+            <div style="background: #3ED28A; color: #06120C; font-weight: 600; font-size: 14px; padding: 11px 16px; border-radius: 4px;">{{t.addCart}}</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="padding: 78px 120px; background: #101316; border-bottom: 1px solid #1B1F23; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 60px; align-items: center;">
+    <div style="display: flex; flex-direction: column; gap: 22px; align-items: flex-start;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #E0A33C;">{{t.rackKicker}}</div>
+      <h2 style="font-size: 38px; font-weight: 700; line-height: 1.1; max-width: 460px;">{{t.rackTitle}}</h2>
+      <p style="font-size: 16px; line-height: 1.6; color: #A8B0B7; max-width: 470px;">{{t.rackSub}}</p>
+      <div style="background: #3ED28A; color: #06120C; font-weight: 600; font-size: 15px; padding: 15px 24px; border-radius: 4px; margin-top: 6px;">{{t.rackCta}}</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; border: 1px solid #23282D; background: #15181B; border-radius: 6px; padding: 20px 22px;">
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #06120C; background: #C6CCD1; padding: 2px 7px; border-radius: 2px;">1U</span>
+            <span style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-size: 17px; font-weight: 500;">{{t.tier1}}</span>
+          </div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #98A0A8;">Xeon E-2400 &middot; 64 GB ECC &middot; 2&times;NVMe</div>
+        </div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 16px; color: #E9ECEE; white-space: nowrap;">{{t.from}} 1.890 &euro;</div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; border: 1px solid #23282D; background: #15181B; border-radius: 6px; padding: 20px 22px;">
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #06120C; background: #C6CCD1; padding: 2px 7px; border-radius: 2px;">2U</span>
+            <span style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-size: 17px; font-weight: 500;">{{t.tier2}}</span>
+          </div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #98A0A8;">EPYC 9004 &middot; 256 GB ECC &middot; 8&times;NVMe</div>
+        </div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 16px; color: #E9ECEE; white-space: nowrap;">{{t.from}} 4.500 &euro;</div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; border: 1px solid #23282D; background: #15181B; border-radius: 6px; padding: 20px 22px;">
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #06120C; background: #C6CCD1; padding: 2px 7px; border-radius: 2px;">4U</span>
+            <span style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-size: 17px; font-weight: 500;">{{t.tier3}}</span>
+          </div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #98A0A8;">EPYC 9004 &middot; 512 GB ECC &middot; 24&times;3,5&quot;</div>
+        </div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 16px; color: #E9ECEE; white-space: nowrap;">{{t.from}} 7.200 &euro;</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 70px 120px; border-bottom: 1px solid #1B1F23; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px;">
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="#3ED28A" stroke-width="1.5"></circle><path d="M12 6.5V12l3.6 2.2" stroke="#3ED28A" stroke-width="1.5" stroke-linecap="round"></path></svg>
+      <h3 style="font-size: 17px; font-weight: 500;">{{t.why1t}}</h3>
+      <p style="font-size: 14px; line-height: 1.6; color: #98A0A8;">{{t.why1b}}</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="16" height="16" rx="2" stroke="#3ED28A" stroke-width="1.5"></rect><path d="M8 9h8M8 12.5h8M8 16h4" stroke="#3ED28A" stroke-width="1.5" stroke-linecap="round"></path></svg>
+      <h3 style="font-size: 17px; font-weight: 500;">{{t.why2t}}</h3>
+      <p style="font-size: 14px; line-height: 1.6; color: #98A0A8;">{{t.why2b}}</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3l8 3v6c0 4.6-3.2 8.5-8 10-4.8-1.5-8-5.4-8-10V6l8-3z" stroke="#3ED28A" stroke-width="1.5" stroke-linejoin="round"></path><path d="M8.6 12.2l2.4 2.4 4.4-4.6" stroke="#3ED28A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      <h3 style="font-size: 17px; font-weight: 500;">{{t.why3t}}</h3>
+      <p style="font-size: 14px; line-height: 1.6; color: #98A0A8;">{{t.why3b}}</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6.5h16M4 12h16M4 17.5h10" stroke="#3ED28A" stroke-width="1.5" stroke-linecap="round"></path><circle cx="18" cy="17.5" r="2.5" stroke="#3ED28A" stroke-width="1.5"></circle></svg>
+      <h3 style="font-size: 17px; font-weight: 500;">{{t.why4t}}</h3>
+      <p style="font-size: 14px; line-height: 1.6; color: #98A0A8;">{{t.why4b}}</p>
+    </div>
+  </div>
+
+  <div style="padding: 60px 120px 44px; background: #0A0C0E; display: flex; flex-direction: column; gap: 40px;">
+    <div style="display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px;">
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <svg width="22" height="22" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="24" height="24" rx="3" stroke="#3ED28A" stroke-width="1.5"></rect><rect x="7.5" y="7.5" width="11" height="11" rx="1.5" stroke="#E9ECEE" stroke-width="1.5"></rect><path d="M10 1v5M16 1v5M10 20v5M16 20v5M1 10h5M1 16h5M20 10h5M20 16h5" stroke="#3ED28A" stroke-width="1.5"></path></svg>
+          <div style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-weight: 700; font-size: 19px;">Compud</div>
+        </div>
+        <p style="font-size: 13px; line-height: 1.7; color: #6E767D; max-width: 300px;">{{t.footBlurb}}</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #4A5259;">{{t.footC1}}</div>
+        <div style="font-size: 13px; color: #98A0A8;">{{t.navMini}}</div>
+        <div style="font-size: 13px; color: #98A0A8;">{{t.navRack}}</div>
+        <div style="font-size: 13px; color: #98A0A8;">{{t.navConfig}}</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #4A5259;">{{t.footC2}}</div>
+        <div style="font-size: 13px; color: #98A0A8;">{{t.footShip}}</div>
+        <div style="font-size: 13px; color: #98A0A8;">{{t.footRma}}</div>
+        <div style="font-size: 13px; color: #98A0A8;">{{t.footPay}}</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #4A5259;">{{t.footC3}}</div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #98A0A8;">[EMAIL]</div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #98A0A8;">[TELEFONO]</div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #98A0A8;">[INDIRIZZO]</div>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; border-top: 1px solid #16191C; padding-top: 22px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #4A5259;">Compud &middot; P.IVA [P.IVA] &middot; REA [REA]</div>
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #4A5259;">{{t.footLegal}}</div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"lang":{"editor":"enum","options":["it","en"],"default":"it","tsType":"string"},"$preview":{"width":1440,"height":3260}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { lang: null };
+  }
+  renderVals() {
+    var lang = (this.state && this.state.lang) || this.props.lang || 'it';
+    var IT = {
+      ticker: "Spedizione gratuita in Italia · Bonifico istantaneo SEPA · Collaudo 48 h su ogni macchina",
+      support: "Assistenza: [TELEFONO]",
+      navMini: "Mini PC", navRack: "Server rack", navConfig: "Configuratore", navSupport: "Assistenza", navCompany: "Azienda",
+      eyebrow: "Assemblato e collaudato in Italia",
+      h1: "Mini PC potenti. Server rack su misura.",
+      heroSub: "Selezioniamo i componenti, assembliamo e mettiamo sotto carico ogni macchina prima di spedirla. Paghi con bonifico istantaneo: nessuna commissione, spedizione entro 24 ore dall’accredito.",
+      ctaPrimary: "Configura il tuo sistema", ctaSecondary: "Sfoglia i mini PC",
+      trust1: "Garanzia 3 anni", trust2: "Collaudo 48 h", trust3: "Bonifico SEPA Instant",
+      figNote: "Rendering illustrativo",
+      payKicker: "Pagamento",
+      payTitle: "Bonifico istantaneo. Prezzo netto, nessuna commissione.",
+      payNote: "Nessun dato di carta da conservare, nessuna commissione di incasso ribaltata sul prezzo. Per gli ordini business emettiamo fattura elettronica con la stessa causale.",
+      step1t: "Confermi l’ordine", step1b: "Al checkout ricevi subito IBAN, importo esatto e una causale univoca legata al numero d’ordine.",
+      step2t: "Esegui il bonifico", step2b: "Dal tuo home banking scegli SEPA Instant: l’accredito arriva in pochi secondi, 24 ore su 24, festivi compresi.",
+      step3t: "Spediamo", step3b: "Appena vediamo l’accredito la macchina entra in preparazione e parte entro 24 ore lavorative, con tracking.",
+      miniTitle: "Mini PC pronti alla spedizione", miniAll: "Tutti i mini PC",
+      badgeReady: "Pronto in 24 h", badgeLast: "Ultimi 3 pezzi",
+      vatNote: "IVA esclusa", addCart: "Aggiungi",
+      rackKicker: "Su commessa",
+      rackTitle: "Server rack assemblati su misura",
+      rackSub: "Ci dici il carico di lavoro — virtualizzazione, storage, backup, firewall — e ti proponiamo la configurazione, il preventivo e i tempi. Montaggio, cablaggio e collaudo sotto carico prima della consegna.",
+      rackCta: "Richiedi una configurazione",
+      from: "da", tier1: "Edge e firewall", tier2: "Virtualizzazione", tier3: "Storage e backup",
+      why1t: "Collaudo 48 ore", why1b: "Ogni macchina gira sotto carico per due giorni: CPU, memoria, dischi e temperature sotto controllo.",
+      why2t: "Componenti tracciati", why2b: "Numeri di serie e lotti registrati per ogni sistema. Sai esattamente cosa hai dentro il case.",
+      why3t: "Garanzia 3 anni", why3b: "RMA gestito da noi, in Italia. Sostituzione anticipata sui sistemi business.",
+      why4t: "Parli con chi assembla", why4b: "Supporto tecnico diretto, senza primo livello a copione. In italiano o in inglese.",
+      footBlurb: "Compud assembla, collauda e vende mini PC e server rack per studi tecnici, PMI e homelab. Sede operativa a [CITTÀ].",
+      footC1: "Prodotti", footC2: "Assistenza", footC3: "Contatti",
+      footShip: "Spedizioni e resi", footRma: "Garanzia e RMA", footPay: "Come funziona il bonifico",
+      footLegal: "Privacy · Cookie · Condizioni di vendita"
+    };
+    var EN = {
+      ticker: "Free shipping in Italy · Instant SEPA bank transfer · 48 h burn-in on every machine",
+      support: "Support: [TELEFONO]",
+      navMini: "Mini PCs", navRack: "Rack servers", navConfig: "Configurator", navSupport: "Support", navCompany: "Company",
+      eyebrow: "Assembled and tested in Italy",
+      h1: "Powerful mini PCs. Rack servers built to order.",
+      heroSub: "We pick the parts, assemble and stress-test every machine before it ships. Pay by instant bank transfer: no payment fees, dispatch within 24 hours of the credit landing.",
+      ctaPrimary: "Configure your system", ctaSecondary: "Browse mini PCs",
+      trust1: "3-year warranty", trust2: "48 h burn-in", trust3: "SEPA Instant transfer",
+      figNote: "Illustrative rendering",
+      payKicker: "Payment",
+      payTitle: "Instant bank transfer. Net price, no fees.",
+      payTitleAlt: "",
+      payNote: "No card details to store, no acquiring fees baked into the price. Business orders get an electronic invoice carrying the same reference.",
+      step1t: "Confirm the order", step1b: "At checkout you immediately get the IBAN, the exact amount and a unique payment reference tied to your order number.",
+      step2t: "Send the transfer", step2b: "From your online banking pick SEPA Instant: the credit lands in seconds, 24/7, holidays included.",
+      step3t: "We ship", step3b: "As soon as we see the credit the machine goes into prep and leaves within 24 working hours, with tracking.",
+      miniTitle: "Mini PCs ready to ship", miniAll: "All mini PCs",
+      badgeReady: "Ships in 24 h", badgeLast: "Last 3 units",
+      vatNote: "excl. VAT", addCart: "Add to cart",
+      rackKicker: "Built to order",
+      rackTitle: "Rack servers assembled to your spec",
+      rackSub: "Tell us the workload — virtualisation, storage, backup, firewall — and we come back with a configuration, a quote and lead times. Assembly, cabling and load testing before delivery.",
+      rackCta: "Request a configuration",
+      from: "from", tier1: "Edge and firewall", tier2: "Virtualisation", tier3: "Storage and backup",
+      why1t: "48-hour burn-in", why1b: "Every machine runs under load for two days: CPU, memory, drives and temperatures all checked.",
+      why2t: "Traceable parts", why2b: "Serial numbers and batches recorded per system. You know exactly what is inside the case.",
+      why3t: "3-year warranty", why3b: "RMA handled by us, in Italy. Advance replacement on business systems.",
+      why4t: "Talk to the builder", why4b: "Direct technical support, no scripted first line. In Italian or English.",
+      footBlurb: "Compud assembles, tests and sells mini PCs and rack servers for engineering studios, SMEs and homelabs. Workshop in [CITTÀ].",
+      footC1: "Products", footC2: "Support", footC3: "Contact",
+      footShip: "Shipping and returns", footRma: "Warranty and RMA", footPay: "How the transfer works",
+      footLegal: "Privacy · Cookies · Terms of sale"
+    };
+    var isIt = lang !== 'en';
+    var self = this;
+    return {
+      t: isIt ? IT : EN,
+      v: {
+        itBg: isIt ? '#3ED28A' : 'transparent', itFg: isIt ? '#06120C' : '#98A0A8',
+        enBg: isIt ? 'transparent' : '#3ED28A', enFg: isIt ? '#98A0A8' : '#06120C'
+      },
+      setIt: function () { self.setState({ lang: 'it' }); },
+      setEn: function () { self.setState({ lang: 'en' }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

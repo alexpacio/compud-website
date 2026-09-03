@@ -1,0 +1,69 @@
+---
+import type { Lang } from '../i18n/ui';
+import { href, otherLang, type RouteName } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  route: RouteName;
+  param?: string;
+}
+const { lang, route, param } = Astro.props;
+const other = otherLang(lang);
+const languages: { code: Lang; url: string }[] = [
+  { code: 'it', url: href('it', route, param) },
+  { code: 'en', url: href('en', route, param) },
+];
+---
+
+<div class="langswitch" role="group" aria-label={lang === 'it' ? 'Lingua' : 'Language'}>
+  {
+    languages.map(({ code, url }) => (
+      <a
+        href={url}
+        class:list={['langswitch__item', { 'is-active': code === lang }]}
+        hreflang={code}
+        lang={code}
+        aria-current={code === lang ? 'true' : undefined}
+        rel={code === other ? 'alternate' : undefined}
+      >
+        {code.toUpperCase()}
+      </a>
+    ))
+  }
+</div>
+
+<style>
+  .langswitch {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-chip);
+    padding: 2px;
+  }
+
+  .langswitch__item {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    padding: 6px 10px;
+    border-radius: 2px;
+    color: var(--muted);
+    line-height: 1;
+  }
+
+  .langswitch__item:hover {
+    color: var(--text);
+  }
+
+  .langswitch__item.is-active {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  @media (max-width: 720px) {
+    .langswitch__item {
+      padding: 10px 12px;
+    }
+  }
+</style>

@@ -1,0 +1,12 @@
+---
+import Base from '../../layouts/Base.astro';
+import HomePage from '../../sections/HomePage.astro';
+import { useTranslations } from '../../i18n/utils';
+
+const lang = 'en' as const;
+const t = useTranslations(lang);
+---
+
+<Base lang={lang} route="home" title={t('meta.home.title')} description={t('meta.home.description')}>
+  <HomePage lang={lang} />
+</Base>

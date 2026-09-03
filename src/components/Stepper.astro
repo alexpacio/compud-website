@@ -1,0 +1,137 @@
+---
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  /** Zero-based index of the step the customer is on. */
+  current: number;
+}
+const { lang, current } = Astro.props;
+const t = useTranslations(lang);
+const steps = [t('co.step.cart'), t('co.step.data'), t('co.step.pay'), t('co.step.ship')];
+---
+
+<nav class="band stepper" aria-label={t('co.step.pay')}>
+  <ol class="wrap stepper__inner">
+    {
+      steps.map((label, index) => (
+        <li
+          class:list={[
+            'stepper__step',
+            { 'is-done': index < current, 'is-current': index === current },
+          ]}
+          aria-current={index === current ? 'step' : undefined}
+        >
+          <span class="stepper__mark">
+            {index < current ? (
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <path
+                  d="M2.5 6.2l2.4 2.4L9.6 3.6"
+                  stroke="#3ed28a"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+              </svg>
+            ) : (
+              <span class="mono">{index + 1}</span>
+            )}
+          </span>
+          <span class="stepper__label">{label}</span>
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  .stepper__inner {
+    list-style: none;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-block: 26px;
+    overflow-x: auto;
+  }
+
+  .stepper__step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+  }
+
+  .stepper__step:not(:last-child)::after {
+    content: '';
+    display: block;
+    width: clamp(24px, 12vw, 200px);
+    height: 1px;
+    background: var(--line);
+    margin-left: 6px;
+  }
+
+  .stepper__mark {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line-strong);
+    font-size: 11px;
+    color: var(--faint);
+    flex: none;
+  }
+
+  .stepper__step.is-done .stepper__mark {
+    background: var(--surface-4);
+  }
+
+  .stepper__step.is-current .stepper__mark {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  .stepper__label {
+    font-size: 13px;
+    color: var(--faint);
+  }
+
+  .stepper__step.is-done .stepper__label {
+    color: var(--muted);
+  }
+
+  .stepper__step.is-current .stepper__label {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* On a phone only the step you are on keeps its label, so the whole
+     progression fits without turning into a sideways scroller. */
+  @media (max-width: 620px) {
+    .stepper__inner {
+      gap: 10px;
+      padding-block: 20px;
+    }
+
+    .stepper__step:not(:last-child)::after {
+      width: 100%;
+      min-width: 12px;
+      margin-left: 0;
+    }
+
+    .stepper__step:not(.is-current) {
+      flex: 1 1 auto;
+    }
+
+    .stepper__step:not(.is-current) .stepper__label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+</style>

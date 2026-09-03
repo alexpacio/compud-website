@@ -1,0 +1,30 @@
+---
+import Base from '../../layouts/Base.astro';
+import OrderPage from '../../sections/OrderPage.astro';
+import OrderNotFound from '../../sections/OrderNotFound.astro';
+import { useTranslations } from '../../i18n/utils';
+import { getOrder } from '../../lib/orders';
+import { orderQrDataUrl } from '../../lib/qr';
+
+export const prerender = false;
+
+const lang = 'it' as const;
+const t = useTranslations(lang);
+const ref = Astro.params.ref ?? '';
+const order = await getOrder(ref);
+if (!order) Astro.response.status = 404;
+const qrDataUrl = order
+  ? await orderQrDataUrl({ reference: order.ref, amountCents: order.totals.grossCents })
+  : null;
+---
+
+<Base
+  lang={lang}
+  route="order"
+  param={order?.ref ?? ref}
+  title={order ? `${order.ref} — Compud` : t('ord.notFound')}
+  compact
+  noindex
+>
+  {order ? <OrderPage lang={lang} order={order} qrDataUrl={qrDataUrl} /> : <OrderNotFound lang={lang} />}
+</Base>

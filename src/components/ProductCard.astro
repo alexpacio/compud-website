@@ -1,0 +1,166 @@
+---
+import HardwareGlyph from './HardwareGlyph.astro';
+import { pick, type Product } from '../data/catalogue';
+import type { Lang } from '../i18n/ui';
+import { href, useTranslations } from '../i18n/utils';
+import { formatEur } from '../lib/money';
+
+interface Props {
+  lang: Lang;
+  product: Product;
+}
+const { lang, product } = Astro.props;
+const t = useTranslations(lang);
+const url = href(lang, 'product', product.slug);
+
+const badge =
+  product.stock === 0
+    ? { tone: 'chip', label: t('badge.order') }
+    : product.stock <= 3
+      ? { tone: 'chip chip--warn', label: t('badge.last', { n: product.stock }) }
+      : { tone: 'chip chip--ok', label: t('badge.ready') };
+---
+
+<article class="pcard">
+  <a class="pcard__media" href={url} tabindex="-1" aria-hidden="true">
+    <HardwareGlyph glyph={product.glyph} width={220} label={product.name} />
+    <span class:list={['pcard__badge', badge.tone]}>
+      <span class="chip__dot"></span>
+      {badge.label}
+    </span>
+  </a>
+
+  <div class="pcard__body">
+    <div class="pcard__head">
+      <p class="kicker">{pick(product.category, lang)}</p>
+      <h3 class="pcard__name"><a href={url}>{product.name}</a></h3>
+    </div>
+
+    <dl class="pcard__specs">
+      {
+        product.summary.map((row) => (
+          <div class="pcard__spec">
+            <dt>{t(row.label)}</dt>
+            <dd>{row.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <div class="pcard__foot">
+      <div class="pcard__price">
+        <span class="pcard__priceLabel">{t('price.excl')}</span>
+        <span class="pcard__priceValue">{formatEur(product.basePriceCents, lang)}</span>
+      </div>
+      <a class="btn btn--primary pcard__cta" href={url}>{t('cart.add')}</a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .pcard {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: var(--r-card);
+    overflow: hidden;
+  }
+
+  .pcard__media {
+    position: relative;
+    min-width: 0;
+    padding-inline: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 210px;
+    background: var(--surface-3);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .pcard__badge {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+  }
+
+  .pcard__body {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex: 1 1 auto;
+  }
+
+  .pcard__head {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .pcard__name {
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  .pcard__specs {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .pcard__spec {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .pcard__spec dt {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 11px;
+  }
+
+  .pcard__spec dd {
+    margin: 0;
+    color: var(--text-2);
+    text-align: right;
+  }
+
+  .pcard__foot {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 1px solid var(--line-faint);
+  }
+
+  .pcard__price {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .pcard__priceLabel {
+    font-size: 11px;
+    color: var(--muted-2);
+  }
+
+  .pcard__priceValue {
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: 500;
+  }
+
+  .pcard__cta {
+    padding: 11px 16px;
+    font-size: 14px;
+  }
+</style>

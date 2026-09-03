@@ -1,0 +1,100 @@
+---
+import type { Glyph } from '../data/catalogue';
+
+/**
+ * Vector stand-ins for product photography. Replace these with real photos of
+ * the machines as soon as the shoot is done — the markup expects a square-ish
+ * asset centred in the frame.
+ */
+interface Props {
+  glyph: Glyph | 'rack';
+  width?: number;
+  label?: string;
+}
+const { glyph, width = 220, label } = Astro.props;
+const box = glyph === 'rack' ? { w: 460, h: 330 } : { w: 220, h: 150 };
+---
+
+<svg
+  width={box.w}
+  height={box.h}
+  viewBox={`0 0 ${box.w} ${box.h}`}
+  style={`width: 100%; max-width: ${width}px; height: auto;`}
+  fill="none"
+  role="img"
+  aria-label={label}
+  xmlns="http://www.w3.org/2000/svg"
+>
+  {glyph === 'mini' && (
+    <g>
+      <rect x="30" y="24" width="160" height="102" rx="8" fill="#1f2429" stroke="#3a4147" stroke-width="1.5" />
+      <rect x="44" y="38" width="132" height="60" rx="4" fill="#14181b" stroke="#2f353b" />
+      <path d="M56 50h108M56 60h108M56 70h108M56 80h108" stroke="#242a30" stroke-width="2" stroke-linecap="round" />
+      <circle cx="54" cy="112" r="4" fill="#3ed28a" />
+      <rect x="70" y="108" width="18" height="8" rx="4" fill="#2a3036" />
+      <rect x="96" y="108" width="18" height="8" rx="4" fill="#2a3036" />
+      <rect x="126" y="107" width="10" height="10" rx="2" fill="#2a3036" />
+      <rect x="52" y="126" width="116" height="5" rx="2" fill="#101315" />
+    </g>
+  )}
+  {glyph === 'miniCompact' && (
+    <g>
+      <rect x="42" y="30" width="136" height="92" rx="8" fill="#1f2429" stroke="#3a4147" stroke-width="1.5" />
+      <rect x="56" y="44" width="108" height="52" rx="4" fill="#14181b" stroke="#2f353b" />
+      <path d="M68 56h84M68 66h84M68 76h84" stroke="#242a30" stroke-width="2" stroke-linecap="round" />
+      <circle cx="66" cy="108" r="4" fill="#3ed28a" />
+      <rect x="82" y="104" width="18" height="8" rx="4" fill="#2a3036" />
+      <rect x="108" y="104" width="18" height="8" rx="4" fill="#2a3036" />
+      <rect x="62" y="122" width="96" height="5" rx="2" fill="#101315" />
+    </g>
+  )}
+  {glyph === 'miniNetwork' && (
+    <g>
+      <rect x="38" y="28" width="144" height="96" rx="6" fill="#1f2429" stroke="#3a4147" stroke-width="1.5" />
+      <rect x="50" y="40" width="120" height="44" rx="3" fill="#14181b" stroke="#2f353b" />
+      <rect x="60" y="52" width="26" height="20" rx="2" fill="#0f1315" stroke="#3ed28a" stroke-width="1.2" />
+      <rect x="94" y="52" width="26" height="20" rx="2" fill="#0f1315" stroke="#3ed28a" stroke-width="1.2" />
+      <rect x="128" y="52" width="30" height="20" rx="2" fill="#0f1315" stroke="#2f353b" />
+      <circle cx="58" cy="104" r="4" fill="#3ed28a" />
+      <rect x="74" y="100" width="18" height="8" rx="4" fill="#2a3036" />
+      <rect x="100" y="100" width="18" height="8" rx="4" fill="#2a3036" />
+      <rect x="126" y="99" width="34" height="10" rx="2" fill="#2a3036" />
+      <rect x="58" y="124" width="104" height="5" rx="2" fill="#101315" />
+    </g>
+  )}
+  {glyph === 'rack' && (
+    <g>
+      <rect x="26" y="18" width="408" height="294" rx="6" fill="#101315" stroke="#2a2f35" stroke-width="1.5" />
+      <rect x="34" y="26" width="392" height="10" rx="2" fill="#181c20" />
+      <rect x="34" y="44" width="392" height="44" rx="3" fill="#1f2429" stroke="#3a4147" stroke-width="1.2" />
+      <rect x="44" y="54" width="10" height="24" rx="1.5" fill="#333a40" />
+      <rect x="406" y="54" width="10" height="24" rx="1.5" fill="#333a40" />
+      {[64, 100, 136, 172, 208, 244, 280, 316].map((x) => (
+        <rect x={x} y="53" width="32" height="26" rx="2" fill="#12161a" stroke="#3a4147" />
+      ))}
+      <circle cx="368" cy="60" r="3" fill="#3ed28a" />
+      <circle cx="368" cy="72" r="3" fill="#2a3036" />
+      <rect x="34" y="96" width="392" height="44" rx="3" fill="#1f2429" stroke="#3a4147" stroke-width="1.2" />
+      <rect x="44" y="106" width="10" height="24" rx="1.5" fill="#333a40" />
+      <rect x="406" y="106" width="10" height="24" rx="1.5" fill="#333a40" />
+      {[64, 100, 136, 172, 208, 244, 280, 316].map((x) => (
+        <rect x={x} y="105" width="32" height="26" rx="2" fill="#12161a" stroke="#3a4147" />
+      ))}
+      <circle cx="368" cy="112" r="3" fill="#3ed28a" />
+      <circle cx="368" cy="124" r="3" fill="#3ed28a" />
+      <rect x="34" y="148" width="392" height="28" rx="3" fill="#181c20" stroke="#2a2f35" stroke-width="1.2" />
+      <path d="M56 162h150M226 162h70" stroke="#2a3036" stroke-width="2" stroke-linecap="round" />
+      <circle cx="368" cy="162" r="3" fill="#333a40" />
+      <rect x="34" y="184" width="392" height="28" rx="3" fill="#181c20" stroke="#2a2f35" stroke-width="1.2" />
+      <path d="M56 198h150M226 198h70" stroke="#2a3036" stroke-width="2" stroke-linecap="round" />
+      <circle cx="368" cy="198" r="3" fill="#333a40" />
+      <rect x="34" y="220" width="392" height="36" rx="3" fill="#1f2429" stroke="#3a4147" stroke-width="1.2" />
+      {[60, 128, 196].map((x) => (
+        <rect x={x} y="230" width="60" height="16" rx="2" fill="#12161a" stroke="#3a4147" />
+      ))}
+      <circle cx="368" cy="238" r="3" fill="#e0a33c" />
+      <rect x="34" y="264" width="392" height="40" rx="3" fill="#16191c" stroke="#2a2f35" stroke-width="1.2" />
+      <path d="M64 284h80M164 284h40" stroke="#242a30" stroke-width="2" stroke-linecap="round" />
+    </g>
+  )}
+</svg>

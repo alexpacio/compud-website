@@ -1,0 +1,30 @@
+---
+import type { Lang } from '../i18n/ui';
+import { href, useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="wrap nf">
+  <h1 class="h2">{t('ord.notFound')}</h1>
+  <p class="lead nf__body">{t('ord.notFoundBody')}</p>
+  <a class="btn btn--ghost" href={href(lang, 'home')}>Compud</a>
+</section>
+
+<style>
+  .nf {
+    padding-block: 80px 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .nf__body {
+    max-width: 520px;
+  }
+</style>

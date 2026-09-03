@@ -1,0 +1,357 @@
+---
+import HardwareGlyph from '../components/HardwareGlyph.astro';
+import Icon from '../components/Icon.astro';
+import Configurator, { type ConfigGroup } from '../islands/Configurator.tsx';
+import { defaultChoice, pick, type Product } from '../data/catalogue';
+import type { Lang } from '../i18n/ui';
+import { href, useTranslations } from '../i18n/utils';
+import { commerce } from '../lib/config';
+
+interface Props {
+  lang: Lang;
+  product: Product;
+}
+const { lang, product } = Astro.props;
+const t = useTranslations(lang);
+
+const groups: ConfigGroup[] = [
+  { id: 'ram', label: t('pdp.optRam'), options: product.options.ram },
+  { id: 'ssd', label: t('pdp.optSsd'), options: product.options.ssd },
+  { id: 'os', label: t('pdp.optOs'), options: product.options.os },
+].map((group) => ({
+  id: group.id as ConfigGroup['id'],
+  label: group.label,
+  options: group.options.map((option) => ({
+    id: option.id,
+    label: pick(option.label, lang),
+    addCents: option.addCents,
+    spec: pick(option.spec ?? option.label, lang),
+  })),
+}));
+
+const stockChip =
+  product.stock === 0
+    ? { tone: 'chip', label: t('badge.order') }
+    : product.stock <= 3
+      ? { tone: 'chip chip--warn', label: t('badge.last', { n: product.stock }) }
+      : { tone: 'chip chip--ok', label: t('badge.stock', { n: product.stock }) };
+
+const prep = [
+  { icon: 'clock', title: t('pdp.prep1.title'), body: t('pdp.prep1.body') },
+  { icon: 'list', title: t('pdp.prep2.title'), body: t('pdp.prep2.body') },
+  { icon: 'shield', title: t('pdp.prep3.title'), body: t('pdp.prep3.body') },
+] as const;
+
+---
+
+<nav class="band crumbs" aria-label={t('pdp.crumbHome')}>
+  <div class="wrap">
+    <p class="mono crumbs__text">
+      <a href={href(lang, 'home')}>{t('pdp.crumbHome').toUpperCase()}</a>
+      <span aria-hidden="true"> / </span>
+      <a href={href(lang, 'miniPc')}>{t('nav.miniPc').toUpperCase()}</a>
+      <span aria-hidden="true"> / </span>
+      <span aria-current="page">{product.name.toUpperCase()}</span>
+    </p>
+  </div>
+</nav>
+
+<section class="band pdp">
+  <div class="wrap pdp__inner">
+    <div class="pdp__media">
+      <div class="pdp__frame">
+        <p class="mono pdp__figNote">{t('home.figNote')}</p>
+        <HardwareGlyph glyph={product.glyph} width={480} label={product.name} />
+      </div>
+      <div class="pdp__thumbs" aria-hidden="true">
+        <span class="pdp__thumb is-active"></span>
+        <span class="pdp__thumb"></span>
+        <span class="pdp__thumb"></span>
+        <span class="pdp__thumb"></span>
+      </div>
+    </div>
+
+    <div class="pdp__buy">
+      <div class="pdp__head">
+        <div class="pdp__meta">
+          <span class:list={[stockChip.tone]}><span class="chip__dot"></span>{stockChip.label}</span>
+          <span class="mono pdp__sku">SKU {product.sku}</span>
+        </div>
+        <h1 class="pdp__title">{product.name}</h1>
+        <p class="pdp__tagline">{pick(product.tagline, lang)}</p>
+      </div>
+
+      <Configurator
+        client:load
+        lang={lang}
+        slug={product.slug}
+        basePriceCents={product.basePriceCents}
+        vatRate={commerce.vatRate}
+        groups={groups}
+        defaults={defaultChoice(product)}
+        checkoutUrl={href(lang, 'checkout')}
+        strings={{
+          included: t('pdp.included'),
+          excl: t('price.excl'),
+          incl: t('price.incl', { rate: commerce.vatRate }),
+          payLine: t('pdp.payLine'),
+          buyNow: t('pdp.buyNow'),
+          addCart: t('cart.add'),
+          added: t('cart.added'),
+          shipLine: t('pdp.shipLine'),
+        }}
+      />
+    </div>
+  </div>
+</section>
+
+<section class="band pdp2">
+  <div class="wrap pdp2__inner">
+    <div class="pdp2__specs">
+      <h2 class="h2">{t('pdp.specTitle')}</h2>
+      <dl class="spec">
+        {
+          product.specs.map((row) => (
+            <div class="spec__row">
+              <dt class="spec__key">{t(row.label)}</dt>
+              <dd class="spec__value">{pick(row.value, lang)}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    <div class="pdp2__prep">
+      <h2 class="h2">{t('pdp.prepTitle')}</h2>
+      <ul class="prep">
+        {
+          prep.map((item) => (
+            <li class="panel prep__item">
+              <span class="prep__icon"><Icon name={item.icon} size={20} /></span>
+              <div class="prep__text">
+                <h3 class="prep__title">{item.title}</h3>
+                <p class="prep__body">{item.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .crumbs__text {
+    padding-block: 18px;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--muted-2);
+  }
+
+  .crumbs__text a {
+    color: var(--muted-2);
+  }
+
+  .pdp__inner {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 56px;
+    padding-block: 44px 64px;
+  }
+
+  .pdp__media {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  .pdp__frame {
+    position: relative;
+    min-width: 0;
+    min-height: 430px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-card);
+    display: grid;
+    place-items: center;
+    padding: 32px;
+  }
+
+  .pdp__figNote {
+    position: absolute;
+    top: 18px;
+    left: 20px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .pdp__thumbs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .pdp__thumb {
+    height: 88px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-panel);
+  }
+
+  .pdp__thumb.is-active {
+    border-color: var(--accent);
+  }
+
+  .pdp__buy {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .pdp__head {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pdp__meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .pdp__sku {
+    font-size: 11px;
+    color: var(--muted-2);
+  }
+
+  .pdp__title {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 3vw, 38px);
+    font-weight: 700;
+    line-height: 1.08;
+  }
+
+  .pdp__tagline {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #a8b0b7;
+  }
+
+  .pdp2__inner {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 56px;
+    padding-block: 60px 70px;
+  }
+
+  .pdp2__specs,
+  .pdp2__prep {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .spec {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--line);
+    border-radius: var(--r-panel);
+    overflow: hidden;
+  }
+
+  .spec__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line-faint);
+  }
+
+  .spec__row:nth-child(odd) {
+    background: var(--surface);
+  }
+
+  .spec__row:last-child {
+    border-bottom: 0;
+  }
+
+  .spec__key {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .spec__value {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    text-align: right;
+  }
+
+  .prep {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .prep__item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 18px;
+  }
+
+  .prep__icon {
+    color: var(--accent);
+    display: inline-flex;
+    flex: none;
+  }
+
+  .prep__text {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .prep__title {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .prep__body {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  @media (max-width: 1000px) {
+    .pdp__inner,
+    .pdp2__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 36px;
+      padding-block: 32px 48px;
+    }
+    .pdp__frame {
+      min-height: 300px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .spec__row {
+      flex-direction: column;
+      gap: 4px;
+    }
+    .spec__value {
+      text-align: left;
+    }
+  }
+</style>

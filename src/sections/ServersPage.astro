@@ -1,0 +1,194 @@
+---
+import HardwareGlyph from '../components/HardwareGlyph.astro';
+import WorkloadPicker, { type BuildView } from '../islands/WorkloadPicker.tsx';
+import { pick, serverBuilds } from '../data/catalogue';
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+import { company } from '../lib/config';
+import { formatEur } from '../lib/money';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const builds: BuildView[] = serverBuilds.map((build) => ({
+  id: build.id,
+  name: pick(build.name, lang),
+  tag: pick(build.tag, lang),
+  units: build.units,
+  title: pick(build.title, lang),
+  blurb: pick(build.blurb, lang),
+  price: `${t('price.from')} ${formatEur(build.fromCents, lang)}`,
+  rows: build.rows.map((row) => ({ label: t(row.label), value: pick(row.value, lang) })),
+}));
+
+const process = [
+  { n: '01', title: t('rack.p1.title'), body: t('rack.p1.body') },
+  { n: '02', title: t('rack.p2.title'), body: t('rack.p2.body') },
+  { n: '03', title: t('rack.p3.title'), body: t('rack.p3.body') },
+  { n: '04', title: t('rack.p4.title'), body: t('rack.p4.body') },
+];
+
+const quoteUrl = `mailto:${company.email}?subject=${encodeURIComponent(t('rack.quote'))}`;
+---
+
+<section class="band srv">
+  <div class="wrap srv__inner">
+    <p class="kicker kicker--warn">{t('rack.kicker')}</p>
+    <h1 class="h1 srv__title">{t('rack.h1')}</h1>
+    <p class="lead srv__lead">{t('rack.lead')}</p>
+  </div>
+</section>
+
+<section class="band picker">
+  <div class="wrap picker__inner">
+    <WorkloadPicker
+      client:load
+      builds={builds}
+      quoteUrl={quoteUrl}
+      strings={{ pick: t('rack.pick'), baseConfig: t('rack.baseConfig'), quote: t('rack.quote') }}
+    >
+      <HardwareGlyph glyph="rack" width={420} label={t('rack.h1')} />
+    </WorkloadPicker>
+  </div>
+</section>
+
+<section class="band process">
+  <div class="wrap process__inner">
+    <h2 class="h2">{t('rack.processTitle')}</h2>
+    <ol class="process__grid">
+      {
+        process.map((step, index) => (
+          <li class:list={['process__step', { 'is-first': index === 0 }]}>
+            <span class="mono process__n">{step.n}</span>
+            <h3 class="h3">{step.title}</h3>
+            <p class="process__body">{step.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<section class="band--tint cta">
+  <div class="wrap cta__inner">
+    <div class="cta__text">
+      <h2 class="h2 cta__title">{t('rack.ctaTitle')}</h2>
+      <p class="cta__sub">{t('rack.ctaSub')}</p>
+    </div>
+    <div class="cta__actions">
+      <a class="btn btn--primary" href={quoteUrl}>{t('rack.quote')}</a>
+      <a class="btn btn--ghost" href={`tel:${company.phone}`}>{t('rack.call')}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .srv__inner {
+    padding-block: 64px 52px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .srv__title {
+    font-size: clamp(32px, 3.8vw, 48px);
+    max-width: 700px;
+  }
+
+  .srv__lead {
+    max-width: 640px;
+  }
+
+  .picker__inner {
+    padding-block: 52px 64px;
+  }
+
+  .process__inner {
+    padding-block: 62px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .process__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 22px;
+  }
+
+  .process__step {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-top: 2px solid var(--line-strong);
+    padding-top: 16px;
+  }
+
+  .process__step.is-first {
+    border-top-color: var(--accent);
+  }
+
+  .process__n {
+    font-size: 11px;
+    color: var(--muted-2);
+  }
+
+  .process__step.is-first .process__n {
+    color: var(--accent);
+  }
+
+  .process__body {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .cta__inner {
+    padding-block: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .cta__text {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cta__title {
+    font-size: clamp(24px, 2.4vw, 28px);
+    max-width: 620px;
+  }
+
+  .cta__sub {
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .cta__actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 1000px) {
+    .process__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 620px) {
+    .process__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

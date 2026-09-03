@@ -1,0 +1,152 @@
+---
+import type { Lang } from '../i18n/ui';
+import { href, useTranslations } from '../i18n/utils';
+import { company } from '../lib/config';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <div class="footer__cols">
+      <div class="footer__about">
+        <div class="brand">
+          <svg width="22" height="22" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+            <rect x="1" y="1" width="24" height="24" rx="3" stroke="#3ed28a" stroke-width="1.5"></rect>
+            <rect x="7.5" y="7.5" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1.5"></rect>
+            <path
+              d="M10 1v5M16 1v5M10 20v5M16 20v5M1 10h5M1 16h5M20 10h5M20 16h5"
+              stroke="#3ed28a"
+              stroke-width="1.5"></path>
+          </svg>
+          <span class="brand__word">Compud</span>
+        </div>
+        <p class="footer__blurb">{t('foot.blurb')}</p>
+      </div>
+
+      <div class="footer__col">
+        <p class="kicker">{t('foot.products')}</p>
+        <a href={href(lang, 'miniPc')}>{t('nav.miniPc')}</a>
+        <a href={href(lang, 'servers')}>{t('nav.servers')}</a>
+      </div>
+
+      <div class="footer__col">
+        <p class="kicker">{t('foot.support')}</p>
+        <span>{t('foot.shipping')}</span>
+        <span>{t('foot.rma')}</span>
+        <span>{t('foot.howPay')}</span>
+      </div>
+
+      <div class="footer__col footer__col--mono">
+        <p class="kicker">{t('foot.contact')}</p>
+        <a href={`mailto:${company.email}`}>{company.email}</a>
+        <span>{company.phone}</span>
+        <span>{company.street}, {company.city}</span>
+      </div>
+    </div>
+
+    <div class="footer__base">
+      <p class="mono">{company.legalName} · P.IVA {company.vatNumber} · REA {company.rea}</p>
+      <p class="mono">{t('foot.legal')}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--bg-deep);
+    padding-block: 60px 44px;
+  }
+
+  .footer__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .footer__cols {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    gap: 40px;
+  }
+
+  .footer__about {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+  }
+
+  .brand__word {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 19px;
+  }
+
+  .footer__blurb {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--muted-2);
+    max-width: 300px;
+  }
+
+  .footer__col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .footer__col--mono {
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .footer__col a {
+    color: var(--muted);
+  }
+
+  .footer__col a:hover {
+    color: var(--accent);
+  }
+
+  .footer__base {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border-top: 1px solid #16191c;
+    padding-top: 22px;
+    font-size: 11px;
+    color: var(--faint);
+  }
+
+  @media (max-width: 900px) {
+    .footer__cols {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .footer__cols {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+    .footer__base {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+  }
+</style>

@@ -1,0 +1,79 @@
+---
+import PaymentSteps from '../components/PaymentSteps.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { products } from '../data/catalogue';
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="band index">
+  <div class="wrap index__inner">
+    <header class="index__head">
+      <p class="kicker kicker--accent">{t('nav.miniPc')}</p>
+      <h1 class="h1 index__title">{t('mini.title')}</h1>
+      <p class="lead index__lead">{t('mini.lead')}</p>
+    </header>
+
+    {
+      products.length === 0 ? (
+        <p class="lead">{t('mini.empty')}</p>
+      ) : (
+        <div class="index__grid">
+          {products.map((product) => (
+            <ProductCard lang={lang} product={product} />
+          ))}
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<PaymentSteps lang={lang} />
+
+<style>
+  .index__inner {
+    padding-block: 64px 82px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .index__head {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .index__title {
+    font-size: clamp(32px, 3.6vw, 48px);
+    max-width: 720px;
+  }
+
+  .index__lead {
+    max-width: 620px;
+  }
+
+  .index__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  @media (max-width: 1100px) {
+    .index__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 680px) {
+    .index__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

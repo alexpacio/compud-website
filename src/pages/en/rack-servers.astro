@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import ServersPage from '../../sections/ServersPage.astro';
+import { useTranslations } from '../../i18n/utils';
+
+const lang = 'en' as const;
+const t = useTranslations(lang);
+---
+
+<Base
+  lang={lang}
+  route="servers"
+  active="servers"
+  title={t('meta.servers.title')}
+  description={t('meta.servers.description')}
+>
+  <ServersPage lang={lang} />
+</Base>

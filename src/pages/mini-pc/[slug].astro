@@ -1,0 +1,25 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import ProductPage from '../../sections/ProductPage.astro';
+import { pick, products } from '../../data/catalogue';
+import { useTranslations } from '../../i18n/utils';
+
+export const getStaticPaths = (() =>
+  products.map((product) => ({ params: { slug: product.slug }, props: { product } }))) satisfies GetStaticPaths;
+
+const lang = 'it' as const;
+const t = useTranslations(lang);
+const { product } = Astro.props;
+---
+
+<Base
+  lang={lang}
+  route="product"
+  param={product.slug}
+  active="miniPc"
+  title={`${product.name} — Compud`}
+  description={pick(product.tagline, lang)}
+>
+  <ProductPage lang={lang} product={product} />
+</Base>

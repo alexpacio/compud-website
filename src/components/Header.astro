@@ -1,0 +1,215 @@
+---
+import type { Lang } from '../i18n/ui';
+import { href, useTranslations, type RouteName } from '../i18n/utils';
+import CartBadge from '../islands/CartBadge.tsx';
+import Icon from './Icon.astro';
+import LangSwitch from './LangSwitch.astro';
+
+interface Props {
+  lang: Lang;
+  route: RouteName;
+  param?: string;
+  active?: 'miniPc' | 'servers' | null;
+  compact?: boolean;
+}
+const { lang, route, param, active = null, compact = false } = Astro.props;
+const t = useTranslations(lang);
+
+const links: { key: 'miniPc' | 'servers'; label: string; url: string }[] = [
+  { key: 'miniPc', label: t('nav.miniPc'), url: href(lang, 'miniPc') },
+  { key: 'servers', label: t('nav.servers'), url: href(lang, 'servers') },
+];
+---
+
+{
+  !compact && (
+    <div class="ticker">
+      <div class="wrap ticker__inner">
+        <p class="mono ticker__text">{t('bar.ticker')}</p>
+        <p class="mono ticker__support">{t('bar.support')}: [TELEFONO]</p>
+      </div>
+    </div>
+  )
+}
+
+<header class="header">
+  <div class="wrap header__inner">
+    <div class="header__left">
+      <a class="brand" href={href(lang, 'home')} aria-label="Compud">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+          <rect x="1" y="1" width="24" height="24" rx="3" stroke="#3ed28a" stroke-width="1.5"></rect>
+          <rect x="7.5" y="7.5" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1.5"></rect>
+          <path
+            d="M10 1v5M16 1v5M10 20v5M16 20v5M1 10h5M1 16h5M20 10h5M20 16h5"
+            stroke="#3ed28a"
+            stroke-width="1.5"></path>
+        </svg>
+        <span class="brand__word">Compud</span>
+      </a>
+
+      {
+        !compact && (
+          <nav class="nav" aria-label={t('nav.miniPc')}>
+            {links.map((link) => (
+              <a href={link.url} class:list={['nav__link', { 'is-active': active === link.key }]}>
+                {link.label}
+              </a>
+            ))}
+          </nav>
+        )
+      }
+    </div>
+
+    <div class="header__right">
+      {
+        compact && (
+          <span class="mono header__secure">
+            <Icon name="lock" size={14} />
+            {t('co.secure')}
+          </span>
+        )
+      }
+      <LangSwitch lang={lang} route={route} param={param} />
+      {
+        !compact && (
+          <a class="carthandle" href={href(lang, 'checkout')} aria-label={t('nav.cart')}>
+            <Icon name="cart" size={18} />
+            <CartBadge client:idle />
+          </a>
+        )
+      }
+    </div>
+  </div>
+</header>
+
+<style>
+  .ticker {
+    background: var(--bg-deep);
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .ticker__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 38px;
+  }
+
+  .ticker__text,
+  .ticker__support {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .header {
+    border-bottom: 1px solid var(--line-soft);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+  }
+
+  .header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 74px;
+  }
+
+  .header__left {
+    display: flex;
+    align-items: center;
+    gap: 44px;
+    min-width: 0;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+  }
+
+  .brand:hover {
+    color: var(--text);
+  }
+
+  .brand__word {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.03em;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+  }
+
+  .nav__link {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-2);
+    white-space: nowrap;
+  }
+
+  .nav__link.is-active {
+    color: var(--accent);
+  }
+
+  .header__right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .header__secure {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--muted-2);
+  }
+
+  .carthandle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-btn);
+    padding: 9px 12px;
+    min-height: 40px;
+  }
+
+  .carthandle:hover {
+    border-color: var(--accent);
+  }
+
+  @media (max-width: 860px) {
+    .ticker__text {
+      display: none;
+    }
+    .header__left {
+      gap: 20px;
+    }
+    .nav {
+      gap: 16px;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .nav {
+      display: none;
+    }
+    .brand__word {
+      font-size: 19px;
+    }
+  }
+</style>

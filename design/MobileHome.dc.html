@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+  <style>
+    body { margin: 0; background: #0D0F11; color: #E9ECEE; font-family: Archivo, "Helvetica Neue", Helvetica, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #3ED28A; text-decoration: none; }
+    a:hover { color: #7BE3B2; }
+    h1, h2, h3 { font-family: "Space Grotesk", "Helvetica Neue", Helvetica, sans-serif; margin: 0; letter-spacing: -0.02em; text-wrap: pretty; }
+    p { margin: 0; }
+  </style>
+</helmet>
+
+<div style="width: 390px; background: #0D0F11; display: flex; flex-direction: column;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; height: 58px; padding: 0 20px; border-bottom: 1px solid #1B1F23;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <svg width="22" height="22" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="24" height="24" rx="3" stroke="#3ED28A" stroke-width="1.5"></rect><rect x="7.5" y="7.5" width="11" height="11" rx="1.5" stroke="#E9ECEE" stroke-width="1.5"></rect><path d="M10 1v5M16 1v5M10 20v5M16 20v5M1 10h5M1 16h5M20 10h5M20 16h5" stroke="#3ED28A" stroke-width="1.5"></path></svg>
+      <div style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-weight: 700; font-size: 19px; letter-spacing: -0.03em;">Compud</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 2px; border: 1px solid #2A2F35; border-radius: 3px; padding: 2px;">
+        <div onClick="{{setIt}}" style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; padding: 8px 10px; border-radius: 2px; cursor: pointer; background: {{v.itBg}}; color: {{v.itFg}};">IT</div>
+        <div onClick="{{setEn}}" style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; padding: 8px 10px; border-radius: 2px; cursor: pointer; background: {{v.enBg}}; color: {{v.enFg}};">EN</div>
+      </div>
+      <div style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h16M3 11h16M3 16h16" stroke="#E9ECEE" stroke-width="1.6" stroke-linecap="round"></path></svg>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 30px 20px 34px; display: flex; flex-direction: column; gap: 18px; border-bottom: 1px solid #1B1F23; background-image: linear-gradient(#14181B 1px, transparent 1px), linear-gradient(90deg, #14181B 1px, transparent 1px); background-size: 44px 44px;">
+    <div style="display: flex; align-items: center; gap: 8px; border: 1px solid #2A4F3C; background: #0F1A15; border-radius: 3px; padding: 6px 10px; align-self: flex-start;">
+      <span style="width: 5px; height: 5px; border-radius: 50%; background: #3ED28A; display: block;"></span>
+      <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: #3ED28A;">{{t.eyebrow}}</span>
+    </div>
+    <h1 style="font-size: 34px; line-height: 1.06; font-weight: 700;">{{t.h1}}</h1>
+    <p style="font-size: 15px; line-height: 1.55; color: #A8B0B7;">{{t.heroSub}}</p>
+    <div style="display: flex; flex-direction: column; gap: 10px; padding-top: 4px;">
+      <div style="background: #3ED28A; color: #06120C; font-weight: 600; font-size: 16px; padding: 16px 20px; border-radius: 4px; text-align: center;">{{t.ctaPrimary}}</div>
+      <div style="border: 1px solid #2A2F35; color: #E9ECEE; font-weight: 500; font-size: 16px; padding: 15px 20px; border-radius: 4px; text-align: center;">{{t.ctaSecondary}}</div>
+    </div>
+  </div>
+
+  <div style="padding: 26px 20px; background: #101316; border-bottom: 1px solid #1B1F23; display: flex; flex-direction: column; gap: 16px;">
+    <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #3ED28A;">{{t.payKicker}}</div>
+    <h2 style="font-size: 22px; font-weight: 700; line-height: 1.15;">{{t.payTitle}}</h2>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; gap: 12px; align-items: flex-start; border: 1px solid #23282D; background: #15181B; border-radius: 6px; padding: 15px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #06120C; background: #3ED28A; width: 20px; height: 20px; border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">1</div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="font-size: 15px; font-weight: 500;">{{t.step1t}}</div>
+          <p style="font-size: 13px; line-height: 1.55; color: #98A0A8;">{{t.step1b}}</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: flex-start; border: 1px solid #23282D; background: #15181B; border-radius: 6px; padding: 15px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #06120C; background: #3ED28A; width: 20px; height: 20px; border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">2</div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="font-size: 15px; font-weight: 500;">{{t.step2t}}</div>
+          <p style="font-size: 13px; line-height: 1.55; color: #98A0A8;">{{t.step2b}}</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: flex-start; border: 1px solid #23282D; background: #15181B; border-radius: 6px; padding: 15px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #06120C; background: #3ED28A; width: 20px; height: 20px; border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">3</div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="font-size: 15px; font-weight: 500;">{{t.step3t}}</div>
+          <p style="font-size: 13px; line-height: 1.55; color: #98A0A8;">{{t.step3b}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 28px 20px; border-bottom: 1px solid #1B1F23; display: flex; flex-direction: column; gap: 16px;">
+    <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+      <h2 style="font-size: 22px; font-weight: 700;">{{t.miniTitle}}</h2>
+      <div style="font-size: 13px; color: #3ED28A; font-weight: 500;">{{t.miniAll}}</div>
+    </div>
+    <div style="border: 1px solid #23282D; background: #131619; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+      <div style="height: 178px; background: #181C20; border-bottom: 1px solid #23282D; display: flex; align-items: center; justify-content: center; position: relative;">
+        <svg width="200" height="132" viewBox="0 0 220 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="30" y="24" width="160" height="102" rx="8" fill="#1F2429" stroke="#3A4147" stroke-width="1.5"></rect>
+          <rect x="44" y="38" width="132" height="60" rx="4" fill="#14181B" stroke="#2F353B"></rect>
+          <path d="M56 50h108M56 60h108M56 70h108M56 80h108" stroke="#242A30" stroke-width="2" stroke-linecap="round"></path>
+          <circle cx="54" cy="112" r="4" fill="#3ED28A"></circle>
+          <rect x="70" y="108" width="18" height="8" rx="4" fill="#2A3036"></rect>
+          <rect x="96" y="108" width="18" height="8" rx="4" fill="#2A3036"></rect>
+          <rect x="52" y="126" width="116" height="5" rx="2" fill="#101315"></rect>
+        </svg>
+        <div style="position: absolute; top: 12px; left: 14px; display: flex; align-items: center; gap: 6px; background: #0F1A15; border: 1px solid #2A4F3C; border-radius: 3px; padding: 5px 8px;">
+          <span style="width: 5px; height: 5px; border-radius: 50%; background: #3ED28A; display: block;"></span>
+          <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #3ED28A; text-transform: uppercase;">{{t.badgeReady}}</span>
+        </div>
+      </div>
+      <div style="padding: 18px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; color: #6E767D; text-transform: uppercase;">Mini PC</div>
+          <h3 style="font-size: 19px; font-weight: 500;">Minisforum AI X1 Pro</h3>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #98A0A8; line-height: 1.5;">Ryzen AI 9 HX 370 · 32 GB · 1 TB</div>
+        </div>
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; border-top: 1px solid #1F2429; padding-top: 14px;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <div style="font-size: 11px; color: #6E767D;">{{t.vatNote}}</div>
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 22px; font-weight: 500;">1.299 &euro;</div>
+          </div>
+          <div style="background: #3ED28A; color: #06120C; font-weight: 600; font-size: 15px; padding: 14px 20px; border-radius: 4px;">{{t.addCart}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 26px 20px; background: #101316; border-bottom: 1px solid #1B1F23; display: flex; flex-direction: column; gap: 14px;">
+    <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #E0A33C;">{{t.rackKicker}}</div>
+    <h2 style="font-size: 24px; font-weight: 700; line-height: 1.12;">{{t.rackTitle}}</h2>
+    <p style="font-size: 14px; line-height: 1.6; color: #A8B0B7;">{{t.rackSub}}</p>
+    <div style="border: 1px solid #2A2F35; color: #E9ECEE; font-weight: 500; font-size: 16px; padding: 15px 20px; border-radius: 4px; text-align: center; margin-top: 4px;">{{t.rackCta}}</div>
+  </div>
+
+  <div style="padding: 26px 20px 34px; background: #0A0C0E; display: flex; flex-direction: column; gap: 14px;">
+    <div style="display: flex; flex-wrap: wrap; gap: 14px 20px; font-size: 13px; color: #98A0A8;">
+      <div>{{t.navMini}}</div>
+      <div>{{t.navRack}}</div>
+      <div>{{t.navSupport}}</div>
+      <div>{{t.footShip}}</div>
+      <div>{{t.footRma}}</div>
+    </div>
+    <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #4A5259; line-height: 1.7;">Compud · P.IVA [P.IVA]<br>[EMAIL] · [TELEFONO]</div>
+  </div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"lang":{"editor":"enum","options":["it","en"],"default":"it","tsType":"string"},"$preview":{"width":390,"height":1860}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { lang: null };
+  }
+  renderVals() {
+    var self = this;
+    var st = this.state || {};
+    var lang = st.lang || this.props.lang || 'it';
+    var isIt = lang !== 'en';
+    var IT = {
+      eyebrow: "Assemblato in Italia",
+      h1: "Mini PC potenti. Server rack su misura.",
+      heroSub: "Componenti selezionati, collaudo 48 ore, spedizione entro 24 ore dall’accredito del bonifico.",
+      ctaPrimary: "Configura il tuo sistema", ctaSecondary: "Sfoglia i mini PC",
+      payKicker: "Pagamento",
+      payTitle: "Bonifico istantaneo, nessuna commissione.",
+      step1t: "Confermi l’ordine", step1b: "Ricevi IBAN, importo e causale univoca.",
+      step2t: "Esegui il bonifico", step2b: "SEPA Instant: accredito in pochi secondi, 24/7.",
+      step3t: "Spediamo", step3b: "Partenza entro 24 ore lavorative, con tracking.",
+      miniTitle: "Pronti alla spedizione", miniAll: "Vedi tutti",
+      badgeReady: "Pronto in 24 h", vatNote: "IVA esclusa", addCart: "Aggiungi",
+      rackKicker: "Su commessa",
+      rackTitle: "Server rack assemblati su misura",
+      rackSub: "Dicci il carico di lavoro: ti rispondiamo con configurazione, preventivo e tempi.",
+      rackCta: "Richiedi una configurazione",
+      navMini: "Mini PC", navRack: "Server rack", navSupport: "Assistenza",
+      footShip: "Spedizioni", footRma: "Garanzia"
+    };
+    var EN = {
+      eyebrow: "Assembled in Italy",
+      h1: "Powerful mini PCs. Rack servers built to order.",
+      heroSub: "Selected parts, 48-hour burn-in, dispatch within 24 hours of your transfer landing.",
+      ctaPrimary: "Configure your system", ctaSecondary: "Browse mini PCs",
+      payKicker: "Payment",
+      payTitle: "Instant bank transfer, no fees.",
+      step1t: "Confirm the order", step1b: "You get the IBAN, amount and a unique reference.",
+      step2t: "Send the transfer", step2b: "SEPA Instant: credit lands in seconds, 24/7.",
+      step3t: "We ship", step3b: "Leaves within 24 working hours, with tracking.",
+      miniTitle: "Ready to ship", miniAll: "See all",
+      badgeReady: "Ships in 24 h", vatNote: "excl. VAT", addCart: "Add",
+      rackKicker: "Built to order",
+      rackTitle: "Rack servers assembled to your spec",
+      rackSub: "Tell us the workload: we answer with a configuration, a quote and lead times.",
+      rackCta: "Request a configuration",
+      navMini: "Mini PCs", navRack: "Rack servers", navSupport: "Support",
+      footShip: "Shipping", footRma: "Warranty"
+    };
+    return {
+      t: isIt ? IT : EN,
+      v: {
+        itBg: isIt ? '#3ED28A' : 'transparent', itFg: isIt ? '#06120C' : '#98A0A8',
+        enBg: isIt ? 'transparent' : '#3ED28A', enFg: isIt ? '#98A0A8' : '#06120C'
+      },
+      setIt: function () { self.setState({ lang: 'it' }); },
+      setEn: function () { self.setState({ lang: 'en' }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

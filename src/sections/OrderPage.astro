@@ -1,0 +1,366 @@
+---
+import Icon from '../components/Icon.astro';
+import Stepper from '../components/Stepper.astro';
+import PaymentPanel from '../islands/PaymentPanel.tsx';
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+import { bank, commerce } from '../lib/config';
+import { formatDate, formatEur, toDecimalString } from '../lib/money';
+import type { Order } from '../lib/orders';
+
+interface Props {
+  lang: Lang;
+  order: Order;
+  qrDataUrl: string | null;
+}
+const { lang, order, qrDataUrl } = Astro.props;
+const t = useTranslations(lang);
+
+const benefits = [
+  { icon: 'transfer', title: t('ord.b1.title'), body: t('ord.b1.body') },
+  { icon: 'clock', title: t('ord.b2.title'), body: t('ord.b2.body') },
+  { icon: 'card', title: t('ord.b3.title'), body: t('ord.b3.body') },
+] as const;
+
+const c = order.customer;
+---
+
+<Stepper lang={lang} current={2} />
+
+<section class="ord">
+  <div class="wrap ord__inner">
+    <div class="ord__main">
+      <div class="ord__intro">
+        <h1 class="h2">{t('ord.title')}</h1>
+        <p class="lead ord__lead">{t('ord.intro')}</p>
+      </div>
+
+      <PaymentPanel
+        client:load
+        reference={order.ref}
+        initialStatus={order.status}
+        beneficiary={bank.holder}
+        bankName={bank.name}
+        iban={bank.iban}
+        bic={bank.bic}
+        amount={formatEur(order.totals.grossCents, lang, { decimals: true })}
+        amountRaw={toDecimalString(order.totals.grossCents)}
+        expiresAt={order.expiresAt}
+        qrDataUrl={qrDataUrl}
+        strings={{
+          statusPending: t('ord.status.pending'),
+          statusPaid: t('ord.status.paid'),
+          statusExpired: t('ord.status.expired'),
+          statusCancelled: t('ord.status.cancelled'),
+          metaPending: t('ord.meta.pending', { ref: order.ref, date: formatDate(order.expiresAt, lang) }),
+          metaPaid: t('ord.meta.paid'),
+          beneficiary: t('ord.beneficiary'),
+          bank: t('ord.bank'),
+          iban: t('ord.iban'),
+          bic: t('ord.bic'),
+          reference: t('ord.reference'),
+          amount: t('ord.amount'),
+          copy: t('ord.copy'),
+          copied: t('ord.copied'),
+          refWarning: t('ord.refWarning'),
+          qrTitle: t('ord.qrTitle'),
+          qrNote: t('ord.qrNote'),
+          paidTitle: t('ord.paidTitle'),
+          paidBody: t('ord.paidBody', { ref: order.ref }),
+          watching: t('ord.watching'),
+        }}
+      />
+
+      <ul class="ord__benefits">
+        {
+          benefits.map((item) => (
+            <li class="panel ord__benefit">
+              <span class="ord__benefitIcon"><Icon name={item.icon} size={20} /></span>
+              <h2 class="ord__benefitTitle">{item.title}</h2>
+              <p class="ord__benefitBody">{item.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <aside class="ord__aside">
+      <div class="card ord__summary">
+        <h2 class="ord__summaryTitle">{t('co.summary')}</h2>
+        <ul class="ord__lines">
+          {
+            order.lines.map((line) => (
+              <li class="ord__line">
+                <div class="ord__lineText">
+                  <span class="ord__lineName">{line.name}</span>
+                  <span class="mono ord__lineConfig">{line.configuration}</span>
+                  <span class="mono ord__lineQty">{t('co.qty')} {line.quantity}</span>
+                </div>
+                <span class="mono ord__linePrice">{formatEur(line.lineNetCents, lang)}</span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <dl class="ord__totals">
+          <div class="ord__total">
+            <dt>{t('co.subtotal')}</dt>
+            <dd class="mono">{formatEur(order.totals.netCents, lang)}</dd>
+          </div>
+          <div class="ord__total">
+            <dt>{t('co.shipping')}</dt>
+            <dd class="mono ord__free">
+              {order.totals.shippingCents === 0 ? t('co.free') : formatEur(order.totals.shippingCents, lang)}
+            </dd>
+          </div>
+          <div class="ord__total">
+            <dt>{t('co.payFee')}</dt>
+            <dd class="mono ord__free">{formatEur(0, lang, { decimals: true })}</dd>
+          </div>
+          <div class="ord__total">
+            <dt>{t('co.vat', { rate: order.totals.vatRate })}</dt>
+            <dd class="mono">{formatEur(order.totals.vatCents, lang, { decimals: true })}</dd>
+          </div>
+        </dl>
+
+        <div class="ord__grand">
+          <span class="ord__grandLabel">{t('co.total')}</span>
+          <span class="ord__grandValue">{formatEur(order.totals.grossCents, lang, { decimals: true })}</span>
+        </div>
+      </div>
+
+      <div class="panel ord__address">
+        <p class="kicker">{t('ord.deliverTo')}</p>
+        <address class="ord__addressBody">
+          {c.company && <span>{c.company}</span>}
+          <span>{c.name}</span>
+          <span>{c.address}</span>
+          <span>{c.zip} {c.city} ({c.province})</span>
+          <span>{c.country}</span>
+          <span class="mono ord__contact">{c.email}</span>
+        </address>
+      </div>
+
+      <p class="ord__privacy">
+        <Icon name="lock" size={16} />
+        {t('co.privacy')}
+      </p>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .ord__inner {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 48px;
+    align-items: start;
+    padding-block: 48px 80px;
+  }
+
+  .ord__main {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  .ord__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ord__lead {
+    max-width: 560px;
+  }
+
+  .ord__benefits {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .ord__benefit {
+    background: var(--bg-band);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ord__benefitIcon {
+    color: var(--accent);
+    display: inline-flex;
+  }
+
+  .ord__benefitTitle {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+
+  .ord__benefitBody {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .ord__aside {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .ord__summary {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .ord__summaryTitle {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .ord__lines {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .ord__line {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    border-bottom: 1px solid var(--line-faint);
+    padding-bottom: 16px;
+  }
+
+  .ord__lineText {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .ord__lineName {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .ord__lineConfig {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .ord__lineQty {
+    font-size: 11px;
+    color: var(--muted-2);
+  }
+
+  .ord__linePrice {
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .ord__totals {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .ord__total {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .ord__total dd {
+    margin: 0;
+    color: var(--text-2);
+  }
+
+  .ord__free {
+    color: var(--accent);
+  }
+
+  .ord__grand {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    border-top: 1px solid var(--line-strong);
+    padding-top: 16px;
+  }
+
+  .ord__grandLabel {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 500;
+  }
+
+  .ord__grandValue {
+    font-family: var(--font-mono);
+    font-size: 26px;
+    font-weight: 500;
+  }
+
+  .ord__address {
+    background: var(--bg-band);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .ord__addressBody {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-style: normal;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--text-2);
+  }
+
+  .ord__contact {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  .ord__privacy {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--muted-2);
+    padding: 4px 2px;
+  }
+
+  @media (max-width: 1000px) {
+    .ord__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .ord__benefits {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

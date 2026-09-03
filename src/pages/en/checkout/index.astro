@@ -1,0 +1,12 @@
+---
+import Base from '../../../layouts/Base.astro';
+import CheckoutPage from '../../../sections/CheckoutPage.astro';
+import { useTranslations } from '../../../i18n/utils';
+
+const lang = 'en' as const;
+const t = useTranslations(lang);
+---
+
+<Base lang={lang} route="checkout" title={t('meta.checkout.title')} compact noindex>
+  <CheckoutPage lang={lang} />
+</Base>

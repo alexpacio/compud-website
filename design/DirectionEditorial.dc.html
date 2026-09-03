@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Space+Grotesk:wght@500;700&display=swap">
+  <style>
+    body { margin: 0; background: #F2F0EB; color: #2A2724; font-family: "Space Grotesk", "Helvetica Neue", Helvetica, sans-serif; }
+    a { color: #B4533A; } a:hover { color: #8A3D2B; }
+    p { margin: 0; }
+  </style>
+</helmet>
+
+<div style="width: 720px; height: 900px; background: #F2F0EB; padding: 30px; display: flex; flex-direction: column; gap: 16px; box-sizing: border-box;">
+
+  <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px;">
+    <div style="font-family: Caveat, 'Comic Sans MS', cursive; font-size: 26px; color: #B4533A;">Direzione A — Catalogo editoriale</div>
+    <div style="font-family: Caveat, 'Comic Sans MS', cursive; font-size: 18px; color: #8A857E;">schizzo, non definitivo</div>
+  </div>
+  <p style="font-size: 13px; line-height: 1.55; color: #6B6660; max-width: 620px;">Il prodotto è trattato come un oggetto da catalogo: carta chiara, foto grandi, testo lungo. Punta sull’artigianalità del montaggio. Rischio: sembra un negozio di design, meno un fornitore tecnico affidabile.</p>
+
+  <div style="border: 2px solid #2A2724; background: #FFFFFF; flex-grow: 1; display: flex; flex-direction: column;">
+    <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #2A2724; padding: 12px 16px;">
+      <div style="font-size: 18px; font-weight: 700;">Compud</div>
+      <div style="display: flex; gap: 12px;">
+        <div style="width: 58px; height: 10px; background: #D8D4CD;"></div>
+        <div style="width: 58px; height: 10px; background: #D8D4CD;"></div>
+        <div style="width: 58px; height: 10px; background: #D8D4CD;"></div>
+        <div style="width: 30px; height: 10px; background: #B4533A;"></div>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 18px; padding: 22px 16px; border-bottom: 2px dashed #C9C4BC;">
+      <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 10px; justify-content: center;">
+        <div style="font-size: 30px; font-weight: 700; line-height: 1.05;">Macchine<br>montate a mano.</div>
+        <div style="width: 100%; height: 8px; background: #D8D4CD;"></div>
+        <div style="width: 80%; height: 8px; background: #D8D4CD;"></div>
+        <div style="width: 150px; height: 34px; background: #B4533A; margin-top: 6px;"></div>
+      </div>
+      <div style="width: 250px; height: 180px; border: 2px solid #2A2724; display: flex; align-items: center; justify-content: center; background: #EDEAE4;">
+        <svg width="140" height="100" viewBox="0 0 140 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="14" y="20" width="112" height="62" rx="5" fill="#DCD7CF" stroke="#2A2724" stroke-width="2"></rect>
+          <path d="M4 90h132" stroke="#2A2724" stroke-width="2"></path>
+          <path d="M18 24l104 54M122 24L18 78" stroke="#C4BEB5" stroke-width="1.5"></path>
+        </svg>
+      </div>
+    </div>
+
+    <div style="padding: 18px 16px; display: flex; flex-direction: column; gap: 12px; border-bottom: 2px dashed #C9C4BC;">
+      <div style="font-family: Caveat, 'Comic Sans MS', cursive; font-size: 18px; color: #8A857E;">storia lunga + foto del banco di lavoro</div>
+      <div style="display: flex; gap: 14px;">
+        <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 7px;">
+          <div style="width: 100%; height: 8px; background: #D8D4CD;"></div>
+          <div style="width: 100%; height: 8px; background: #D8D4CD;"></div>
+          <div style="width: 92%; height: 8px; background: #D8D4CD;"></div>
+          <div style="width: 70%; height: 8px; background: #D8D4CD;"></div>
+        </div>
+        <div style="width: 190px; height: 78px; border: 2px solid #C9C4BC; background: #EDEAE4;"></div>
+      </div>
+    </div>
+
+    <div style="padding: 18px 16px; display: flex; flex-direction: column; gap: 12px; flex-grow: 1;">
+      <div style="font-family: Caveat, 'Comic Sans MS', cursive; font-size: 18px; color: #8A857E;">tre prodotti, schede grandi</div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; flex-grow: 1;">
+        <div style="border: 2px solid #2A2724; background: #EDEAE4; display: flex; flex-direction: column;">
+          <div style="flex-grow: 1; border-bottom: 2px solid #2A2724;"></div>
+          <div style="padding: 10px; display: flex; flex-direction: column; gap: 6px;"><div style="width: 80%; height: 8px; background: #C9C4BC;"></div><div style="width: 50%; height: 8px; background: #B4533A;"></div></div>
+        </div>
+        <div style="border: 2px solid #2A2724; background: #EDEAE4; display: flex; flex-direction: column;">
+          <div style="flex-grow: 1; border-bottom: 2px solid #2A2724;"></div>
+          <div style="padding: 10px; display: flex; flex-direction: column; gap: 6px;"><div style="width: 80%; height: 8px; background: #C9C4BC;"></div><div style="width: 50%; height: 8px; background: #B4533A;"></div></div>
+        </div>
+        <div style="border: 2px solid #2A2724; background: #EDEAE4; display: flex; flex-direction: column;">
+          <div style="flex-grow: 1; border-bottom: 2px solid #2A2724;"></div>
+          <div style="padding: 10px; display: flex; flex-direction: column; gap: 6px;"><div style="width: 80%; height: 8px; background: #C9C4BC;"></div><div style="width: 50%; height: 8px; background: #B4533A;"></div></div>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px; border-top: 2px dashed #C9C4BC; padding-top: 12px;">
+        <div style="width: 12px; height: 12px; background: #B4533A;"></div>
+        <div style="font-family: Caveat, 'Comic Sans MS', cursive; font-size: 18px; color: #6B6660;">il bonifico resta in fondo, spiegato a parole</div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":720,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

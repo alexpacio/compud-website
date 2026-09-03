@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+  <style>
+    body { margin: 0; background: #0D0F11; color: #E9ECEE; font-family: Archivo, "Helvetica Neue", Helvetica, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #3ED28A; text-decoration: none; }
+    a:hover { color: #7BE3B2; }
+    h1, h2, h3 { font-family: "Space Grotesk", "Helvetica Neue", Helvetica, sans-serif; margin: 0; letter-spacing: -0.02em; }
+    p { margin: 0; }
+  </style>
+</helmet>
+
+<div style="width: 1200px; background: #0D0F11; padding: 48px 56px 56px; display: flex; flex-direction: column; gap: 44px;">
+
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; border-bottom: 1px solid #23282D; padding-bottom: 22px;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #3ED28A;">Compud · design system</div>
+      <h1 style="font-size: 32px; font-weight: 700;">Fondamenta visive</h1>
+    </div>
+    <p style="font-size: 13px; line-height: 1.6; color: #98A0A8; max-width: 380px;">Token, tipografia e componenti usati su tutte le pagine. Ogni valore qui sotto è quello reale nel mockup: copiali direttamente nel tema Astro.</p>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #6E767D;">Colore</div>
+    <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px;">
+      <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 76px; border-radius: 5px; background: #0D0F11; border: 1px solid #2A2F35;"></div><div style="font-size: 12px; font-weight: 500;">Fondo</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">#0D0F11</div></div>
+      <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 76px; border-radius: 5px; background: #131619; border: 1px solid #2A2F35;"></div><div style="font-size: 12px; font-weight: 500;">Superficie</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">#131619</div></div>
+      <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 76px; border-radius: 5px; background: #2A2F35;"></div><div style="font-size: 12px; font-weight: 500;">Linea</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">#2A2F35</div></div>
+      <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 76px; border-radius: 5px; background: #98A0A8;"></div><div style="font-size: 12px; font-weight: 500;">Testo tenue</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">#98A0A8</div></div>
+      <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 76px; border-radius: 5px; background: #3ED28A;"></div><div style="font-size: 12px; font-weight: 500;">Accento</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">#3ED28A</div></div>
+      <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 76px; border-radius: 5px; background: #E0A33C;"></div><div style="font-size: 12px; font-weight: 500;">Avviso</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">#E0A33C</div></div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 44px;">
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #6E767D;">Tipografia</div>
+      <div style="display: flex; flex-direction: column; gap: 18px;">
+        <div style="display: flex; align-items: baseline; gap: 20px;">
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #4A5259; width: 116px; flex-shrink: 0;">Grotesk 700 / 48</div>
+          <div style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-size: 42px; font-weight: 700; letter-spacing: -0.02em;">Titolo pagina</div>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 20px;">
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #4A5259; width: 116px; flex-shrink: 0;">Grotesk 700 / 34</div>
+          <div style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-size: 30px; font-weight: 700; letter-spacing: -0.02em;">Titolo sezione</div>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 20px;">
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #4A5259; width: 116px; flex-shrink: 0;">Grotesk 500 / 20</div>
+          <div style="font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif; font-size: 20px; font-weight: 500;">Nome prodotto</div>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 20px;">
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #4A5259; width: 116px; flex-shrink: 0;">Archivo 400 / 15</div>
+          <div style="font-size: 15px; line-height: 1.6; color: #A8B0B7; max-width: 380px;">Testo corrente: descrizioni prodotto, spiegazioni del pagamento, note di garanzia.</div>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 20px;">
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #4A5259; width: 116px; flex-shrink: 0;">Mono 400 / 13</div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 13px; color: #C6CCD1;">Specifiche, prezzi, IBAN e causali</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #6E767D;">Controlli</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+        <div style="background: #3ED28A; color: #06120C; font-weight: 600; font-size: 15px; padding: 14px 22px; border-radius: 4px;">Azione primaria</div>
+        <div style="border: 1px solid #2A2F35; color: #E9ECEE; font-weight: 500; font-size: 15px; padding: 13px 20px; border-radius: 4px;">Secondaria</div>
+        <div style="color: #3ED28A; font-weight: 500; font-size: 15px; padding: 13px 6px;">Link azione</div>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 7px; background: #0F1A15; border: 1px solid #2A4F3C; border-radius: 3px; padding: 6px 10px;"><span style="width: 5px; height: 5px; border-radius: 50%; background: #3ED28A; display: block;"></span><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; text-transform: uppercase; color: #3ED28A;">Disponibile</span></div>
+        <div style="display: flex; align-items: center; gap: 7px; background: #1C1508; border: 1px solid #574220; border-radius: 3px; padding: 6px 10px;"><span style="width: 5px; height: 5px; border-radius: 50%; background: #E0A33C; display: block;"></span><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; text-transform: uppercase; color: #E0A33C;">In attesa</span></div>
+        <div style="display: flex; align-items: center; gap: 7px; background: #15181B; border: 1px solid #2A2F35; border-radius: 3px; padding: 6px 10px;"><span style="width: 5px; height: 5px; border-radius: 50%; background: #6E767D; display: block;"></span><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; text-transform: uppercase; color: #98A0A8;">Su commessa</span></div>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <div style="flex-grow: 1; border: 1px solid #3ED28A; background: #0F1A15; border-radius: 5px; padding: 13px 14px; display: flex; flex-direction: column; gap: 4px;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 14px; color: #3ED28A;">32 GB</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">incluso</div></div>
+        <div style="flex-grow: 1; border: 1px solid #2A2F35; background: #131619; border-radius: 5px; padding: 13px 14px; display: flex; flex-direction: column; gap: 4px;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 14px; color: #C6CCD1;">64 GB</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #6E767D;">+210 €</div></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 7px; border: 1px solid #2A2F35; border-radius: 5px; padding: 13px 14px; background: #15181B;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #6E767D;">Campo dati</div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 17px;">CPD-2431-8F</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #6E767D;">Regole di layout</div>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px;">
+      <div style="border: 1px solid #23282D; background: #131619; border-radius: 6px; padding: 18px; display: flex; flex-direction: column; gap: 6px;"><div style="font-size: 14px; font-weight: 500;">Griglia</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #98A0A8;">1440 · margini 120 · gap 24</div></div>
+      <div style="border: 1px solid #23282D; background: #131619; border-radius: 6px; padding: 18px; display: flex; flex-direction: column; gap: 6px;"><div style="font-size: 14px; font-weight: 500;">Raggi</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #98A0A8;">3 chip · 4 bottoni · 8 card</div></div>
+      <div style="border: 1px solid #23282D; background: #131619; border-radius: 6px; padding: 18px; display: flex; flex-direction: column; gap: 6px;"><div style="font-size: 14px; font-weight: 500;">Tocco</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #98A0A8;">min 44 px su mobile</div></div>
+      <div style="border: 1px solid #23282D; background: #131619; border-radius: 6px; padding: 18px; display: flex; flex-direction: column; gap: 6px;"><div style="font-size: 14px; font-weight: 500;">Icone</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #98A0A8;">SVG 20/24 · tratto 1,4</div></div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1200,"height":1080}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

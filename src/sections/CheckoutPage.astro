@@ -1,0 +1,90 @@
+---
+import CheckoutForm, { type CatalogueEntry } from '../islands/CheckoutForm.tsx';
+import { pick, products } from '../data/catalogue';
+import type { Lang } from '../i18n/ui';
+import { href, useTranslations } from '../i18n/utils';
+import { commerce } from '../lib/config';
+import Stepper from '../components/Stepper.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+/** Only what the cart needs to price and label itself, no marketing copy. */
+const catalogue: Record<string, CatalogueEntry> = Object.fromEntries(
+  products.map((product) => [
+    product.slug,
+    {
+      name: product.name,
+      url: href(lang, 'product', product.slug),
+      basePriceCents: product.basePriceCents,
+      options: {
+        ram: Object.fromEntries(
+          product.options.ram.map((o) => [o.id, { label: pick(o.label, lang), addCents: o.addCents }]),
+        ),
+        ssd: Object.fromEntries(
+          product.options.ssd.map((o) => [o.id, { label: pick(o.label, lang), addCents: o.addCents }]),
+        ),
+        os: Object.fromEntries(
+          product.options.os.map((o) => [o.id, { label: pick(o.label, lang), addCents: o.addCents }]),
+        ),
+      },
+    },
+  ]),
+);
+---
+
+<Stepper lang={lang} current={1} />
+
+<section class="checkout">
+  <div class="wrap checkout__inner">
+    <CheckoutForm
+      client:load
+      lang={lang}
+      vatRate={commerce.vatRate}
+      shippingCents={commerce.shippingCents}
+      catalogue={catalogue}
+      browseUrl={href(lang, 'miniPc')}
+      strings={{
+        title: t('co.title'),
+        intro: t('co.intro'),
+        empty: t('co.empty'),
+        emptyCta: t('co.emptyCta'),
+        summary: t('co.summary'),
+        qty: t('co.qty'),
+        remove: t('co.remove'),
+        subtotal: t('co.subtotal'),
+        shipping: t('co.shipping'),
+        free: t('co.free'),
+        payFee: t('co.payFee'),
+        vat: t('co.vat', { rate: commerce.vatRate }),
+        total: t('co.total'),
+        fName: t('co.f.name'),
+        fCompany: t('co.f.company'),
+        fVat: t('co.f.vat'),
+        fEmail: t('co.f.email'),
+        fPhone: t('co.f.phone'),
+        fAddress: t('co.f.address'),
+        fZip: t('co.f.zip'),
+        fCity: t('co.f.city'),
+        fProvince: t('co.f.province'),
+        fCountry: t('co.f.country'),
+        fNotes: t('co.f.notes'),
+        required: t('co.required'),
+        invalidEmail: t('co.invalidEmail'),
+        submit: t('co.submit'),
+        submitting: t('co.submitting'),
+        error: t('co.error'),
+        privacy: t('co.privacy'),
+      }}
+    />
+  </div>
+</section>
+
+<style>
+  .checkout__inner {
+    padding-block: 48px 80px;
+  }
+</style>

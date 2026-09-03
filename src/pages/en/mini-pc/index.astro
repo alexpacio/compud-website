@@ -1,0 +1,18 @@
+---
+import Base from '../../../layouts/Base.astro';
+import MiniPcIndex from '../../../sections/MiniPcIndex.astro';
+import { useTranslations } from '../../../i18n/utils';
+
+const lang = 'en' as const;
+const t = useTranslations(lang);
+---
+
+<Base
+  lang={lang}
+  route="miniPc"
+  active="miniPc"
+  title={t('meta.miniPc.title')}
+  description={t('meta.miniPc.description')}
+>
+  <MiniPcIndex lang={lang} />
+</Base>
