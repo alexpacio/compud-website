@@ -36,6 +36,10 @@ const stockChip =
       ? { tone: 'chip chip--warn', label: t('badge.last', { n: product.stock }) }
       : { tone: 'chip chip--ok', label: t('badge.stock', { n: product.stock }) };
 
+const isNas = (product.section ?? 'miniPc') === 'nas';
+const sectionRoute = (isNas ? 'nas' : 'miniPc') as const;
+const sectionLabel = isNas ? t('nav.nas') : t('nav.miniPc');
+
 const prep = [
   { icon: 'clock', title: t('pdp.prep1.title'), body: t('pdp.prep1.body') },
   { icon: 'list', title: t('pdp.prep2.title'), body: t('pdp.prep2.body') },
@@ -49,7 +53,7 @@ const prep = [
     <p class="mono crumbs__text">
       <a href={href(lang, 'home')}>{t('pdp.crumbHome').toUpperCase()}</a>
       <span aria-hidden="true"> / </span>
-      <a href={href(lang, 'miniPc')}>{t('nav.miniPc').toUpperCase()}</a>
+      <a href={href(lang, sectionRoute)}>{sectionLabel.toUpperCase()}</a>
       <span aria-hidden="true"> / </span>
       <span aria-current="page">{product.name.toUpperCase()}</span>
     </p>
@@ -60,15 +64,49 @@ const prep = [
   <div class="wrap pdp__inner">
     <div class="pdp__media">
       <div class="pdp__frame">
-        <p class="mono pdp__figNote">{t('home.figNote')}</p>
-        <HardwareGlyph glyph={product.glyph} width={480} label={product.name} />
+        {
+          product.images?.length ? (
+            <>
+              <p class="mono pdp__figNote">{product.name} — {product.images.length} foto</p>
+              <img
+                id="pdpMain"
+                class="pdp__img"
+                src={product.images[0]}
+                alt={product.name}
+                fetchpriority="high"
+              />
+            </>
+          ) : (
+            <>
+              <p class="mono pdp__figNote">{t('home.figNote')}</p>
+              <HardwareGlyph glyph={product.glyph} width={480} label={product.name} />
+            </>
+          )
+        }
       </div>
-      <div class="pdp__thumbs" aria-hidden="true">
-        <span class="pdp__thumb is-active"></span>
-        <span class="pdp__thumb"></span>
-        <span class="pdp__thumb"></span>
-        <span class="pdp__thumb"></span>
-      </div>
+      {
+        product.images?.length ? (
+          <div class="pdp__thumbs" role="group" aria-label={product.name}>
+            {product.images.map((src, i) => (
+              <button
+                type="button"
+                class:list={['pdp__thumbBtn', i === 0 && 'is-active']}
+                data-src={src}
+                aria-label={`${product.name} — foto ${i + 1}`}
+              >
+                <img src={src} alt="" loading="lazy" width="220" height="220" />
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div class="pdp__thumbs" aria-hidden="true">
+            <span class="pdp__thumb is-active"></span>
+            <span class="pdp__thumb"></span>
+            <span class="pdp__thumb"></span>
+            <span class="pdp__thumb"></span>
+          </div>
+        )
+      }
     </div>
 
     <div class="pdp__buy">
@@ -105,6 +143,39 @@ const prep = [
   </div>
 </section>
 
+{
+  (product.highlights?.length || product.details) && (
+    <section class="band pdpDetail">
+      <div class="wrap pdpDetail__inner">
+        {product.highlights?.length ? (
+          <div class="pdpDetail__col">
+            <h2 class="h2">{t('pdp.highlightsTitle')}</h2>
+            <ul class="hl">
+              {product.highlights.map((h) => (
+                <li class="hl__item">{pick(h, lang)}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+        {product.details ? (
+          <div class="pdpDetail__col">
+            <h2 class="h2">{t('pdp.detailsTitle')}</h2>
+            <p class="pdpDetail__text">{pick(product.details, lang)}</p>
+            {product.sourceUrl ? (
+              <p class="mono pdpDetail__src">
+                {t('pdp.sourceNote')}{' '}
+                <a href={product.sourceUrl} target="_blank" rel="noopener nofollow">
+                  MINISFORUM ↗
+                </a>
+              </p>
+            ) : null}
+          </div>
+        ) : null}
+      </div>
+    </section>
+  )
+}
+
 <section class="band pdp2">
   <div class="wrap pdp2__inner">
     <div class="pdp2__specs">
@@ -139,6 +210,18 @@ const prep = [
     </div>
   </div>
 </section>
+
+<script>
+  const main = document.getElementById('pdpMain');
+  const thumbs = Array.from(document.querySelectorAll('.pdp__thumbBtn'));
+  thumbs.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const src = btn.getAttribute('data-src');
+      if (main && src) main.setAttribute('src', src);
+      thumbs.forEach((b) => b.classList.toggle('is-active', b === btn));
+    });
+  });
+</script>
 
 <style>
   .crumbs__text {
@@ -176,12 +259,44 @@ const prep = [
     display: grid;
     place-items: center;
     padding: 32px;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* soft top light + floor glow under the cut-out product */
+  .pdp__frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: radial-gradient(60% 45% at 50% 0%, rgba(123, 227, 178, 0.09), transparent 70%);
+    pointer-events: none;
+  }
+
+  .pdp__frame::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 8%;
+    z-index: 0;
+    width: 62%;
+    height: 56px;
+    transform: translateX(-50%);
+    background: radial-gradient(
+      ellipse at center,
+      rgba(62, 210, 138, 0.38),
+      rgba(62, 210, 138, 0.08) 55%,
+      transparent 72%
+    );
+    filter: blur(12px);
+    pointer-events: none;
   }
 
   .pdp__figNote {
     position: absolute;
     top: 18px;
     left: 20px;
+    z-index: 2;
     font-size: 10px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -190,7 +305,7 @@ const prep = [
 
   .pdp__thumbs {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 12px;
   }
 
@@ -203,6 +318,91 @@ const prep = [
 
   .pdp__thumb.is-active {
     border-color: var(--accent);
+  }
+
+  .pdp__img {
+    position: relative;
+    z-index: 1;
+    width: auto;
+    max-width: 100%;
+    max-height: 360px;
+    height: auto;
+    object-fit: contain;
+    filter:
+      drop-shadow(0 30px 28px rgba(0, 0, 0, 0.55))
+      drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
+  }
+
+  .pdp__thumbBtn {
+    height: 88px;
+    padding: 6px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-panel);
+    cursor: pointer;
+  }
+
+  .pdp__thumbBtn img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .pdp__thumbBtn.is-active {
+    border-color: var(--accent);
+  }
+
+  .pdpDetail__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    padding-block: 8px 64px;
+  }
+
+  .pdpDetail__col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .hl {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .hl__item {
+    position: relative;
+    padding-left: 26px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+
+  .hl__item::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  .pdpDetail__text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .pdpDetail__src {
+    font-size: 11px;
+    color: var(--muted-2);
+  }
+
+  .pdpDetail__src a {
+    color: var(--muted-2);
+    text-decoration: underline;
   }
 
   .pdp__buy {
@@ -335,6 +535,7 @@ const prep = [
 
   @media (max-width: 1000px) {
     .pdp__inner,
+    .pdpDetail__inner,
     .pdp2__inner {
       grid-template-columns: minmax(0, 1fr);
       gap: 36px;

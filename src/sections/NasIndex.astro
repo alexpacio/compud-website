@@ -10,20 +10,20 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const items = products.filter((product) => (product.section ?? 'miniPc') === 'miniPc');
+const items = products.filter((product) => (product.section ?? 'miniPc') === 'nas');
 ---
 
 <section class="band index">
   <div class="wrap index__inner">
     <header class="index__head">
-      <p class="kicker kicker--accent">{t('nav.miniPc')}</p>
-      <h1 class="h1 index__title">{t('mini.title')}</h1>
-      <p class="lead index__lead">{t('mini.lead')}</p>
+      <p class="kicker kicker--accent">{t('nav.nas')}</p>
+      <h1 class="h1 index__title">{t('nas.title')}</h1>
+      <p class="lead index__lead">{t('nas.lead')}</p>
     </header>
 
     {
       items.length === 0 ? (
-        <p class="lead">{t('mini.empty')}</p>
+        <p class="lead">{t('nas.empty')}</p>
       ) : (
         <div class="index__grid">
           {items.map((product) => (

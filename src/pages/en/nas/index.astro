@@ -1,0 +1,18 @@
+---
+import Base from '../../../layouts/Base.astro';
+import NasIndex from '../../../sections/NasIndex.astro';
+import { useTranslations } from '../../../i18n/utils';
+
+const lang = 'en' as const;
+const t = useTranslations(lang);
+---
+
+<Base
+  lang={lang}
+  route="nas"
+  active="nas"
+  title={t('meta.nas.title')}
+  description={t('meta.nas.description')}
+>
+  <NasIndex lang={lang} />
+</Base>

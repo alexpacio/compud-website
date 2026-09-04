@@ -1,6 +1,6 @@
 import { ui, defaultLang, routes, type Lang, type UiKey } from './ui';
 
-export type RouteName = 'home' | 'miniPc' | 'product' | 'servers' | 'checkout' | 'order';
+export type RouteName = 'home' | 'miniPc' | 'product' | 'nas' | 'nasProduct' | 'servers' | 'checkout' | 'order';
 
 export function getLangFromUrl(url: URL): Lang {
   const [, first] = url.pathname.split('/');
@@ -32,6 +32,10 @@ export function href(lang: Lang, route: RouteName, param?: string): string {
       return `${prefix}/${seg.miniPc}/`;
     case 'product':
       return `${prefix}/${seg.miniPc}/${param}/`;
+    case 'nas':
+      return `${prefix}/${seg.nas}/`;
+    case 'nasProduct':
+      return `${prefix}/${seg.nas}/${param}/`;
     case 'servers':
       return `${prefix}/${seg.servers}/`;
     case 'checkout':

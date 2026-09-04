@@ -6,7 +6,9 @@ import { pick, products } from '../../data/catalogue';
 import { useTranslations } from '../../i18n/utils';
 
 export const getStaticPaths = (() =>
-  products.map((product) => ({ params: { slug: product.slug }, props: { product } }))) satisfies GetStaticPaths;
+  products
+    .filter((product) => (product.section ?? 'miniPc') === 'miniPc')
+    .map((product) => ({ params: { slug: product.slug }, props: { product } }))) satisfies GetStaticPaths;
 
 const lang = 'it' as const;
 const t = useTranslations(lang);

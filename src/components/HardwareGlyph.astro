@@ -62,6 +62,19 @@ const box = glyph === 'rack' ? { w: 460, h: 330 } : { w: 220, h: 150 };
       <rect x="58" y="124" width="104" height="5" rx="2" fill="#101315" />
     </g>
   )}
+  {glyph === 'nas' && (
+    <g>
+      <rect x="62" y="18" width="96" height="118" rx="8" fill="#1f2429" stroke="#3a4147" stroke-width="1.5" />
+      {[30, 48, 66, 84, 102].map((y) => (
+        <g>
+          <rect x="72" y={y} width="76" height="12" rx="2" fill="#12161a" stroke="#3a4147" />
+          <circle cx={140} cy={y + 6} r="2" fill="#3ed28a" />
+        </g>
+      ))}
+      <rect x="72" y="120" width="40" height="6" rx="3" fill="#2a3036" />
+      <circle cx="140" cy="123" r="3" fill="#2a3036" />
+    </g>
+  )}
   {glyph === 'rack' && (
     <g>
       <rect x="26" y="18" width="408" height="294" rx="6" fill="#101315" stroke="#2a2f35" stroke-width="1.5" />

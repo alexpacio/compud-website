@@ -29,6 +29,9 @@ const why = [
 
 // Shown smallest chassis first, so the ladder reads 1U → 2U → 4U.
 const tiers = ['edge', 'virt', 'storage'].flatMap((id) => serverBuilds.filter((b) => b.id === id));
+
+const miniPcItems = products.filter((product) => (product.section ?? 'miniPc') === 'miniPc');
+const nasItems = products.filter((product) => (product.section ?? 'miniPc') === 'nas');
 ---
 
 <section class="band hero">
@@ -77,10 +80,33 @@ const tiers = ['edge', 'virt', 'storage'].flatMap((id) => serverBuilds.filter((b
     </header>
 
     <div class="products__grid">
-      {products.map((product) => <ProductCard lang={lang} product={product} />)}
+      {miniPcItems.map((product) => <ProductCard lang={lang} product={product} />)}
     </div>
   </div>
 </section>
+
+{
+  nasItems.length > 0 && (
+    <section class="band products">
+      <div class="wrap products__inner">
+        <header class="products__head">
+          <div class="products__titleWrap">
+            <h2 class="h2">{t('nas.title')}</h2>
+            <p class="lead products__sub">{t('nas.lead')}</p>
+          </div>
+          <a class="products__all" href={href(lang, 'nas')}>
+            {t('nas.all')}
+            <Icon name="arrow" size={16} />
+          </a>
+        </header>
+
+        <div class="products__grid">
+          {nasItems.map((product) => <ProductCard lang={lang} product={product} />)}
+        </div>
+      </div>
+    </section>
+  )
+}
 
 <section class="band band--tint rack">
   <div class="wrap rack__inner">
@@ -244,6 +270,17 @@ const tiers = ['edge', 'virt', 'storage'].flatMap((id) => serverBuilds.filter((b
     font-weight: 500;
     color: var(--accent);
     white-space: nowrap;
+  }
+
+  .products__titleWrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .products__sub {
+    font-size: 15px;
+    max-width: 640px;
   }
 
   .products__grid {

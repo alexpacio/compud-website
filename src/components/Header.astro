@@ -9,14 +9,15 @@ interface Props {
   lang: Lang;
   route: RouteName;
   param?: string;
-  active?: 'miniPc' | 'servers' | null;
+  active?: 'miniPc' | 'nas' | 'servers' | null;
   compact?: boolean;
 }
 const { lang, route, param, active = null, compact = false } = Astro.props;
 const t = useTranslations(lang);
 
-const links: { key: 'miniPc' | 'servers'; label: string; url: string }[] = [
+const links: { key: 'miniPc' | 'nas' | 'servers'; label: string; url: string }[] = [
   { key: 'miniPc', label: t('nav.miniPc'), url: href(lang, 'miniPc') },
+  { key: 'nas', label: t('nav.nas'), url: href(lang, 'nas') },
   { key: 'servers', label: t('nav.servers'), url: href(lang, 'servers') },
 ];
 ---
