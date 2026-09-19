@@ -14,14 +14,18 @@ const t = useTranslations(lang);
 const url =
   product.section === 'nas'
     ? href(lang, 'nasProduct', product.slug)
-    : href(lang, 'product', product.slug);
+    : product.section === 'laptop'
+      ? href(lang, 'laptopProduct', product.slug)
+      : product.section === 'gpu'
+        ? href(lang, 'gpuProduct', product.slug)
+        : product.section === 'server'
+          ? href(lang, 'serverProduct', product.slug)
+          : href(lang, 'product', product.slug);
 
 const badge =
   product.stock === 0
     ? { tone: 'chip', label: t('badge.order') }
-    : product.stock <= 3
-      ? { tone: 'chip chip--warn', label: t('badge.last', { n: product.stock }) }
-      : { tone: 'chip chip--ok', label: t('badge.ready') };
+    : { tone: 'chip chip--ok', label: t('badge.stock') };
 ---
 
 <article class="pcard">
@@ -50,7 +54,7 @@ const badge =
         product.summary.map((row) => (
           <div class="pcard__spec">
             <dt>{t(row.label)}</dt>
-            <dd>{row.value}</dd>
+            <dd>{pick(row.value, lang)}</dd>
           </div>
         ))
       }

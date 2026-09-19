@@ -1,7 +1,9 @@
 ---
+import { serversHref } from '../data/catalogue';
 import type { Lang } from '../i18n/ui';
 import { href, useTranslations } from '../i18n/utils';
 import { company } from '../lib/config';
+import ObfuscatedEmail from './ObfuscatedEmail.astro';
 
 interface Props {
   lang: Lang;
@@ -32,7 +34,9 @@ const t = useTranslations(lang);
         <p class="kicker">{t('foot.products')}</p>
         <a href={href(lang, 'miniPc')}>{t('nav.miniPc')}</a>
         <a href={href(lang, 'nas')}>{t('nav.nas')}</a>
-        <a href={href(lang, 'servers')}>{t('nav.servers')}</a>
+        <a href={href(lang, 'laptop')}>{t('nav.laptop')}</a>
+        <a href={href(lang, 'gpu')}>{t('nav.gpu')}</a>
+        <a href={serversHref(lang)}>{t('nav.servers')}</a>
       </div>
 
       <div class="footer__col">
@@ -44,14 +48,18 @@ const t = useTranslations(lang);
 
       <div class="footer__col footer__col--mono">
         <p class="kicker">{t('foot.contact')}</p>
-        <a href={`mailto:${company.email}`}>{company.email}</a>
-        <span>{company.phone}</span>
-        <span>{company.street}, {company.city}</span>
+        <ObfuscatedEmail lang={lang} label={t('foot.showEmail')} />
+        {company.phone && <span>{company.phone}</span>}
+        <span>{company.street}, {company.zip} {company.city}</span>
       </div>
     </div>
 
     <div class="footer__base">
-      <p class="mono">{company.legalName} · P.IVA {company.vatNumber} · REA {company.rea}</p>
+      <p class="mono">
+        {[company.legalName, `P.IVA ${company.vatNumber}`, company.rea && `REA ${company.rea}`]
+          .filter(Boolean)
+          .join(' · ')}
+      </p>
       <p class="mono">{t('foot.legal')}</p>
     </div>
   </div>

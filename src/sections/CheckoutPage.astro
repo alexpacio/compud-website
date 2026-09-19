@@ -14,25 +14,37 @@ const t = useTranslations(lang);
 
 /** Only what the cart needs to price and label itself, no marketing copy. */
 const catalogue: Record<string, CatalogueEntry> = Object.fromEntries(
-  products.map((product) => [
-    product.slug,
-    {
-      name: product.name,
-      url: href(lang, 'product', product.slug),
-      basePriceCents: product.basePriceCents,
-      options: {
-        ram: Object.fromEntries(
-          product.options.ram.map((o) => [o.id, { label: pick(o.label, lang), addCents: o.addCents }]),
-        ),
-        ssd: Object.fromEntries(
-          product.options.ssd.map((o) => [o.id, { label: pick(o.label, lang), addCents: o.addCents }]),
-        ),
-        os: Object.fromEntries(
-          product.options.os.map((o) => [o.id, { label: pick(o.label, lang), addCents: o.addCents }]),
-        ),
+  products.map((product) => {
+    const section = product.section ?? 'miniPc';
+    const url =
+      section === 'nas'
+        ? href(lang, 'nasProduct', product.slug)
+        : section === 'laptop'
+          ? href(lang, 'laptopProduct', product.slug)
+          : section === 'gpu'
+            ? href(lang, 'gpuProduct', product.slug)
+            : section === 'server'
+              ? href(lang, 'serverProduct', product.slug)
+              : href(lang, 'product', product.slug);
+    const view = (list: { id: string; label: unknown; addCents: number }[]) =>
+      Object.fromEntries(list.map((o) => [o.id, { label: pick(o.label as never, lang), addCents: o.addCents }]));
+    return [
+      product.slug,
+      {
+        name: product.name,
+        url,
+        basePriceCents: product.basePriceCents,
+        options: {
+          ram: view(product.options.ram),
+          ssd: view(product.options.ssd),
+          os: view(product.options.os),
+          ...(product.options.gpu ? { gpu: view(product.options.gpu) } : {}),
+          ...(product.options.psu ? { psu: view(product.options.psu) } : {}),
+          ...(product.options.bay ? { bay: view(product.options.bay) } : {}),
+        },
       },
-    },
-  ]),
+    ];
+  }),
 );
 ---
 
@@ -77,6 +89,15 @@ const catalogue: Record<string, CatalogueEntry> = Object.fromEntries(
         submit: t('co.submit'),
         submitting: t('co.submitting'),
         error: t('co.error'),
+        mailSubject: t('co.mailSubject'),
+        mailIntro: t('co.mailIntro'),
+        mailItems: t('co.mailItems'),
+        mailNet: t('co.mailNet'),
+        mailCustomer: t('co.mailCustomer'),
+        mailOutro: t('co.mailOutro'),
+        sentTitle: t('co.sentTitle'),
+        sentBody: t('co.sentBody'),
+        sentReopen: t('co.sentReopen'),
         privacy: t('co.privacy'),
       }}
     />

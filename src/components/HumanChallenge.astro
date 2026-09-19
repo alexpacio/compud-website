@@ -1,0 +1,159 @@
+---
+/**
+ * HumanChallenge.astro — verifica umana in stile Cloudflare.
+ *
+ * Il widget resta nascosto finché qualcuno non chiede l'indirizzo email (link
+ * del footer o invio di una richiesta d'ordine): solo allora parte la verifica
+ * e, al successo, viene dispatchato `compud:humanVerified`. Con
+ * PUBLIC_TURNSTILE_SITEKEY valorizzata usa il vero Turnstile, altrimenti resta
+ * il challenge locale, che filtra comunque i crawler senza JS.
+ */
+interface Props {
+  sitekey?: string;
+  lang: 'it' | 'en';
+}
+const { sitekey, lang } = Astro.props;
+const isTurnstile = Boolean(sitekey);
+const it = lang === 'it';
+---
+
+{
+  isTurnstile ? (
+    <>
+      <div class="cf-turnstile" data-sitekey={sitekey} data-callback="onCompudTurnstileVerified" data-theme="dark" data-size="normal" />
+      <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer is:inline />
+      <script is:inline define:vars={{ lang }}>
+        window.onCompudTurnstileVerified = function (token) {
+          window.dispatchEvent(
+            new CustomEvent('compud:turnstileVerified', { detail: { token } }),
+          );
+          const widget = document.querySelector('[data-hc-widget]');
+          if (widget) {
+            widget.dataset.verified = '1';
+            const msg = widget.querySelector('.hc__msg');
+            if (msg) msg.textContent = lang === 'it' ? 'Verifica completata ✓' : 'Verified ✓';
+          }
+        };
+      </script>
+    </>
+  ) : (
+    <div class="hc" data-hc-widget role="status" aria-live="polite" aria-label={it ? 'Verifica umana anti-spam' : 'Anti-spam human verification'}>
+      <div class="hc__box">
+        <button type="button" class="hc__checkbox" data-hc-check aria-label={it ? 'Clicca per verificare che sei umano' : 'Click to verify you are human'}>
+          <span class="hc__spinner" aria-hidden="true" />
+          <span class="hc__tick" aria-hidden="true">✓</span>
+        </button>
+        <span class="hc__label">{it ? 'Verifica che sei umano' : 'Verify you are human'}</span>
+        <span class="hc__brand">
+          <span class="hc__brandName">Compud Shield</span>
+          <span class="hc__brandSub">{it ? 'Protezione anti-spam' : 'Anti-spam protection'}</span>
+        </span>
+      </div>
+      <span class="hc__msg">{it ? 'Verifica in corso…' : 'Verifying…'}</span>
+    </div>
+  )
+}
+
+<style>
+  .hc {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-panel);
+    font-family: var(--font-mono);
+    max-width: 340px;
+    user-select: none;
+    box-shadow: 0 18px 40px rgb(0 0 0 / 45%);
+  }
+
+  .hc__box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hc__checkbox {
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--line-strong);
+    background: var(--surface-4);
+    border-radius: var(--r-chip);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    flex: none;
+  }
+
+  .hc__checkbox:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .hc__spinner {
+    width: 15px;
+    height: 15px;
+    border: 2px solid var(--line-strong);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: hc-spin 0.8s linear infinite;
+  }
+
+  .hc__tick {
+    display: none;
+    color: var(--accent);
+    font-size: 15px;
+    line-height: 1;
+  }
+
+  .hc[data-verified='1'] .hc__spinner { display: none; }
+  .hc[data-verified='1'] .hc__tick { display: block; }
+  .hc[data-verified='1'] .hc__checkbox {
+    border-color: var(--accent-line);
+    background: var(--accent-bg);
+  }
+  .hc[data-verified='1'] .hc__msg { color: var(--accent); }
+
+  .hc__label {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text);
+  }
+
+  .hc__brand {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1px;
+  }
+
+  .hc__brandName {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .hc__brandSub {
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: var(--muted-2);
+  }
+
+  .hc__msg {
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+
+  @keyframes hc-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hc__spinner { animation: none; }
+  }
+</style>

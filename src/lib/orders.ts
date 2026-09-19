@@ -12,7 +12,7 @@ export interface OrderLine {
   sku: string;
   /** Human-readable configuration, already resolved in the order's language. */
   configuration: string;
-  choice: { ram: string; ssd: string; os: string };
+  choice: { ram: string; ssd: string; os: string; gpu?: string; psu?: string; bay?: string };
   quantity: number;
   unitNetCents: number;
   lineNetCents: number;

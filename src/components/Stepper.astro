@@ -9,7 +9,7 @@ interface Props {
 }
 const { lang, current } = Astro.props;
 const t = useTranslations(lang);
-const steps = [t('co.step.cart'), t('co.step.data'), t('co.step.pay'), t('co.step.ship')];
+const steps = [t('co.step.cart'), t('co.step.data'), t('co.step.confirm'), t('co.step.pay'), t('co.step.ship')];
 ---
 
 <nav class="band stepper" aria-label={t('co.step.pay')}>

@@ -2,6 +2,8 @@
 import '../styles/global.css';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import HumanChallenge from '../components/HumanChallenge.astro';
+import { encodedContactEmail } from '../lib/config';
 import type { Lang } from '../i18n/ui';
 import { href, useTranslations, type RouteName } from '../i18n/utils';
 
@@ -11,7 +13,7 @@ interface Props {
   description?: string;
   route: RouteName;
   param?: string;
-  active?: 'miniPc' | 'nas' | 'servers' | null;
+  active?: 'miniPc' | 'nas' | 'laptop' | 'gpu' | 'servers' | null;
   /** Checkout and order pages drop the ticker, nav and cart handle. */
   compact?: boolean;
   noindex?: boolean;
@@ -20,6 +22,7 @@ interface Props {
 const { lang, title, description, route, param, active = null, compact = false, noindex = false } =
   Astro.props;
 const t = useTranslations(lang);
+const turnstileSitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY as string | undefined;
 const canonical = new URL(href(lang, route, param), Astro.site);
 const alternates: { lang: Lang; url: URL }[] = [
   { lang: 'it', url: new URL(href('it', route, param), Astro.site) },
@@ -61,5 +64,122 @@ const alternates: { lang: Lang; url: URL }[] = [
       <slot />
     </main>
     <Footer lang={lang} />
+
+    <!-- Verifica anti-spam: nascosta finché qualcuno non chiede l'indirizzo. -->
+    <div id="human-layer" hidden style="position:fixed;right:20px;bottom:20px;z-index:60;">
+      <HumanChallenge lang={lang} sitekey={turnstileSitekey} />
+    </div>
+
+    <script is:inline define:vars={{ encodedContactEmail, lang }}>
+      (() => {
+        /**
+         * L'indirizzo d'ordine vive solo qui, in base64 rovesciato, e viene
+         * decodificato dopo la verifica umana. Chi sblocca l'email ottiene sia
+         * i link del footer sia il mailto della richiesta d'ordine.
+         */
+        const decode = (value) => {
+          try {
+            return atob(value.split('').reverse().join(''));
+          } catch {
+            return '';
+          }
+        };
+
+        const looksAutomated = () => {
+          try {
+            if (navigator.webdriver) return true;
+            return /HeadlessChrome|PhantomJS|bot|crawler|spider/i.test(navigator.userAgent);
+          } catch {
+            return false;
+          }
+        };
+
+        const layer = () => document.getElementById('human-layer');
+        const widget = () => document.querySelector('[data-hc-widget]');
+        const it = lang === 'it';
+
+        let email = '';
+        let pending = [];
+
+        const say = (text) => {
+          const message = widget()?.querySelector('.hc__msg');
+          if (message) message.textContent = text;
+        };
+
+        const reveal = () => {
+          const host = layer();
+          if (host) host.hidden = false;
+          say(it ? 'Verifica che sei umano…' : 'Verifying you are human…');
+        };
+
+        /** Riscrive i link email già in pagina e libera chi stava aspettando. */
+        const markVerified = () => {
+          if (email) return;
+          if (looksAutomated()) return;
+          email = decode(encodedContactEmail);
+          if (!email) return;
+
+          const host = layer();
+          const box = widget();
+          if (box) box.dataset.verified = '1';
+          say(it ? 'Verifica completata ✓ — email sbloccata' : 'Verified ✓ — email unlocked');
+
+          document.querySelectorAll('a.obf-email').forEach((el) => {
+            if (el.dataset.decoded === '1') return;
+            el.setAttribute('href', 'mailto:' + email);
+            if (!el.getAttribute('data-label')) {
+              el.textContent = (el.getAttribute('data-prefix') || '') + email;
+            }
+            el.dataset.decoded = '1';
+          });
+
+          window.__compudEmail = email;
+          window.dispatchEvent(new CustomEvent('compud:humanVerified', { detail: { email } }));
+
+          const waiting = pending;
+          pending = [];
+          waiting.forEach((resolve) => resolve(email));
+          if (host) window.setTimeout(() => { host.hidden = true; }, 1800);
+        };
+
+        /**
+         * API usata dal checkout: restituisce l'indirizzo, mostrando la
+         * verifica se non è ancora stata superata.
+         */
+        window.compudRequestEmail = () => {
+          if (email) return Promise.resolve(email);
+          return new Promise((resolve) => {
+            pending.push(resolve);
+            reveal();
+            window.setTimeout(markVerified, 700);
+          });
+        };
+
+        const onEmailLink = (event) => {
+          const el = event.currentTarget;
+          if (el.dataset.decoded === '1') return;
+          event.preventDefault();
+          void window.compudRequestEmail().then((address) => {
+            el.setAttribute('href', 'mailto:' + address);
+            window.setTimeout(() => { window.location.href = 'mailto:' + address; }, 300);
+          });
+        };
+
+        const boot = () => {
+          document.querySelectorAll('a.obf-email').forEach((el) => {
+            el.addEventListener('click', onEmailLink);
+            el.addEventListener('keydown', (event) => {
+              if (event.key === 'Enter' || event.key === ' ') onEmailLink(event);
+            });
+          });
+          widget()?.querySelector('[data-hc-check]')?.addEventListener('click', () => markVerified());
+          // Turnstile, quando configurato, arriva per evento.
+          window.addEventListener('compud:turnstileVerified', () => markVerified());
+        };
+
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+        else boot();
+      })();
+    </script>
   </body>
 </html>

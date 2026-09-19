@@ -30,6 +30,9 @@ interface RawItem {
   ram?: unknown;
   ssd?: unknown;
   os?: unknown;
+  gpu?: unknown;
+  psu?: unknown;
+  bay?: unknown;
   quantity?: unknown;
 }
 
@@ -61,17 +64,27 @@ export const POST: APIRoute = async ({ request }) => {
       return json({ error: 'invalid_quantity', slug: product.slug }, 400);
     }
 
-    const choice = {
+    const choice: { ram: string; ssd: string; os: string; gpu?: string; psu?: string; bay?: string } = {
       ram: optionById(product.options.ram, text(raw.ram, 20)).id,
       ssd: optionById(product.options.ssd, text(raw.ssd, 20)).id,
       os: optionById(product.options.os, text(raw.os, 20)).id,
     };
+    if (product.options.gpu) choice.gpu = optionById(product.options.gpu, text(raw.gpu, 20)).id;
+    if (product.options.psu) choice.psu = optionById(product.options.psu, text(raw.psu, 20)).id;
+    if (product.options.bay) choice.bay = optionById(product.options.bay, text(raw.bay, 20)).id;
     const unitNetCents = configuredPriceCents(product, choice);
-    const configuration = [
+    const configurationParts = [
       pick(optionById(product.options.ram, choice.ram).label, lang),
       pick(optionById(product.options.ssd, choice.ssd).label, lang),
-      pick(optionById(product.options.os, choice.os).label, lang),
-    ].join(' · ');
+    ];
+    if (product.options.bay && choice.bay)
+      configurationParts.push(pick(optionById(product.options.bay, choice.bay).label, lang));
+    if (product.options.gpu && choice.gpu)
+      configurationParts.push(pick(optionById(product.options.gpu, choice.gpu).label, lang));
+    if (product.options.psu && choice.psu)
+      configurationParts.push(pick(optionById(product.options.psu, choice.psu).label, lang));
+    configurationParts.push(pick(optionById(product.options.os, choice.os).label, lang));
+    const configuration = configurationParts.join(' · ');
 
     lines.push({
       slug: product.slug,

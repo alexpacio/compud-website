@@ -7,3 +7,6 @@ data/orders.json
 
 # Seeded design canvas (rebuild with the /design helper)
 compud-store.html
+
+# Internal supplier quotes — cost data, never in a public repo.
+Preventivo_*.xlsx

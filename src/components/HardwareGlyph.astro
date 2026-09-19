@@ -7,12 +7,12 @@ import type { Glyph } from '../data/catalogue';
  * asset centred in the frame.
  */
 interface Props {
-  glyph: Glyph | 'rack';
+  glyph: Glyph;
   width?: number;
   label?: string;
 }
 const { glyph, width = 220, label } = Astro.props;
-const box = glyph === 'rack' ? { w: 460, h: 330 } : { w: 220, h: 150 };
+const box = glyph === 'laptop' ? { w: 260, h: 176 } : glyph === 'rack' ? { w: 460, h: 330 } : { w: 220, h: 150 };
 ---
 
 <svg
@@ -75,6 +75,36 @@ const box = glyph === 'rack' ? { w: 460, h: 330 } : { w: 220, h: 150 };
       <circle cx="140" cy="123" r="3" fill="#2a3036" />
     </g>
   )}
+  {glyph === 'gpu' && (
+    <g>
+      <rect x="18" y="26" width="9" height="98" rx="1.5" fill="#333a40" stroke="#2a2f35" />
+      {[36, 56, 76].map((y) => (
+        <rect x="19" y={y} width="7" height="14" rx="1.5" fill="#12161a" stroke="#3a4147" />
+      ))}
+      <rect x="27" y="30" width="168" height="84" rx="5" fill="#1f2429" stroke="#3a4147" stroke-width="1.5" />
+      <rect x="33" y="36" width="156" height="66" rx="4" fill="#171b1f" stroke="#2f353b" />
+      {[72, 142].map((cx) => (
+        <g>
+          <circle cx={cx} cy="69" r="22" fill="#12161a" stroke="#2f353b" />
+          {[0, 45, 90, 135, 180, 225, 270, 315].map((a) => (
+            <path
+              d={`M${cx} ${69 - 7} q9 -5 13 -11`}
+              stroke="#242a30"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              transform={`rotate(${a} ${cx} 69)`}
+            />
+          ))}
+          <circle cx={cx} cy="69" r="6" fill="#1f2429" stroke="#3a4147" />
+        </g>
+      ))}
+      <rect x="160" y="21" width="30" height="10" rx="2" fill="#2a3036" stroke="#3a4147" />
+      <circle cx="186" cy="41" r="3" fill="#3ed28a" />
+      <rect x="27" y="108" width="168" height="6" rx="2" fill="#101315" />
+      <rect x="46" y="116" width="42" height="10" rx="1" fill="#b8912f" />
+      <rect x="94" y="116" width="76" height="10" rx="1" fill="#b8912f" />
+    </g>
+  )}
   {glyph === 'rack' && (
     <g>
       <rect x="26" y="18" width="408" height="294" rx="6" fill="#101315" stroke="#2a2f35" stroke-width="1.5" />
@@ -108,6 +138,54 @@ const box = glyph === 'rack' ? { w: 460, h: 330 } : { w: 220, h: 150 };
       <circle cx="368" cy="238" r="3" fill="#e0a33c" />
       <rect x="34" y="264" width="392" height="40" rx="3" fill="#16191c" stroke="#2a2f35" stroke-width="1.2" />
       <path d="M64 284h80M164 284h40" stroke="#242a30" stroke-width="2" stroke-linecap="round" />
+    </g>
+  )}
+  {glyph === 'laptop' && (
+    <g>
+      <path d="M22 142 L44 126 L216 126 L238 142 Z" fill="#161a1e" stroke="#3a4147" stroke-width="1.5" />
+      <rect x="38" y="144" width="184" height="6" rx="3" fill="#101315" />
+      <rect x="34" y="14" width="192" height="112" rx="6" fill="#1f2429" stroke="#3a4147" stroke-width="1.5" />
+      <rect x="44" y="24" width="172" height="92" rx="3" fill="#0f3a5f" stroke="#2f353b" />
+
+      {/* KDE Plasma desktop: Breeze-blue wallpaper, Tux, bottom panel. */}
+      <g clip-path="inset(0)">
+        <rect x="44" y="24" width="172" height="80" fill="#0f3a5f" />
+        <path d="M44 82 L216 46 L216 104 L44 104 Z" fill="#1d6fa5" opacity="0.9" />
+        <path d="M44 94 L216 62 L216 104 L44 104 Z" fill="#2a8dd0" opacity="0.5" />
+        <path d="M44 40 L216 24 L216 34 L44 56 Z" fill="#3daee9" opacity="0.28" />
+      </g>
+
+      <g transform="translate(130 62) scale(0.62)">
+        <ellipse cx="-11" cy="30" rx="10" ry="5" fill="#f2a71b" />
+        <ellipse cx="11" cy="30" rx="10" ry="5" fill="#f2a71b" />
+        <ellipse cx="0" cy="6" rx="22" ry="26" fill="#17191c" />
+        <circle cx="0" cy="-19" r="16" fill="#17191c" />
+        <ellipse cx="-21" cy="8" rx="6" ry="14" fill="#17191c" transform="rotate(12 -21 8)" />
+        <ellipse cx="21" cy="8" rx="6" ry="14" fill="#17191c" transform="rotate(-12 21 8)" />
+        <ellipse cx="0" cy="11" rx="14" ry="19" fill="#f2f4f5" />
+        <ellipse cx="-6" cy="-21" rx="6" ry="7" fill="#f2f4f5" />
+        <ellipse cx="6" cy="-21" rx="6" ry="7" fill="#f2f4f5" />
+        <circle cx="-5" cy="-20" r="2.6" fill="#17191c" />
+        <circle cx="5" cy="-20" r="2.6" fill="#17191c" />
+        <ellipse cx="0" cy="-11" rx="7" ry="5" fill="#f2a71b" />
+        <path d="M-7 -11h14" stroke="#c9861a" stroke-width="1.2" />
+      </g>
+
+      <rect x="44" y="104" width="172" height="12" fill="#2a2e32" opacity="0.94" />
+      <circle cx="53" cy="110" r="4" fill="#3daee9" />
+      {[64, 82, 100].map((x) => (
+        <rect x={x} y="106" width="16" height="8" rx="2" fill="#3a4147" />
+      ))}
+      {[176, 184, 192].map((x) => (
+        <circle cx={x} cy="110" r="1.8" fill="#5c666e" />
+      ))}
+      <rect x="200" y="107" width="12" height="6" rx="1.5" fill="#5c666e" />
+
+      <circle cx="130" cy="19" r="1.8" fill="#3a4147" />
+      <rect x="44" y="118" width="172" height="4" rx="2" fill="#2a3036" />
+      <circle cx="140" cy="133" r="3" fill="#3ed28a" />
+      <rect x="152" y="129" width="22" height="8" rx="4" fill="#2a3036" />
+      <rect x="180" y="129" width="14" height="8" rx="4" fill="#2a3036" />
     </g>
   )}
 </svg>

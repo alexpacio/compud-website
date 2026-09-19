@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Lang } from '../i18n/ui';
-import { clearCart, lineKey, readCart, removeLine, setQuantity, subscribe, type CartItem } from '../lib/cart';
+import { lineKey, readCart, removeLine, setQuantity, subscribe, type CartItem } from '../lib/cart';
 import { formatEur, vatOf } from '../lib/money';
 
 interface OptionView {
@@ -12,7 +12,8 @@ export interface CatalogueEntry {
   name: string;
   url: string;
   basePriceCents: number;
-  options: Record<'ram' | 'ssd' | 'os', Record<string, OptionView>>;
+  options: Record<'ram' | 'ssd' | 'os', Record<string, OptionView>> &
+    Partial<Record<'gpu' | 'psu' | 'bay', Record<string, OptionView>>>;
 }
 
 interface Props {
@@ -68,6 +69,8 @@ export default function CheckoutForm({
   const [touched, setTouched] = useState<Partial<Record<keyof Fields, boolean>>>({});
   const [submitting, setSubmitting] = useState(false);
   const [failure, setFailure] = useState('');
+  const [sentTo, setSentTo] = useState('');
+  const [mailtoHref, setMailtoHref] = useState('');
 
   useEffect(() => {
     setItems(readCart());
@@ -79,7 +82,13 @@ export default function CheckoutForm({
     return (items ?? []).flatMap((item) => {
       const product = catalogue[item.slug];
       if (!product) return [];
-      const parts = (['ram', 'ssd', 'os'] as const).map((group) => product.options[group][item[group]]);
+      const groupIds = (['ram', 'ssd', 'bay', 'gpu', 'psu', 'os'] as const).filter(
+        (group) => product.options[group] !== undefined,
+      );
+      const parts = groupIds.map((group) => {
+        const id = item[group] ?? '';
+        return product.options[group]?.[id];
+      });
       if (parts.some((part) => part === undefined)) return [];
       const unitNetCents = parts.reduce((sum, part) => sum + part!.addCents, product.basePriceCents);
       return [
@@ -113,6 +122,49 @@ export default function CheckoutForm({
     setFields((current) => ({ ...current, [field]: value }));
   };
 
+  /** The order request as it reaches info@ — plain text, one line per field. */
+  const composeBody = (): string => {
+    const money = (cents: number) => formatEur(cents, lang, { decimals: true });
+    const itemLines = lines.map(
+      (line) =>
+        `- ${line.product.name} x${line.item.quantity}\n  ${line.configuration}\n  ${money(line.lineNetCents)} ${strings.mailNet}`,
+    );
+    const customer = [
+      `${strings.fName}: ${fields.name}`,
+      fields.company && `${strings.fCompany}: ${fields.company}`,
+      fields.vatNumber && `${strings.fVat}: ${fields.vatNumber}`,
+      `${strings.fEmail}: ${fields.email}`,
+      `${strings.fPhone}: ${fields.phone}`,
+      `${strings.fAddress}: ${fields.address}`,
+      `${strings.fZip}: ${fields.zip}`,
+      `${strings.fCity}: ${fields.city} (${fields.province})`,
+      `${strings.fCountry}: ${fields.country}`,
+      fields.notes && `${strings.fNotes}: ${fields.notes}`,
+    ].filter(Boolean) as string[];
+
+    return [
+      strings.mailIntro,
+      '',
+      strings.mailItems,
+      ...itemLines,
+      '',
+      `${strings.subtotal}: ${money(netCents)}`,
+      `${strings.shipping}: ${shippingCents === 0 ? strings.free : money(shippingCents)}`,
+      `${strings.vat}: ${money(vatCents)}`,
+      `${strings.total}: ${money(grossCents)}`,
+      '',
+      strings.mailCustomer,
+      ...customer,
+      '',
+      strings.mailOutro,
+    ].join('\n');
+  };
+
+  /**
+   * The order leaves as an email: no address is in the page until the
+   * anti-spam challenge in the layout hands one over, so submitting waits on
+   * that before opening the customer's mail client.
+   */
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
     setTouched(Object.fromEntries(REQUIRED.map((f) => [f, true])) as Partial<Record<keyof Fields, boolean>>);
@@ -121,26 +173,15 @@ export default function CheckoutForm({
     setSubmitting(true);
     setFailure('');
     try {
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          lang,
-          items: lines.map((line) => ({
-            slug: line.item.slug,
-            ram: line.item.ram,
-            ssd: line.item.ssd,
-            os: line.item.os,
-            quantity: line.item.quantity,
-          })),
-          customer: fields,
-        }),
-      });
-      if (!response.ok) throw new Error(`order failed: ${response.status}`);
-      const payload = (await response.json()) as { url?: string };
-      if (!payload.url) throw new Error('order response missing url');
-      clearCart();
-      window.location.href = payload.url;
+      const request = (window as unknown as { compudRequestEmail?: () => Promise<string> }).compudRequestEmail;
+      const address = request ? await request() : '';
+      if (!address) throw new Error('email locked');
+
+      const href = `mailto:${address}?subject=${encodeURIComponent(strings.mailSubject)}&body=${encodeURIComponent(composeBody())}`;
+      setMailtoHref(href);
+      setSentTo(address);
+      setSubmitting(false);
+      window.location.href = href;
     } catch {
       setFailure(strings.error);
       setSubmitting(false);
@@ -150,6 +191,23 @@ export default function CheckoutForm({
   // Nothing is known about the cart until localStorage has been read.
   if (items === null) {
     return <div className="co__loading" aria-hidden="true" />;
+  }
+
+  if (sentTo) {
+    return (
+      <div className="co__sent">
+        <h1 className="h2">{strings.sentTitle}</h1>
+        <p className="lead">{strings.sentBody}</p>
+        <p className="mono co__sentAddress">{sentTo}</p>
+        <a className="btn btn--primary" href={mailtoHref}>
+          {strings.sentReopen}
+        </a>
+        <style>{`
+          .co__sent { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: 40px 0 80px; max-width: 620px; }
+          .co__sentAddress { color: var(--accent); }
+        `}</style>
+      </div>
+    );
   }
 
   if (lines.length === 0) {

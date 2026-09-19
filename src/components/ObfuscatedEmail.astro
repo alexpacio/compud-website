@@ -1,0 +1,41 @@
+---
+/**
+ * ObfuscatedEmail.astro — link email che non contiene l'indirizzo.
+ *
+ * L'HTML servito non ha né `info@…` né varianti con [at]: al primo click parte
+ * la verifica umana e solo dopo il testo e l'href vengono composti in JS.
+ */
+interface Props {
+  /** Testo mostrato al posto dell'indirizzo finché la verifica non passa. */
+  label?: string;
+  /** Prefisso lasciato davanti all'indirizzo una volta sbloccato. */
+  prefix?: string;
+  class?: string;
+  lang: 'it' | 'en';
+}
+
+const { label, prefix = '', class: className = '', lang } = Astro.props;
+const it = lang === 'it';
+const placeholder = label ?? (it ? 'Mostra email' : 'Show email');
+---
+
+<a
+  class:list={['obf-email', className]}
+  href="#"
+  rel="nofollow"
+  data-obf="true"
+  data-prefix={prefix}
+  data-label={label}
+  title={it
+    ? 'Indirizzo protetto — clicca per la verifica anti-spam'
+    : 'Protected address — click for the anti-spam check'}
+  aria-label={it
+    ? 'Verifica umana richiesta per mostrare l’indirizzo email'
+    : 'Human verification required to show the email address'}>{placeholder}</a
+>
+
+<style>
+  .obf-email {
+    cursor: pointer;
+  }
+</style>

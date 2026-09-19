@@ -1,11 +1,12 @@
 ---
 import HardwareGlyph from '../components/HardwareGlyph.astro';
 import Icon from '../components/Icon.astro';
+import Video from '../components/Video.astro';
 import Configurator, { type ConfigGroup } from '../islands/Configurator.tsx';
 import { defaultChoice, pick, type Product } from '../data/catalogue';
 import type { Lang } from '../i18n/ui';
 import { href, useTranslations } from '../i18n/utils';
-import { commerce } from '../lib/config';
+import { commerce, company } from '../lib/config';
 
 interface Props {
   lang: Lang;
@@ -16,11 +17,21 @@ const t = useTranslations(lang);
 
 const groups: ConfigGroup[] = [
   { id: 'ram', label: t('pdp.optRam'), options: product.options.ram },
-  { id: 'ssd', label: t('pdp.optSsd'), options: product.options.ssd },
+  {
+    id: 'ssd',
+    // With a separate bay group the M.2 pair needs a name of its own.
+    label: product.options.bay ? t('pdp.optNvme') : t('pdp.optSsd'),
+    options: product.options.ssd,
+  },
+  ...(product.options.bay ? [{ id: 'bay' as const, label: t('pdp.optBay'), options: product.options.bay }] : []),
+  ...(product.options.gpu ? [{ id: 'gpu' as const, label: t('pdp.optGpu'), options: product.options.gpu }] : []),
+  ...(product.options.psu ? [{ id: 'psu' as const, label: t('pdp.optPsu'), options: product.options.psu }] : []),
   { id: 'os', label: t('pdp.optOs'), options: product.options.os },
 ].map((group) => ({
   id: group.id as ConfigGroup['id'],
   label: group.label,
+  // A used GPU has no RAM, disk or OS: its option groups are schema filler.
+  hidden: (product.section ?? 'miniPc') === 'gpu',
   options: group.options.map((option) => ({
     id: option.id,
     label: pick(option.label, lang),
@@ -32,13 +43,35 @@ const groups: ConfigGroup[] = [
 const stockChip =
   product.stock === 0
     ? { tone: 'chip', label: t('badge.order') }
-    : product.stock <= 3
-      ? { tone: 'chip chip--warn', label: t('badge.last', { n: product.stock }) }
-      : { tone: 'chip chip--ok', label: t('badge.stock', { n: product.stock }) };
+    : { tone: 'chip chip--ok', label: t('badge.stock') };
 
-const isNas = (product.section ?? 'miniPc') === 'nas';
-const sectionRoute = (isNas ? 'nas' : 'miniPc') as const;
-const sectionLabel = isNas ? t('nav.nas') : t('nav.miniPc');
+const section = product.section ?? 'miniPc';
+const sectionRoute = section === 'nas' ? 'nas' : section === 'laptop' ? 'laptop' : section === 'gpu' ? 'gpu' : section === 'server' ? 'servers' : 'miniPc';
+const sectionLabel =
+  section === 'nas'
+    ? t('nav.nas')
+    : section === 'laptop'
+      ? t('nav.laptop')
+      : section === 'gpu'
+        ? t('nav.gpu')
+        : section === 'server'
+          ? t('nav.servers')
+          : t('nav.miniPc');
+
+/** Attribution brand, taken from the host of the source page. */
+const sourceBrand = product.sourceUrl
+  ? new URL(product.sourceUrl).hostname.replace(/^www\./, '').split('.')[0].toUpperCase()
+  : '';
+
+const isServer = section === 'server';
+const hasPhotos = !!product.images?.length;
+const quoteUrl = `mailto:${company.email}?subject=${encodeURIComponent(`${t('rack.quote')} — ${product.name}`)}`;
+const process = [
+  { n: '01', title: t('rack.p1.title'), body: t('rack.p1.body') },
+  { n: '02', title: t('rack.p2.title'), body: t('rack.p2.body') },
+  { n: '03', title: t('rack.p3.title'), body: t('rack.p3.body') },
+  { n: '04', title: t('rack.p4.title'), body: t('rack.p4.body') },
+];
 
 const prep = [
   { icon: 'clock', title: t('pdp.prep1.title'), body: t('pdp.prep1.body') },
@@ -53,7 +86,13 @@ const prep = [
     <p class="mono crumbs__text">
       <a href={href(lang, 'home')}>{t('pdp.crumbHome').toUpperCase()}</a>
       <span aria-hidden="true"> / </span>
-      <a href={href(lang, sectionRoute)}>{sectionLabel.toUpperCase()}</a>
+      {
+        isServer ? (
+          <span>{sectionLabel.toUpperCase()}</span>
+        ) : (
+          <a href={href(lang, sectionRoute)}>{sectionLabel.toUpperCase()}</a>
+        )
+      }
       <span aria-hidden="true"> / </span>
       <span aria-current="page">{product.name.toUpperCase()}</span>
     </p>
@@ -63,49 +102,57 @@ const prep = [
 <section class="band pdp">
   <div class="wrap pdp__inner">
     <div class="pdp__media">
-      <div class="pdp__frame">
-        {
-          product.images?.length ? (
-            <>
-              <p class="mono pdp__figNote">{product.name} — {product.images.length} foto</p>
+      {
+        hasPhotos ? (
+          <>
+            <div class="pdp__frame">
+              <p class="mono pdp__figNote">
+                {product.name} — {t('pdp.photoCount', { n: product.images!.length })}
+              </p>
               <img
                 id="pdpMain"
                 class="pdp__img"
-                src={product.images[0]}
+                src={product.images![0]}
                 alt={product.name}
                 fetchpriority="high"
               />
-            </>
-          ) : (
-            <>
+            </div>
+            <div class="pdp__thumbs" role="group" aria-label={product.name}>
+              {product.images!.map((src, i) => (
+                <button
+                  type="button"
+                  class:list={['pdp__thumbBtn', i === 0 && 'is-active']}
+                  data-src={src}
+                  aria-label={`${product.name} — ${t('pdp.photoNth', { n: i + 1 })}`}
+                >
+                  <img src={src} alt="" loading="lazy" width="220" height="220" />
+                </button>
+              ))}
+            </div>
+          </>
+        ) : product.video ? null : (
+          <>
+            <div class="pdp__frame">
               <p class="mono pdp__figNote">{t('home.figNote')}</p>
               <HardwareGlyph glyph={product.glyph} width={480} label={product.name} />
-            </>
-          )
-        }
-      </div>
-      {
-        product.images?.length ? (
-          <div class="pdp__thumbs" role="group" aria-label={product.name}>
-            {product.images.map((src, i) => (
-              <button
-                type="button"
-                class:list={['pdp__thumbBtn', i === 0 && 'is-active']}
-                data-src={src}
-                aria-label={`${product.name} — foto ${i + 1}`}
-              >
-                <img src={src} alt="" loading="lazy" width="220" height="220" />
-              </button>
-            ))}
-          </div>
-        ) : (
-          <div class="pdp__thumbs" aria-hidden="true">
-            <span class="pdp__thumb is-active"></span>
-            <span class="pdp__thumb"></span>
-            <span class="pdp__thumb"></span>
-            <span class="pdp__thumb"></span>
-          </div>
+            </div>
+            <div class="pdp__thumbs" aria-hidden="true">
+              <span class="pdp__thumb is-active" />
+              <span class="pdp__thumb" />
+              <span class="pdp__thumb" />
+              <span class="pdp__thumb" />
+            </div>
+          </>
         )
+      }
+      {
+        product.video ? (
+          <Video
+            src={product.video}
+            label={`${product.name} — ${t('pdp.videoNote')}`}
+            note={t('pdp.videoNote')}
+          />
+        ) : null
       }
     </div>
 
@@ -163,9 +210,9 @@ const prep = [
             <p class="pdpDetail__text">{pick(product.details, lang)}</p>
             {product.sourceUrl ? (
               <p class="mono pdpDetail__src">
-                {t('pdp.sourceNote')}{' '}
+                {t('pdp.sourceNote', { brand: sourceBrand })}{' '}
                 <a href={product.sourceUrl} target="_blank" rel="noopener nofollow">
-                  MINISFORUM ↗
+                  {sourceBrand} ↗
                 </a>
               </p>
             ) : null}
@@ -210,6 +257,48 @@ const prep = [
     </div>
   </div>
 </section>
+
+{
+  isServer && (
+    <section class="band srvProcess">
+      <div class="wrap srvProcess__inner">
+        <h2 class="h2">{t('rack.processTitle')}</h2>
+        <ol class="srvProcess__grid">
+          {process.map((step, index) => (
+            <li class:list={['srvProcess__step', { 'is-first': index === 0 }]}>
+              <span class="mono srvProcess__n">{step.n}</span>
+              <h3 class="srvProcess__title">{step.title}</h3>
+              <p class="srvProcess__body">{step.body}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  )
+}
+
+{
+  isServer && (
+    <section class="band--tint srvCta">
+      <div class="wrap srvCta__inner">
+        <div class="srvCta__text">
+          <h2 class="h2 srvCta__title">{t('rack.ctaTitle')}</h2>
+          <p class="srvCta__sub">{t('rack.ctaSub')}</p>
+        </div>
+        <div class="srvCta__actions">
+          <a class="btn btn--primary" href={quoteUrl}>
+            {t('rack.quote')}
+          </a>
+          {company.phone && (
+            <a class="btn btn--ghost" href={`tel:${company.phone}`}>
+              {t('rack.call')}
+            </a>
+          )}
+        </div>
+      </div>
+    </section>
+  )
+}
 
 <script>
   const main = document.getElementById('pdpMain');
@@ -531,6 +620,98 @@ const prep = [
     font-size: 13px;
     line-height: 1.6;
     color: var(--muted);
+  }
+
+  .srvProcess__inner {
+    padding-block: 62px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .srvProcess__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 22px;
+  }
+
+  .srvProcess__step {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-top: 2px solid var(--line-strong);
+    padding-top: 16px;
+  }
+
+  .srvProcess__step.is-first {
+    border-top-color: var(--accent);
+  }
+
+  .srvProcess__n {
+    font-size: 11px;
+    color: var(--muted-2);
+  }
+
+  .srvProcess__step.is-first .srvProcess__n {
+    color: var(--accent);
+  }
+
+  .srvProcess__title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 500;
+  }
+
+  .srvProcess__body {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .srvCta__inner {
+    padding-block: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .srvCta__text {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .srvCta__title {
+    font-size: clamp(24px, 2.4vw, 28px);
+    max-width: 620px;
+  }
+
+  .srvCta__sub {
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .srvCta__actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 1000px) {
+    .srvProcess__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 620px) {
+    .srvProcess__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 
   @media (max-width: 1000px) {

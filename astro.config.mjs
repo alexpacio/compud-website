@@ -6,9 +6,14 @@ import node from '@astrojs/node';
 // prerendering (`export const prerender = false`) because an order and its
 // payment reference only exist at request time.
 export default defineConfig({
-  site: process.env.SITE_URL ?? 'https://www.compud.it',
+  site: process.env.SITE_URL ?? 'https://compud.it',
   output: 'static',
   server: { port: 4322 },
+  // The rack server is a single build: the old section index lands on it.
+  redirects: {
+    '/server-rack': '/server-rack/compud-server-3u-epyc-4585px/',
+    '/en/rack-servers': '/en/rack-servers/compud-server-3u-epyc-4585px/',
+  },
   adapter: node({ mode: 'standalone' }),
   integrations: [react()],
   i18n: {

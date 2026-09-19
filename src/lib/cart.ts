@@ -9,14 +9,19 @@ export interface CartItem {
   ram: string;
   ssd: string;
   os: string;
+  gpu?: string;
+  psu?: string;
+  bay?: string;
   quantity: number;
 }
 
 const KEY = 'compud.cart.v1';
 const EVENT = 'compud:cart';
 
-export const lineKey = (item: Pick<CartItem, 'slug' | 'ram' | 'ssd' | 'os'>): string =>
-  [item.slug, item.ram, item.ssd, item.os].join('|');
+export const lineKey = (
+  item: Pick<CartItem, 'slug' | 'ram' | 'ssd' | 'os' | 'gpu' | 'psu' | 'bay'>,
+): string =>
+  [item.slug, item.ram, item.ssd, item.os, item.gpu ?? '', item.psu ?? '', item.bay ?? ''].join('|');
 
 export function readCart(): CartItem[] {
   if (typeof localStorage === 'undefined') return [];
@@ -34,6 +39,9 @@ export function readCart(): CartItem[] {
           ram: String(item.ram ?? ''),
           ssd: String(item.ssd ?? ''),
           os: String(item.os ?? ''),
+          gpu: item.gpu !== undefined ? String(item.gpu) : undefined,
+          psu: item.psu !== undefined ? String(item.psu) : undefined,
+          bay: item.bay !== undefined ? String(item.bay) : undefined,
           quantity: Number.isFinite(quantity) ? Math.min(10, Math.max(1, Math.floor(quantity))) : 1,
         },
       ];

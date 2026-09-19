@@ -3,10 +3,9 @@ import HardwareGlyph from '../components/HardwareGlyph.astro';
 import Icon from '../components/Icon.astro';
 import PaymentSteps from '../components/PaymentSteps.astro';
 import ProductCard from '../components/ProductCard.astro';
-import { products, pick, serverBuilds } from '../data/catalogue';
+import { products, serversHref } from '../data/catalogue';
 import type { Lang } from '../i18n/ui';
 import { href, useTranslations } from '../i18n/utils';
-import { formatEur } from '../lib/money';
 
 interface Props {
   lang: Lang;
@@ -17,7 +16,7 @@ const t = useTranslations(lang);
 const trust = [
   { icon: 'shield', label: t('home.trust1') },
   { icon: 'clock', label: t('home.trust2') },
-  { icon: 'rack', label: t('home.trust3') },
+  { icon: 'bank', label: t('home.trust3') },
 ] as const;
 
 const why = [
@@ -27,11 +26,12 @@ const why = [
   { icon: 'sliders', title: t('why.4.title'), body: t('why.4.body') },
 ] as const;
 
-// Shown smallest chassis first, so the ladder reads 1U → 2U → 4U.
-const tiers = ['edge', 'virt', 'storage'].flatMap((id) => serverBuilds.filter((b) => b.id === id));
 
 const miniPcItems = products.filter((product) => (product.section ?? 'miniPc') === 'miniPc');
 const nasItems = products.filter((product) => (product.section ?? 'miniPc') === 'nas');
+const laptopItems = products.filter((product) => (product.section ?? 'miniPc') === 'laptop');
+const gpuItems = products.filter((product) => (product.section ?? 'miniPc') === 'gpu');
+const serverItems = products.filter((product) => (product.section ?? 'miniPc') === 'server');
 ---
 
 <section class="band hero">
@@ -42,8 +42,8 @@ const nasItems = products.filter((product) => (product.section ?? 'miniPc') === 
       <p class="lead hero__sub">{t('home.sub')}</p>
 
       <div class="hero__actions">
-        <a class="btn btn--primary" href={href(lang, 'servers')}>{t('home.ctaPrimary')}</a>
-        <a class="btn btn--ghost" href={href(lang, 'miniPc')}>{t('home.ctaSecondary')}</a>
+        <a class="btn btn--primary" href={href(lang, 'miniPc')}>{t('home.ctaSecondary')}</a>
+        <a class="btn btn--ghost" href={href(lang, 'nas')}>{t('nav.nas')}</a>
       </div>
 
       <ul class="hero__trust">
@@ -61,7 +61,7 @@ const nasItems = products.filter((product) => (product.section ?? 'miniPc') === 
     <div class="hero__figure">
       <div class="hero__frame">
         <p class="mono hero__figNote">{t('home.figNote')}</p>
-        <HardwareGlyph glyph="rack" width={420} label="Compud" />
+        <HardwareGlyph glyph="mini" width={420} label="Compud" />
       </div>
     </div>
   </div>
@@ -108,37 +108,74 @@ const nasItems = products.filter((product) => (product.section ?? 'miniPc') === 
   )
 }
 
-<section class="band band--tint rack">
-  <div class="wrap rack__inner">
-    <div class="rack__text">
-      <p class="kicker kicker--warn">{t('rack.kicker')}</p>
-      <h2 class="h2 rack__title">{t('rack.title')}</h2>
-      <p class="lead rack__sub">{t('rack.sub')}</p>
-      <a class="btn btn--primary rack__cta" href={href(lang, 'servers')}>{t('rack.cta')}</a>
-    </div>
+{
+  laptopItems.length > 0 && (
+    <section class="band products">
+      <div class="wrap products__inner">
+        <header class="products__head">
+          <div class="products__titleWrap">
+            <h2 class="h2">{t('laptop.title')}</h2>
+            <p class="lead products__sub">{t('laptop.lead')}</p>
+          </div>
+          <a class="products__all" href={href(lang, 'laptop')}>
+            {t('laptop.all')}
+            <Icon name="arrow" size={16} />
+          </a>
+        </header>
 
-    <ul class="rack__tiers">
-      {
-        tiers.map((build) => (
-          <li class="panel rack__tier">
-            <div class="rack__tierText">
-              <div class="rack__tierHead">
-                <span class="rack__units">{build.units}</span>
-                <span class="rack__tierName">{pick(build.name, lang)}</span>
-              </div>
-              <p class="mono rack__tierSpec">
-                {build.rows.slice(0, 3).map((row) => pick(row.value, lang)).join(' · ')}
-              </p>
-            </div>
-            <p class="mono rack__tierPrice">
-              {t('price.from')} {formatEur(build.fromCents, lang)}
-            </p>
-          </li>
-        ))
-      }
-    </ul>
-  </div>
-</section>
+        <div class="products__grid">
+          {laptopItems.map((product) => <ProductCard lang={lang} product={product} />)}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+{
+  serverItems.length > 0 && (
+    <section class="band products">
+      <div class="wrap products__inner">
+        <header class="products__head">
+          <div class="products__titleWrap">
+            <h2 class="h2">{t('server.title')}</h2>
+            <p class="lead products__sub">{t('server.lead')}</p>
+          </div>
+          <a class="products__all" href={serversHref(lang)}>
+            {t('server.all')}
+            <Icon name="arrow" size={16} />
+          </a>
+        </header>
+
+        <div class="products__grid">
+          {serverItems.map((product) => <ProductCard lang={lang} product={product} />)}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+{
+  gpuItems.length > 0 && (
+    <section class="band products">
+      <div class="wrap products__inner">
+        <header class="products__head">
+          <div class="products__titleWrap">
+            <h2 class="h2">{t('gpu.title')}</h2>
+            <p class="lead products__sub">{t('gpu.lead')}</p>
+          </div>
+          <a class="products__all" href={href(lang, 'gpu')}>
+            {t('gpu.all')}
+            <Icon name="arrow" size={16} />
+          </a>
+        </header>
+
+        <div class="products__grid">
+          {gpuItems.map((product) => <ProductCard lang={lang} product={product} />)}
+        </div>
+      </div>
+    </section>
+  )
+}
 
 <section class="band why">
   <div class="wrap why__grid">
@@ -289,90 +326,18 @@ const nasItems = products.filter((product) => (product.section ?? 'miniPc') === 
     gap: 24px;
   }
 
-  .rack__inner {
-    padding-block: 78px;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 60px;
-    align-items: center;
-  }
 
-  .rack__text {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 22px;
-  }
 
-  .rack__title {
-    font-size: clamp(28px, 3vw, 38px);
-    max-width: 460px;
-  }
 
-  .rack__sub {
-    font-size: 16px;
-    max-width: 470px;
-  }
 
-  .rack__cta {
-    margin-top: 6px;
-  }
 
-  .rack__tiers {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
 
-  .rack__tier {
-    background: var(--surface-2);
-    padding: 20px 22px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-  }
 
-  .rack__tierText {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    min-width: 0;
-  }
 
-  .rack__tierHead {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
 
-  .rack__units {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--accent-ink);
-    background: var(--text-2);
-    padding: 2px 7px;
-    border-radius: 2px;
-  }
 
-  .rack__tierName {
-    font-family: var(--font-display);
-    font-size: 17px;
-    font-weight: 500;
-  }
 
-  .rack__tierSpec {
-    font-size: 12px;
-    color: var(--muted);
-  }
 
-  .rack__tierPrice {
-    font-size: 16px;
-    white-space: nowrap;
-  }
 
   .why__grid {
     padding-block: 70px;
@@ -408,8 +373,7 @@ const nasItems = products.filter((product) => (product.section ?? 'miniPc') === 
   }
 
   @media (max-width: 900px) {
-    .hero__inner,
-    .rack__inner {
+    .hero__inner {
       grid-template-columns: minmax(0, 1fr);
       gap: 40px;
       padding-block: 48px;
@@ -426,11 +390,6 @@ const nasItems = products.filter((product) => (product.section ?? 'miniPc') === 
     .why__grid {
       grid-template-columns: minmax(0, 1fr);
       gap: 32px;
-    }
-    .rack__tier {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 12px;
     }
   }
 </style>

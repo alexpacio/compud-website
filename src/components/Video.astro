@@ -1,0 +1,71 @@
+---
+/** Self-hosted MP4 with the same framing as the product photo stage. */
+interface Props {
+  src: string;
+  label?: string;
+  note?: string;
+  poster?: string;
+  autoplay?: boolean;
+  loop?: boolean;
+  class?: string;
+}
+const {
+  src,
+  label,
+  note,
+  poster,
+  autoplay = false,
+  loop = false,
+  class: className,
+} = Astro.props;
+---
+
+<figure class:list={['video', className]}>
+  {note && <figcaption class="mono video__note">{note}</figcaption>}
+  <video
+    class="video__el"
+    controls
+    playsinline
+    preload="metadata"
+    poster={poster}
+    autoplay={autoplay}
+    loop={loop}
+    muted={autoplay}
+    aria-label={label}
+  >
+    <source src={src} type="video/mp4" />
+  </video>
+</figure>
+
+<style>
+  .video {
+    position: relative;
+    margin: 0;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-card);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .video__note {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    z-index: 2;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faint);
+    pointer-events: none;
+  }
+
+  .video__el {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background: #000;
+  }
+</style>

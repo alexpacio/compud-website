@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import LaptopIndex from '../../sections/LaptopIndex.astro';
+import { useTranslations } from '../../i18n/utils';
+
+const lang = 'it' as const;
+const t = useTranslations(lang);
+---
+
+<Base
+  lang={lang}
+  route="laptop"
+  active="laptop"
+  title={t('meta.laptop.title')}
+  description={t('meta.laptop.description')}
+>
+  <LaptopIndex lang={lang} />
+</Base>

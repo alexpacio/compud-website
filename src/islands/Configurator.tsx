@@ -11,9 +11,11 @@ export interface ConfigOption {
 }
 
 export interface ConfigGroup {
-  id: 'ram' | 'ssd' | 'os';
+  id: 'ram' | 'ssd' | 'os' | 'gpu' | 'psu' | 'bay';
   label: string;
   options: ConfigOption[];
+  /** Placeholder group (a used GPU has no RAM, disk or OS): keep it out of the UI. */
+  hidden?: boolean;
 }
 
 interface Props {
@@ -22,7 +24,7 @@ interface Props {
   basePriceCents: number;
   vatRate: number;
   groups: ConfigGroup[];
-  defaults: { ram: string; ssd: string; os: string };
+  defaults: { ram: string; ssd: string; os: string; gpu?: string; psu?: string; bay?: string };
   checkoutUrl: string;
   strings: {
     included: string;
@@ -36,7 +38,7 @@ interface Props {
   };
 }
 
-type Choice = { ram: string; ssd: string; os: string };
+type Choice = { ram: string; ssd: string; os: string; gpu?: string; psu?: string; bay?: string };
 
 /**
  * Price and configuration for one machine. The price shown here is advisory:
@@ -54,6 +56,14 @@ export default function Configurator({
 }: Props) {
   const [choice, setChoice] = useState<Choice>(defaults);
   const [added, setAdded] = useState(false);
+
+  /**
+   * Placeholder groups stay out of the UI but keep their price. A group with a
+   * single real option is not a choice either, yet the buyer still needs to see
+   * it — what OS ships on the machine is part of what they are paying for — so
+   * it is rendered locked rather than dropped.
+   */
+  const shown = groups.filter((group) => !group.hidden);
 
   const netCents = useMemo(() => {
     return groups.reduce((sum, group) => {
@@ -82,33 +92,50 @@ export default function Configurator({
 
   return (
     <div className="cfg">
-      {groups.map((group) => (
-        <fieldset className="cfg__group" key={group.id}>
-          <legend className="kicker cfg__legend">{group.label}</legend>
-          <div className="cfg__options" role="radiogroup" aria-label={group.label}>
-            {group.options.map((option) => {
-              const selected = choice[group.id] === option.id;
-              return (
-                <button
-                  type="button"
-                  key={option.id}
-                  role="radio"
-                  aria-checked={selected}
-                  className={selected ? 'cfg__option is-selected' : 'cfg__option'}
-                  onClick={() => select(group.id, option.id)}
-                >
-                  <span className="cfg__optionLabel">{option.label}</span>
-                  <span className="cfg__optionDelta">
-                    {option.addCents === 0
-                      ? strings.included
-                      : `${option.addCents > 0 ? '+' : '−'}${formatEur(Math.abs(option.addCents), lang)}`}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </fieldset>
-      ))}
+      {shown.map((group) => {
+        const locked = group.options.length === 1;
+        return (
+          <fieldset className="cfg__group" key={group.id}>
+            <legend className="kicker cfg__legend">{group.label}</legend>
+            <div
+              className="cfg__options"
+              role={locked ? undefined : 'radiogroup'}
+              aria-label={group.label}
+            >
+              {group.options.map((option) => {
+                const delta =
+                  option.addCents === 0
+                    ? strings.included
+                    : `${option.addCents > 0 ? '+' : '−'}${formatEur(Math.abs(option.addCents), lang)}`;
+
+                if (locked) {
+                  return (
+                    <div className="cfg__option is-locked" key={option.id}>
+                      <span className="cfg__optionLabel">{option.label}</span>
+                      <span className="cfg__optionDelta">{delta}</span>
+                    </div>
+                  );
+                }
+
+                const selected = choice[group.id] === option.id;
+                return (
+                  <button
+                    type="button"
+                    key={option.id}
+                    role="radio"
+                    aria-checked={selected}
+                    className={selected ? 'cfg__option is-selected' : 'cfg__option'}
+                    onClick={() => select(group.id, option.id)}
+                  >
+                    <span className="cfg__optionLabel">{option.label}</span>
+                    <span className="cfg__optionDelta">{delta}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </fieldset>
+        );
+      })}
 
       <div className="cfg__buy">
         <div className="cfg__prices">
@@ -145,15 +172,20 @@ export default function Configurator({
         .cfg { display: flex; flex-direction: column; gap: 22px; }
         .cfg__group { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
         .cfg__legend { padding: 0; }
-        .cfg__options { display: flex; gap: 10px; }
+        .cfg__options {
+          display: grid; gap: 10px;
+          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        }
         .cfg__option {
-          flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 4px;
+          min-width: 0; display: flex; flex-direction: column; gap: 4px;
           align-items: flex-start; text-align: left;
           border: 1px solid var(--line-strong); background: var(--surface);
           border-radius: var(--r-field); padding: 13px 14px; min-height: 62px;
           transition: border-color 120ms ease, background-color 120ms ease;
         }
         .cfg__option:hover { border-color: var(--faint); }
+        .cfg__option.is-locked { cursor: default; background: var(--surface-2); border-style: dashed; }
+        .cfg__option.is-locked:hover { border-color: var(--line-strong); }
         .cfg__option.is-selected { border-color: var(--accent); background: var(--accent-bg); }
         .cfg__optionLabel { font-family: var(--font-mono); font-size: 14px; color: var(--text-2); }
         .cfg__option.is-selected .cfg__optionLabel { color: var(--accent); }
@@ -178,8 +210,7 @@ export default function Configurator({
         .cfg__primary { flex: 1 1 auto; }
         .cfg__ship { font-size: 11px; color: var(--muted-2); letter-spacing: 0.04em; }
         @media (max-width: 520px) {
-          .cfg__options { flex-wrap: wrap; }
-          .cfg__option { flex-basis: calc(50% - 5px); }
+          .cfg__options { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
           .cfg__priceValue { font-size: 30px; }
           .cfg__actions { flex-direction: column; }
         }

@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import GpuIndex from '../../sections/GpuIndex.astro';
+import { useTranslations } from '../../i18n/utils';
+
+const lang = 'it' as const;
+const t = useTranslations(lang);
+---
+
+<Base
+  lang={lang}
+  route="gpu"
+  active="gpu"
+  title={t('meta.gpu.title')}
+  description={t('meta.gpu.description')}
+>
+  <GpuIndex lang={lang} />
+</Base>
