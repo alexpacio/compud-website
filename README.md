@@ -3,14 +3,16 @@
 Showcase and shop for Compud: **turnkey Linux hardware for companies and
 freelancers whose developers build software with AI tools**. Machines ship with
 Compud Linux and the development toolchain preinstalled and burn-in tested,
-**delivered within 7 working days** of the order confirmation; **on-site
-installation is quoted separately**. Italian and English, paid by **instant SEPA
-bank transfer** — no card processor is involved at any point.
+with preparation and shipping estimates provided for each order based on
+configuration and component availability. **On-site installation is quoted
+separately**. Italian and English, paid by **instant SEPA bank transfer** — no
+card processor is involved at any point.
 
 The positioning lives entirely in `src/i18n/ui.ts`: the `home.*`, `aud.*`,
 `turn.*`, `pay.*` and `onsite.*` groups carry the slogan, the two audiences
-(companies / freelancers), what "turnkey" includes, the 7-working-day delivery
-promise and the on-site installation offer.
+(companies / freelancers), what "turnkey" includes, the ordering process and
+the on-site installation offer. Do not promise fixed preparation, shipping or
+delivery deadlines: provide estimates with the order confirmation.
 
 Built with **Astro 5** (static pages + a small on-demand island of server
 routes) and **React** for the interactive parts.
