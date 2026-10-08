@@ -64,6 +64,7 @@ const sourceBrand = product.sourceUrl
   : '';
 
 const isServer = section === 'server';
+const hasSingleProduct = isServer || section === 'miniPc' || section === 'nas';
 const hasPhotos = !!product.images?.length;
 const quoteUrl = `mailto:${company.email}?subject=${encodeURIComponent(`${t('rack.quote')} — ${product.name}`)}`;
 const process = [
@@ -75,7 +76,7 @@ const process = [
 
 const prep = [
   { icon: 'clock', title: t('pdp.prep1.title'), body: t('pdp.prep1.body') },
-  { icon: 'list', title: t('pdp.prep2.title'), body: t('pdp.prep2.body') },
+  { icon: 'list', title: t('pdp.prep2.title'), body: product.linuxNote ? pick(product.linuxNote, lang) : t('pdp.prep2.body') },
   { icon: 'shield', title: t('pdp.prep3.title'), body: t('pdp.prep3.body') },
 ] as const;
 
@@ -87,7 +88,7 @@ const prep = [
       <a href={href(lang, 'home')}>{t('pdp.crumbHome').toUpperCase()}</a>
       <span aria-hidden="true"> / </span>
       {
-        isServer ? (
+        hasSingleProduct ? (
           <span>{sectionLabel.toUpperCase()}</span>
         ) : (
           <a href={href(lang, sectionRoute)}>{sectionLabel.toUpperCase()}</a>
@@ -117,12 +118,13 @@ const prep = [
                 fetchpriority="high"
               />
             </div>
-            <div class="pdp__thumbs" role="group" aria-label={product.name}>
+            <div class="pdp__thumbs" style={`--pdp-photo-count: ${Math.min(product.images!.length, 5)}`} role="group" aria-label={product.name}>
               {product.images!.map((src, i) => (
                 <button
                   type="button"
                   class:list={['pdp__thumbBtn', i === 0 && 'is-active']}
                   data-src={src}
+                  aria-pressed={i === 0 ? "true" : "false"}
                   aria-label={`${product.name} — ${t('pdp.photoNth', { n: i + 1 })}`}
                 >
                   <img src={src} alt="" loading="lazy" width="220" height="220" />
@@ -135,12 +137,6 @@ const prep = [
             <div class="pdp__frame">
               <p class="mono pdp__figNote">{t('home.figNote')}</p>
               <HardwareGlyph glyph={product.glyph} width={480} label={product.name} />
-            </div>
-            <div class="pdp__thumbs" aria-hidden="true">
-              <span class="pdp__thumb is-active" />
-              <span class="pdp__thumb" />
-              <span class="pdp__thumb" />
-              <span class="pdp__thumb" />
             </div>
           </>
         )
@@ -166,6 +162,8 @@ const prep = [
         <p class="pdp__tagline">{pick(product.tagline, lang)}</p>
       </div>
 
+      {product.linuxNote && <p class="pdp__linuxNote">{pick(product.linuxNote, lang)}</p>}
+
       <Configurator
         client:load
         lang={lang}
@@ -183,7 +181,7 @@ const prep = [
           buyNow: t('pdp.buyNow'),
           addCart: t('cart.add'),
           added: t('cart.added'),
-          shipLine: t('pdp.shipLine'),
+          shipLine: product.fulfillmentNote ? pick(product.fulfillmentNote, lang) : t('pdp.shipLine'),
         }}
       />
     </div>
@@ -207,7 +205,11 @@ const prep = [
         {product.details ? (
           <div class="pdpDetail__col">
             <h2 class="h2">{t('pdp.detailsTitle')}</h2>
-            <p class="pdpDetail__text">{pick(product.details, lang)}</p>
+            <div class="pdpDetail__copy">
+              {pick(product.details, lang).split(/\n\n+/).map((paragraph) => (
+                <p class="pdpDetail__text">{paragraph}</p>
+              ))}
+            </div>
             {product.sourceUrl ? (
               <p class="mono pdpDetail__src">
                 {t('pdp.sourceNote', { brand: sourceBrand })}{' '}
@@ -221,6 +223,25 @@ const prep = [
       </div>
     </section>
   )
+}
+
+{
+  product.features?.length ? (
+    <section class="band pdpFeatures" aria-labelledby="pdpFeaturesTitle">
+      <div class="wrap pdpFeatures__inner">
+        <h2 class="h2" id="pdpFeaturesTitle">{t('pdp.featuresTitle')}</h2>
+        <div class="pdpFeatures__grid">
+          {product.features.map((feature) => (
+            <article class="panel pdpFeatures__card">
+              <p class="pdpFeatures__value">{pick(feature.value, lang)}</p>
+              <h3 class="pdpFeatures__title">{pick(feature.title, lang)}</h3>
+              <p class="pdpFeatures__body">{pick(feature.body, lang)}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  ) : null
 }
 
 <section class="band pdp2">
@@ -307,7 +328,10 @@ const prep = [
     btn.addEventListener('click', () => {
       const src = btn.getAttribute('data-src');
       if (main && src) main.setAttribute('src', src);
-      thumbs.forEach((b) => b.classList.toggle('is-active', b === btn));
+      thumbs.forEach((b) => {
+        b.classList.toggle('is-active', b === btn);
+        b.setAttribute('aria-pressed', String(b === btn));
+      });
     });
   });
 </script>
@@ -341,8 +365,8 @@ const prep = [
   .pdp__frame {
     position: relative;
     min-width: 0;
-    min-height: 430px;
-    background: var(--surface-2);
+    min-height: 460px;
+    background: radial-gradient(ellipse at 50% 35%, #314b3c80, transparent 70%), linear-gradient(145deg, #1a231f, #0c1310);
     border: 1px solid var(--line);
     border-radius: var(--r-card);
     display: grid;
@@ -358,7 +382,10 @@ const prep = [
     position: absolute;
     inset: 0;
     z-index: 0;
-    background: radial-gradient(60% 45% at 50% 0%, rgba(123, 227, 178, 0.09), transparent 70%);
+    background: linear-gradient(120deg, transparent 20%, #c6ffe910 45%, transparent 70%),
+      repeating-linear-gradient(0deg, transparent 0 63px, #b8edcf08 63px 64px),
+      repeating-linear-gradient(90deg, transparent 0 63px, #b8edcf08 63px 64px);
+    animation: studio-light 2s ease-out both;
     pointer-events: none;
   }
 
@@ -389,12 +416,12 @@ const prep = [
     font-size: 10px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--faint);
+    color: var(--muted);
   }
 
   .pdp__thumbs {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--pdp-photo-count, 5), minmax(0, 1fr));
     gap: 12px;
   }
 
@@ -437,6 +464,8 @@ const prep = [
     object-fit: contain;
   }
 
+  @keyframes studio-light { from { opacity: 0; transform: translateX(-25px); } to { opacity: 1; transform: translateX(0); } }
+
   .pdp__thumbBtn.is-active {
     border-color: var(--accent);
   }
@@ -478,6 +507,12 @@ const prep = [
     color: var(--accent);
   }
 
+  .pdpDetail__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
   .pdpDetail__text {
     font-size: 14px;
     line-height: 1.7;
@@ -492,6 +527,53 @@ const prep = [
   .pdpDetail__src a {
     color: var(--muted-2);
     text-decoration: underline;
+  }
+
+  .pdpFeatures__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-block: 36px 56px;
+  }
+
+  .pdpFeatures__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .pdpFeatures__card {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: linear-gradient(145deg, var(--surface-2), var(--surface));
+  }
+
+  .pdpFeatures__value {
+    font-family: var(--font-display);
+    font-size: clamp(30px, 3vw, 42px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--accent);
+  }
+
+  .pdpFeatures__title {
+    font-size: 18px;
+    line-height: 1.35;
+  }
+
+  .pdpFeatures__body {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  @media (max-width: 800px) {
+    .pdpFeatures__grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   .pdp__buy {
@@ -524,6 +606,8 @@ const prep = [
     font-weight: 700;
     line-height: 1.08;
   }
+
+  .pdp__linuxNote { padding: 16px 18px; border-left: 2px solid var(--accent); background: var(--accent-bg); color: var(--text-2); font-size: 13px; line-height: 1.65; }
 
   .pdp__tagline {
     font-size: 15px;

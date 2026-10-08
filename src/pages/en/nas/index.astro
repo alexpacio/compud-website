@@ -1,6 +1,7 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import NasIndex from '../../../sections/NasIndex.astro';
+import { nasProduct, pick } from '../../../data/catalogue';
 import { useTranslations } from '../../../i18n/utils';
 
 const lang = 'en' as const;
@@ -9,10 +10,11 @@ const t = useTranslations(lang);
 
 <Base
   lang={lang}
-  route="nas"
+  route="nasProduct"
+  param={nasProduct?.slug}
   active="nas"
-  title={t('meta.nas.title')}
-  description={t('meta.nas.description')}
+  title={`${nasProduct?.name ?? t('meta.nas.title')} — Compud`}
+  description={nasProduct ? pick(nasProduct.tagline, lang) : t('meta.nas.description')}
 >
   <NasIndex lang={lang} />
 </Base>

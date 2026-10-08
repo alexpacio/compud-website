@@ -1,5 +1,5 @@
 ---
-import { serversHref } from '../data/catalogue';
+import { miniPcHref, nasHref, serversHref } from '../data/catalogue';
 import { company } from '../lib/config';
 import type { Lang } from '../i18n/ui';
 import { href, useTranslations, type RouteName } from '../i18n/utils';
@@ -18,8 +18,8 @@ const { lang, route, param, active = null, compact = false } = Astro.props;
 const t = useTranslations(lang);
 
 const links: { key: 'miniPc' | 'nas' | 'laptop' | 'gpu' | 'servers'; label: string; url: string }[] = [
-  { key: 'miniPc', label: t('nav.miniPc'), url: href(lang, 'miniPc') },
-  { key: 'nas', label: t('nav.nas'), url: href(lang, 'nas') },
+  { key: 'miniPc', label: t('nav.miniPc'), url: miniPcHref(lang) },
+  { key: 'nas', label: t('nav.nas'), url: nasHref(lang) },
   { key: 'laptop', label: t('nav.laptop'), url: href(lang, 'laptop') },
   { key: 'gpu', label: t('nav.gpu'), url: href(lang, 'gpu') },
   { key: 'servers', label: t('nav.servers'), url: serversHref(lang) },
@@ -203,7 +203,7 @@ const links: { key: 'miniPc' | 'nas' | 'laptop' | 'gpu' | 'servers'; label: stri
 
   @media (max-width: 860px) {
     .ticker__text {
-      display: none;
+      font-size: 9px;
     }
     .header__left {
       gap: 20px;
@@ -213,10 +213,13 @@ const links: { key: 'miniPc' | 'nas' | 'laptop' | 'gpu' | 'servers'; label: stri
     }
   }
 
-  @media (max-width: 620px) {
-    .nav {
-      display: none;
-    }
+  @media (max-width: 900px) {
+    .header__inner { flex-wrap: wrap; gap: 0; padding-top: 16px; }
+    .header__left { display: contents; }
+    .nav { order: 3; width: 100%; overflow-x: auto; gap: 22px; padding-block: 16px; }
+    .nav__link { font-size: 12px; }
+    .header__right { margin-left: auto; }
+    .ticker__support { display: none; }
     .brand__word {
       font-size: 19px;
     }

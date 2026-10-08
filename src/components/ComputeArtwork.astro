@@ -1,0 +1,200 @@
+---
+import type { Lang } from '../i18n/ui';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const it = lang === 'it';
+---
+<figure class="compute" data-compute data-paused="true" data-decimal={it ? ',' : '.'} aria-label={it ? "Schema di un sistema Compud: il workload di inferenza passa da Linux alla GPU; i pesi del modello arrivano dall'NVMe attraverso il bus PCIe. Nessun traffico verso l'esterno." : 'Diagram of a Compud system: the inference workload runs through Linux to the GPU; model weights load from NVMe over the PCIe bus. No outbound traffic.'}>
+  <div class="compute__heading mono"><span>{it ? 'COMPUD / SCHEMA DI SISTEMA' : 'COMPUD / SYSTEM DIAGRAM'}</span><span>{it ? 'TUTTO IN LOCALE' : 'ALL LOCAL'}</span></div>
+  <div class="compute__stage" aria-hidden="true">
+    <div class="diagram mono">
+      <div class="diagram__legend">
+        <span>{it ? 'FIG. 01 — FLUSSO DATI' : 'FIG. 01 — DATA FLOW'}</span>
+        <span><i class="diagram__key"></i>{it ? 'percorso attivo' : 'active path'}</span>
+        <span><i class="diagram__key diagram__key--dashed"></i>{it ? 'collegamento remoto' : 'remote link'}</span>
+      </div>
+
+      <div class="node node--workload" style="left:30em;top:0;width:24em;height:6.4em">
+        <div class="node__meta"><span>WORKLOAD</span><span class="node__model">qwen3.8:27b-uncensored</span></div>
+        <div class="node__name">{it ? 'Inferenza locale' : 'Local inference'}</div>
+      </div>
+      <div class="wire wire--v" style="left:46.5em;top:6.4em;height:4em"><i class="pulse pulse--down" style="animation-delay:3.2s"></i></div>
+
+      <div class="layer" style="left:0;top:10.4em;width:54em;height:4em">
+        <span class="layer__name">LINUX</span><span>{it ? 'kernel · driver GPU · container · toolchain' : 'kernel · GPU driver · containers · toolchain'}</span><span class="layer__state">{it ? 'pronto' : 'ready'}</span>
+      </div>
+      <div class="wire wire--v" style="left:46.5em;top:14.4em;height:4em"><i class="pulse pulse--down" style="animation-delay:3.84s"></i></div>
+
+      <div class="node node--tall" style="left:0;top:18.4em">
+        <div><div class="node__label">CPU</div><div class="node__name">{it ? 'Processore' : 'Processor'}</div></div>
+        <div class="meter"><span>{it ? 'carico' : 'load'}</span><div class="meter__track"><div class="meter__fill meter__fill--cpu"></div></div></div>
+      </div>
+      <div class="wire wire--h" style="left:15em;top:24.4em;width:4.5em"></div>
+      <span class="bus-label" style="left:15.6em;top:23em"><span>DDR5</span></span>
+      <div class="node node--tall" style="left:19.5em;top:18.4em">
+        <div><div class="node__label">RAM</div><div class="node__name">{it ? 'Memoria' : 'Memory'}</div></div>
+        <div class="meter"><span>{it ? 'in uso' : 'in use'}</span><div class="meter__track"><div class="meter__fill meter__fill--ram"></div></div></div>
+      </div>
+      <div class="node node--tall node--gpu" style="left:39em;top:18.4em">
+        <div><div class="node__label">GPU</div><div class="node__name">{it ? 'Acceleratore' : 'Accelerator'}</div></div>
+        <div class="node__meters">
+          <div class="meter"><span>{it ? 'calcolo' : 'compute'}</span><div class="meter__track"><div class="meter__fill meter__fill--gpu"></div></div></div>
+          <div class="meter"><span>VRAM</span><div class="meter__track"><div class="meter__fill meter__fill--vram"></div></div></div>
+        </div>
+      </div>
+
+      <div class="wire wire--v" style="left:7.5em;top:30.4em;height:3em"></div>
+      <div class="wire wire--v" style="left:46.5em;top:30.4em;height:3em"><i class="pulse pulse--up" style="animation-delay:1.6s"></i></div>
+      <div class="wire wire--h" style="left:7.5em;top:33.4em;width:39.1em"><i class="pulse pulse--right" style="animation-delay:.5s"></i></div>
+      <span class="bus-label" style="left:8.4em;top:32em"><span>PCIe</span></span>
+      <div class="wire wire--v" style="left:7.5em;top:33.4em;height:3em"><i class="pulse pulse--up"></i></div>
+      <div class="wire wire--v" style="left:27em;top:33.4em;height:3em"></div>
+
+      <div class="node node--short" style="left:0;top:36.4em">
+        <div class="node__label">NVMe</div><div class="node__name">{it ? 'Pesi del modello' : 'Model weights'}</div>
+      </div>
+      <div class="node node--short" style="left:19.5em;top:36.4em">
+        <div class="node__label">{it ? 'RETE' : 'NETWORK'}</div><div class="node__name">LAN · SSH</div>
+      </div>
+      <div class="wire wire--dashed" style="left:34.5em;top:39.2em;width:4.5em"></div>
+      <div class="node node--short node--remote" style="left:39em;top:36.4em">
+        <div class="node__label">{it ? 'REMOTO' : 'REMOTE'}</div><div class="node__name">{it ? 'Il tuo server' : 'Your server'}</div>
+      </div>
+    </div>
+  </div>
+
+  <dl class="compute__readouts mono">
+    <div>
+      <dt>{it ? 'TOKEN / S' : 'TOKENS / S'}</dt>
+      <dd><span data-readout="tps">40</span><span class="compute__spark" aria-hidden="true"><svg width="140" height="16" viewBox="0 0 140 16" fill="none"><path d="M0 9 7 7l7 1 7-3 7 1 7-2 7 3 7-1 7 2 7-3 7 4 7-2 7 1 7-3 7 1 7-2 7 3 7-1 7 2 7-3 7 4" stroke="currentColor"/></svg></span></dd>
+    </div>
+    <div>
+      <dt>VRAM</dt>
+      <dd><span data-readout="vram">28</span><small> / 32 GB</small></dd>
+    </div>
+    <div>
+      <dt>{it ? 'TRAFFICO ESTERNO' : 'OUTBOUND TRAFFIC'}</dt>
+      <dd class="compute__zero">0 B</dd>
+    </div>
+  </dl>
+
+  <div class="compute__caption"><button class="compute__toggle mono" type="button" aria-pressed="false" hidden data-pause={it ? 'PAUSA' : 'PAUSE'} data-resume={it ? 'ANIMA' : 'ANIMATE'} aria-label={it ? 'Animazione dello schema' : 'Diagram animation'}>{it ? 'ANIMA' : 'ANIMATE'}</button></div>
+</figure>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-compute]').forEach((scene) => {
+    const toggle = scene.querySelector<HTMLButtonElement>('.compute__toggle')!;
+    const tps = scene.querySelector<HTMLElement>('[data-readout="tps"]')!;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    let userPaused = false;
+    let visible = true;
+    let timer = 0;
+    let tokens = 40;
+    const tick = () => {
+      tokens = Math.max(38, Math.min(42, tokens + Math.round((Math.random() - .5) * 4)));
+      tps.textContent = String(tokens);
+    };
+    const sync = () => {
+      const enabled = !userPaused && !reduced.matches;
+      const paused = !enabled || !visible || document.hidden;
+      scene.dataset.paused = String(paused);
+      toggle.setAttribute('aria-pressed', String(enabled));
+      toggle.textContent = (enabled ? toggle.dataset.pause : toggle.dataset.resume) ?? '';
+      toggle.hidden = reduced.matches;
+      clearInterval(timer);
+      timer = paused ? 0 : window.setInterval(tick, 1800);
+    };
+    toggle.addEventListener('click', () => { userPaused = !userPaused; sync(); });
+    reduced.addEventListener('change', sync);
+    document.addEventListener('visibilitychange', sync);
+    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); }, { threshold: .1 });
+    observer.observe(scene);
+    sync();
+  });
+</script>
+
+<style>
+  .compute { margin: 0; width: 100%; max-width: 540px; }
+  .compute__heading { display: flex; justify-content: space-between; gap: 10px; font-size: 9px; letter-spacing: .1em; color: var(--faint); padding-block: 14px; border-top: 1px solid #26332d; }
+  .compute__heading span:last-child { color: var(--accent); }
+
+  /* The diagram is drawn on a 540×420 grid where 1em = 10px at full width, so it scales with the column. */
+  .compute__stage { container-type: inline-size; margin-top: 10px; }
+  .diagram { position: relative; font-size: calc(100cqw / 54); width: 54em; height: 42em; }
+  .diagram__legend { position: absolute; left: 0; top: 0; display: flex; flex-direction: column; gap: .8em; font-size: .9em; letter-spacing: .1em; color: #5f6d66; }
+  .diagram__legend span { display: flex; align-items: center; gap: .9em; }
+  .diagram__key { display: block; width: 2em; height: 1px; background: var(--accent); }
+  .diagram__key--dashed { height: 0; background: none; border-top: 1px dashed #4a5a52; }
+
+  .node { position: absolute; box-sizing: border-box; padding: 1.2em 1.4em; border: 1px solid #26332d; border-radius: 6px; background: #111714; display: flex; flex-direction: column; justify-content: space-between; }
+  .node--tall { width: 15em; height: 12em; }
+  .node--short { width: 15em; height: 5.6em; padding-block: 1em; }
+  .node--workload { border-color: #2f4a3d; background: var(--accent-bg); }
+  .node--remote { background: none; border-style: dashed; border-color: #3a4842; }
+  .node--remote .node__name { color: var(--text-2); }
+  .node--gpu { animation: gpu-active 8s linear infinite; }
+  .node__meta { display: flex; justify-content: space-between; font-size: .9em; letter-spacing: .1em; color: var(--faint); }
+  .node__model { color: var(--accent); letter-spacing: 0; }
+  .node__label { font-size: .9em; letter-spacing: .1em; color: var(--faint); }
+  .node__name { margin-top: .3em; font: 500 1.5em/1.2 var(--font-display); color: var(--text); }
+  .node--short .node__name { font-size: 1.4em; }
+  .node__meters { display: flex; flex-direction: column; gap: .8em; }
+
+  .meter { display: flex; flex-direction: column; gap: .5em; font-size: .9em; color: var(--faint); }
+  .meter__track { height: 2px; background: #1f2925; }
+  .meter__fill { height: 2px; background: #7fa995; }
+  .meter__fill--cpu { width: 34%; animation: meter-cpu 9s ease-in-out infinite; }
+  .meter__fill--ram { width: 41%; animation: meter-ram 11s ease-in-out infinite; }
+  .meter__fill--gpu { width: 74%; background: var(--accent); animation: meter-gpu 8s ease-in-out infinite; }
+  .meter__fill--vram { width: 87.5%; background: var(--accent); }
+
+  .layer { position: absolute; box-sizing: border-box; padding: 0 1.4em; border: 1px solid #26332d; border-radius: 6px; background: #111714; display: flex; align-items: center; justify-content: space-between; gap: 1em; font-size: 1em; color: var(--muted); }
+  .layer > span { font-size: 1em; white-space: nowrap; }
+  .layer__name { letter-spacing: .1em; color: var(--text); }
+  .layer__state { color: var(--accent); }
+
+  .wire { position: absolute; overflow: hidden; background: #26332d; }
+  .wire--v { width: 1px; }
+  .wire--h { height: 1px; }
+  .wire--dashed { height: 0; background: none; border-top: 1px dashed #4a5a52; }
+  .bus-label { position: absolute; line-height: 1; color: #5f6d66; }
+  .bus-label > span { font-size: .8em; letter-spacing: .08em; }
+  .pulse { position: absolute; display: block; animation: 8s linear infinite; }
+  .pulse--down { left: 0; top: -2.4em; width: 1px; height: 2.4em; background: linear-gradient(transparent, var(--accent)); animation-name: run-down; }
+  .pulse--up { left: 0; top: 100%; width: 1px; height: 2.4em; background: linear-gradient(var(--accent), transparent); animation-name: run-up; }
+  .pulse--right { top: 0; left: -4em; width: 4em; height: 1px; background: linear-gradient(90deg, transparent, var(--accent)); animation-name: run-right; }
+
+  .compute__readouts { margin: 22px 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-block: 1px solid #26332d; }
+  .compute__readouts > div { padding: 12px 16px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .compute__readouts > div:first-child { padding-left: 0; }
+  .compute__readouts > div + div { border-left: 1px solid #1b2420; }
+  .compute__readouts dt { font-size: 9px; letter-spacing: .1em; color: var(--faint); }
+  .compute__readouts dd { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 18px; line-height: 1.2; color: var(--text); white-space: nowrap; }
+  .compute__readouts small { font-size: 11px; color: var(--faint); margin-left: -6px; }
+  .compute__zero { color: var(--accent) !important; }
+  .compute__spark { width: 70px; height: 16px; overflow: hidden; color: var(--accent); }
+  .compute__spark svg { display: block; animation: scroll 12s linear infinite; }
+
+  .compute__caption { padding-top: 14px; display: flex; justify-content: flex-end; }
+  .compute__caption:has(.compute__toggle[hidden]) { display: none; }
+  .compute__toggle { min-height: 36px; padding: 0 12px; border: 1px solid #2f4a3d; border-radius: 4px; font-size: 10px; letter-spacing: .08em; color: var(--text-2); }
+  .compute__toggle:hover { background: #a7e8c215; }
+  .compute__toggle[hidden] { display: none; }
+
+  .compute[data-paused='true'] * { animation-play-state: paused !important; }
+  @keyframes run-down { 0% { top: -2.4em; } 8%, 100% { top: 100%; } }
+  @keyframes run-up { 0% { top: 100%; } 8%, 100% { top: -2.4em; } }
+  @keyframes run-right { 0% { left: -4em; } 16%, 100% { left: 100%; } }
+  @keyframes gpu-active { 0%, 26% { border-color: #26332d; } 32% { border-color: #4f8a6a; } 70%, 100% { border-color: #26332d; } }
+  @keyframes meter-cpu { 0%, 100% { width: 34%; } 50% { width: 46%; } }
+  @keyframes meter-ram { 0%, 100% { width: 41%; } 50% { width: 44%; } }
+  @keyframes meter-gpu { 0%, 100% { width: 74%; } 35% { width: 91%; } 65% { width: 83%; } }
+  @keyframes scroll { to { transform: translateX(-50%); } }
+
+  @media (max-width: 500px) {
+    .diagram__legend span + span { display: none; }
+    .compute__readouts > div { padding-inline: 10px; }
+    .compute__readouts dd { font-size: 15px; }
+    .compute__spark { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .compute * { animation: none !important; } }
+</style>

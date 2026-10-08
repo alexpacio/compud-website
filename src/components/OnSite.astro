@@ -1,0 +1,136 @@
+---
+/**
+ * OnSite.astro — l'installazione presso il cliente, che è un servizio a parte
+ * e va quotato. L'ancora `#onsite` è il bersaglio della CTA nell'hero.
+ *
+ * Il contatto passa da ObfuscatedEmail: l'indirizzo non finisce mai nell'HTML
+ * servito, viene composto dopo la verifica anti-spam.
+ */
+import Icon from './Icon.astro';
+import ObfuscatedEmail from './ObfuscatedEmail.astro';
+import { company } from '../lib/config';
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const points = [t('onsite.1'), t('onsite.2'), t('onsite.3'), t('onsite.4')];
+---
+
+<section class="band onsite" id="onsite">
+  <div class="wrap onsite__inner">
+    <div class="onsite__text">
+      <p class="kicker kicker--accent">{t('onsite.kicker')}</p>
+      <h2 class="h2 onsite__title">{t('onsite.title')}</h2>
+      <p class="lead onsite__lead">{t('onsite.lead')}</p>
+
+      <div class="onsite__actions">
+        <ObfuscatedEmail lang={lang} label={t('onsite.cta')} class="btn btn--primary" />
+        {company.phone && (
+          <a class="btn btn--ghost" href={`tel:${company.phone}`}>
+            <Icon name="pin" size={16} />
+            {company.phone}
+          </a>
+        )}
+      </div>
+
+      <p class="onsite__note">{t('onsite.note')}</p>
+    </div>
+
+    <ul class="panel onsite__list">
+      {
+        points.map((point) => (
+          <li class="onsite__item">
+            <span class="onsite__icon">
+              <Icon name="toolbox" size={18} />
+            </span>
+            {point}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .onsite__inner {
+    padding-block: 72px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: 44px;
+    align-items: center;
+  }
+
+  .onsite__text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .onsite__title {
+    max-width: 520px;
+  }
+
+  .onsite__lead {
+    max-width: 560px;
+    font-size: 16px;
+  }
+
+  .onsite__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 6px;
+  }
+
+  .onsite__note {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--muted-2);
+    max-width: 520px;
+  }
+
+  .onsite__list {
+    list-style: none;
+    margin: 0;
+    padding: 24px;
+    background: var(--surface-2);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .onsite__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text-2);
+  }
+
+  .onsite__item + .onsite__item {
+    border-top: 1px solid var(--line-soft);
+    padding-top: 16px;
+  }
+
+  .onsite__icon {
+    color: var(--accent);
+    display: inline-flex;
+    flex: none;
+    padding-top: 1px;
+  }
+
+  @media (max-width: 900px) {
+    .onsite__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+      padding-block: 52px;
+    }
+  }
+</style>

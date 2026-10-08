@@ -1,9 +1,13 @@
 ---
-import HardwareGlyph from '../components/HardwareGlyph.astro';
+import Audience from '../components/Audience.astro';
+import ComputeArtwork from '../components/ComputeArtwork.astro';
+import Workloads from '../components/Workloads.astro';
 import Icon from '../components/Icon.astro';
+import OnSite from '../components/OnSite.astro';
 import PaymentSteps from '../components/PaymentSteps.astro';
 import ProductCard from '../components/ProductCard.astro';
-import { products, serversHref } from '../data/catalogue';
+import TurnkeyStack from '../components/TurnkeyStack.astro';
+import { miniPcHref, nasHref, products, serversHref } from '../data/catalogue';
 import type { Lang } from '../i18n/ui';
 import { href, useTranslations } from '../i18n/utils';
 
@@ -14,18 +18,17 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 
 const trust = [
-  { icon: 'shield', label: t('home.trust1') },
+  { icon: 'terminal', label: t('home.trust1') },
   { icon: 'clock', label: t('home.trust2') },
-  { icon: 'bank', label: t('home.trust3') },
+  { icon: 'toolbox', label: t('home.trust3') },
 ] as const;
 
 const why = [
-  { icon: 'clock', title: t('why.1.title'), body: t('why.1.body') },
-  { icon: 'list', title: t('why.2.title'), body: t('why.2.body') },
+  { icon: 'terminal', title: t('why.1.title'), body: t('why.1.body') },
+  { icon: 'layers', title: t('why.2.title'), body: t('why.2.body') },
   { icon: 'shield', title: t('why.3.title'), body: t('why.3.body') },
-  { icon: 'sliders', title: t('why.4.title'), body: t('why.4.body') },
+  { icon: 'cpu', title: t('why.4.title'), body: t('why.4.body') },
 ] as const;
-
 
 const miniPcItems = products.filter((product) => (product.section ?? 'miniPc') === 'miniPc');
 const nasItems = products.filter((product) => (product.section ?? 'miniPc') === 'nas');
@@ -38,12 +41,12 @@ const serverItems = products.filter((product) => (product.section ?? 'miniPc') =
   <div class="wrap hero__inner">
     <div class="hero__text">
       <p class="chip chip--ok"><span class="chip__dot"></span>{t('home.eyebrow')}</p>
-      <h1 class="h1 hero__title">{t('home.h1')}</h1>
+      <h1 class="h1 hero__title">{t('home.h1')} <span>{t('home.h1Accent')}</span></h1>
       <p class="lead hero__sub">{t('home.sub')}</p>
 
       <div class="hero__actions">
-        <a class="btn btn--primary" href={href(lang, 'miniPc')}>{t('home.ctaSecondary')}</a>
-        <a class="btn btn--ghost" href={href(lang, 'nas')}>{t('nav.nas')}</a>
+        <a class="btn btn--primary" href="#workloads">{t('home.ctaPrimary')}<Icon name="arrow" size={18} /></a>
+        <a class="btn btn--ghost" href="#onsite">{t('home.ctaOnsite')}</a>
       </div>
 
       <ul class="hero__trust">
@@ -59,21 +62,25 @@ const serverItems = products.filter((product) => (product.section ?? 'miniPc') =
     </div>
 
     <div class="hero__figure">
-      <div class="hero__frame">
-        <p class="mono hero__figNote">{t('home.figNote')}</p>
-        <HardwareGlyph glyph="mini" width={420} label="Compud" />
-      </div>
+      <ComputeArtwork lang={lang} />
     </div>
   </div>
 </section>
 
-<PaymentSteps lang={lang} />
+<Workloads lang={lang} />
+
+<Audience lang={lang} />
+
+<TurnkeyStack lang={lang} />
 
 <section class="band products">
   <div class="wrap products__inner">
     <header class="products__head">
-      <h2 class="h2">{t('mini.title')}</h2>
-      <a class="products__all" href={href(lang, 'miniPc')}>
+      <div class="products__titleWrap">
+        <h2 class="h2">{t('mini.title')}</h2>
+        <p class="lead products__sub">{t('mini.lead')}</p>
+      </div>
+      <a class="products__all" href={miniPcHref(lang)}>
         {t('mini.all')}
         <Icon name="arrow" size={16} />
       </a>
@@ -94,7 +101,7 @@ const serverItems = products.filter((product) => (product.section ?? 'miniPc') =
             <h2 class="h2">{t('nas.title')}</h2>
             <p class="lead products__sub">{t('nas.lead')}</p>
           </div>
-          <a class="products__all" href={href(lang, 'nas')}>
+          <a class="products__all" href={nasHref(lang)}>
             {t('nas.all')}
             <Icon name="arrow" size={16} />
           </a>
@@ -177,6 +184,10 @@ const serverItems = products.filter((product) => (product.section ?? 'miniPc') =
   )
 }
 
+<OnSite lang={lang} />
+
+<PaymentSteps lang={lang} />
+
 <section class="band why">
   <div class="wrap why__grid">
     {
@@ -193,19 +204,42 @@ const serverItems = products.filter((product) => (product.section ?? 'miniPc') =
 
 <style>
   .hero {
-    background-image:
-      linear-gradient(#14181b 1px, transparent 1px),
-      linear-gradient(90deg, #14181b 1px, transparent 1px);
-    background-size: 48px 48px;
-    background-position: -1px -1px;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 80% 40%, #22433350, transparent 55%), #0d1210;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: linear-gradient(#91caaa08 1px, transparent 1px), linear-gradient(90deg, #91caaa08 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: linear-gradient(90deg, transparent, #000);
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 520px;
+    height: 520px;
+    top: -400px;
+    left: 36%;
+    border-radius: 50%;
+    background: #afffd533;
+    filter: blur(100px);
+    pointer-events: none;
   }
 
   .hero__inner {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 64px;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 70px;
     align-items: center;
-    padding-block: 82px 78px;
+    padding-block: 88px 70px;
+    min-height: 670px;
   }
 
   .hero__text {
@@ -215,13 +249,19 @@ const serverItems = products.filter((product) => (product.section ?? 'miniPc') =
     gap: 26px;
   }
 
+  .hero__text > .chip { background: transparent; border: 0; padding: 0; letter-spacing: .12em; font-size: 10px; }
+  .hero__text > .chip .chip__dot { box-shadow: 0 0 12px #91e6b9; }
+
   .hero__title {
-    max-width: 560px;
+    max-width: 620px;
+    font-size: clamp(46px, 5.4vw, 76px);
+    letter-spacing: -.06em;
+    line-height: 1.04;
   }
 
-  .hero__sub {
-    max-width: 500px;
-  }
+  .hero__title span { display: block; color: #a7e8c2; }
+
+  .hero__sub { max-width: 480px; font-size: 16px; line-height: 1.8; }
 
   .hero__actions {
     display: flex;
@@ -258,29 +298,6 @@ const serverItems = products.filter((product) => (product.section ?? 'miniPc') =
     display: flex;
     justify-content: center;
     min-width: 0;
-  }
-
-  .hero__frame {
-    position: relative;
-    width: 100%;
-    min-width: 0;
-    max-width: 540px;
-    background: #121619;
-    border: 1px solid #23282d;
-    border-radius: var(--r-card);
-    display: grid;
-    place-items: center;
-    padding: 40px 24px;
-  }
-
-  .hero__figNote {
-    position: absolute;
-    top: 18px;
-    left: 20px;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--faint);
   }
 
   .products__inner {
@@ -327,18 +344,6 @@ const serverItems = products.filter((product) => (product.section ?? 'miniPc') =
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
   .why__grid {
     padding-block: 70px;
     display: grid;
@@ -376,14 +381,17 @@ const serverItems = products.filter((product) => (product.section ?? 'miniPc') =
     .hero__inner {
       grid-template-columns: minmax(0, 1fr);
       gap: 40px;
-      padding-block: 48px;
+      padding-block: 58px;
+      min-height: auto;
     }
     .hero__figure {
-      order: -1;
+      width: min(100%, 560px);
+      margin-inline: auto;
     }
   }
 
   @media (max-width: 680px) {
+    .products__head { flex-direction: column; align-items: flex-start; gap: 20px; }
     .products__grid {
       grid-template-columns: minmax(0, 1fr);
     }

@@ -1,5 +1,5 @@
 ---
-import { serversHref } from '../data/catalogue';
+import { miniPcHref, nasHref, serversHref } from '../data/catalogue';
 import type { Lang } from '../i18n/ui';
 import { href, useTranslations } from '../i18n/utils';
 import { company } from '../lib/config';
@@ -32,8 +32,8 @@ const t = useTranslations(lang);
 
       <div class="footer__col">
         <p class="kicker">{t('foot.products')}</p>
-        <a href={href(lang, 'miniPc')}>{t('nav.miniPc')}</a>
-        <a href={href(lang, 'nas')}>{t('nav.nas')}</a>
+        <a href={miniPcHref(lang)}>{t('nav.miniPc')}</a>
+        <a href={nasHref(lang)}>{t('nav.nas')}</a>
         <a href={href(lang, 'laptop')}>{t('nav.laptop')}</a>
         <a href={href(lang, 'gpu')}>{t('nav.gpu')}</a>
         <a href={serversHref(lang)}>{t('nav.servers')}</a>
@@ -41,6 +41,7 @@ const t = useTranslations(lang);
 
       <div class="footer__col">
         <p class="kicker">{t('foot.support')}</p>
+        <a href={`${href(lang, 'home')}#onsite`}>{t('foot.onsite')}</a>
         <span>{t('foot.shipping')}</span>
         <span>{t('foot.rma')}</span>
         <span>{t('foot.howPay')}</span>

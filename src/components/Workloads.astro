@@ -1,0 +1,50 @@
+---
+import type { Lang } from '../i18n/ui';
+import { miniPcHref, nasHref, serversHref } from '../data/catalogue';
+import Icon from './Icon.astro';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const it = lang === 'it';
+const workloads = [
+  { n: '01', tag: 'INFERENCE', title: it ? 'I tuoi modelli. In locale.' : 'Your models. Running locally.', body: it ? 'Partiamo da modello, quantizzazione e contesto. Poi dimensioniamo memoria e GPU per l’inferenza che ti serve.' : 'Start with the model, quantization and context. Then size memory and GPU around the inference you need.', link: serversHref(lang), cta: it ? 'Configura un server' : 'Configure a server', bars: [32, 56, 44, 74, 62, 91, 72, 100] },
+  { n: '02', tag: 'DEVELOPMENT', title: it ? 'Il tuo ambiente. Linux.' : 'Your environment. Linux.', body: it ? 'IDE, agenti, container e build sulla stessa macchina. CPU, RAM e NVMe scelti per lavorare insieme.' : 'IDEs, agents, containers and builds on one machine. CPU, RAM and NVMe selected to work together.', link: miniPcHref(lang), cta: it ? 'Configura il mini PC' : 'Configure the mini PC', bars: [72, 72, 48, 48, 88, 88, 60, 60] },
+  { n: '03', tag: 'DATA', title: it ? 'I tuoi dati. A casa tua.' : 'Your data. On your terms.', body: it ? 'Dataset, pesi dei modelli e backup sulla tua infrastruttura. Storage e rete dimensionati per il tuo team.' : 'Datasets, model weights and backups on your infrastructure. Storage and networking sized for your team.', link: nasHref(lang), cta: it ? 'Configura il NAS' : 'Configure the NAS', bars: [40, 48, 56, 64, 72, 80, 88, 96] },
+];
+---
+<section class="band workloads" id="workloads">
+  <div class="wrap workloads__inner">
+    <header class="workloads__head">
+      <p class="kicker kicker--accent">{it ? '01 / Il carico prima del catalogo' : '01 / Workload before hardware'}</p>
+      <h2>{it ? 'Il tuo lavoro decide lo stack.' : 'Your workload defines the stack.'}</h2>
+      <p>{it ? 'Linux è il punto di partenza. L’AI locale è una scelta di controllo. Noi costruiamo il sistema intorno a te.' : 'Linux is the foundation. Local AI is a choice to stay in control. We build the system around you.'}</p>
+    </header>
+    <div class="workloads__grid">
+      {workloads.map(item => <a class="workload" href={item.link}>
+        <div class="workload__meta mono"><span>{item.n}</span><span>{item.tag}</span><Icon name="arrow" size={18}/></div>
+        <div class="workload__signal" aria-hidden="true">{item.bars.map((height, i) => <span style={`--height: ${height}%; --i: ${i}`}/>)}</div>
+        <h3>{item.title}</h3><p>{item.body}</p><span class="workload__cta">{item.cta}<Icon name="arrow" size={16}/></span>
+      </a>)}
+    </div>
+  </div>
+</section>
+<style>
+  .workloads { background: #101713; scroll-margin-top: 95px; }
+  .workloads__inner { padding-block: 76px 84px; }
+  .workloads__head { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px 80px; align-items: end; margin-bottom: 44px; }
+  .workloads__head .kicker { grid-column: 1 / -1; }
+  .workloads__head h2 { font-size: clamp(30px, 3.6vw, 46px); max-width: 550px; }
+  .workloads__head > p:last-child { color: var(--muted); max-width: 440px; font-size: 15px; }
+  .workloads__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid #304138; }
+  .workload { padding: 28px; display: flex; flex-direction: column; color: var(--text); background: linear-gradient(150deg, #20382b30, transparent 65%); transition: background-color .25s; }
+  .workload + .workload { border-left: 1px solid #304138; }
+  .workload:hover { background-color: #1a2921; color: var(--text); }
+  .workload__meta { display: flex; align-items: center; gap: 14px; font-size: 10px; letter-spacing: .12em; color: #a8c6b5; }
+  .workload__meta svg { margin-left: auto; }
+  .workload__signal { height: 70px; display: flex; gap: 7px; align-items: end; margin-block: 36px; width: 75%; }
+  .workload__signal span { flex: 1; height: var(--height); background: linear-gradient(0deg, #6ba68308, #8dcba548); border-top: 1px solid #8dcba5; transform-origin: bottom; transition: transform .5s; transition-delay: calc(var(--i) * 20ms); }
+  .workload:hover .workload__signal span { transform: scaleY(.8); }
+  .workload h3 { font-size: 23px; line-height: 1.25; margin-bottom: 16px; }
+  .workload > p { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 28px; }
+  .workload__cta { display: flex; align-items: center; gap: 10px; color: var(--accent); font-size: 13px; margin-top: auto; }
+  @media(max-width: 800px) { .workloads__head { grid-template-columns: 1fr; gap: 20px; } .workloads__grid { grid-template-columns: 1fr; } .workload + .workload { border-left: 0; border-top: 1px solid #304138; } .workload__signal { height: 48px; max-width: 200px; margin-block: 26px; } .workloads__inner { padding-block: 52px; } }
+</style>

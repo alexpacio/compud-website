@@ -1,6 +1,7 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import MiniPcIndex from '../../../sections/MiniPcIndex.astro';
+import { miniPcProduct, pick } from '../../../data/catalogue';
 import { useTranslations } from '../../../i18n/utils';
 
 const lang = 'en' as const;
@@ -9,10 +10,11 @@ const t = useTranslations(lang);
 
 <Base
   lang={lang}
-  route="miniPc"
+  route="product"
+  param={miniPcProduct?.slug}
   active="miniPc"
-  title={t('meta.miniPc.title')}
-  description={t('meta.miniPc.description')}
+  title={`${miniPcProduct?.name ?? t('meta.miniPc.title')} — Compud`}
+  description={miniPcProduct ? pick(miniPcProduct.tagline, lang) : t('meta.miniPc.description')}
 >
   <MiniPcIndex lang={lang} />
 </Base>

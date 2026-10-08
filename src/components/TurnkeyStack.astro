@@ -1,0 +1,230 @@
+---
+/**
+ * TurnkeyStack.astro — cosa vuol dire «chiavi in mano»: i quattro passaggi che
+ * facciamo noi, e il profilo software che il cliente trova al primo avvio.
+ */
+import Icon from './Icon.astro';
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const steps = [
+  { icon: 'sliders', title: t('turn.1.title'), body: t('turn.1.body') },
+  { icon: 'layers', title: t('turn.2.title'), body: t('turn.2.body') },
+  { icon: 'terminal', title: t('turn.3.title'), body: t('turn.3.body') },
+  { icon: 'truck', title: t('turn.4.title'), body: t('turn.4.body') },
+] as const;
+
+const stack = [
+  t('turn.stack1'),
+  t('turn.stack2'),
+  t('turn.stack3'),
+  t('turn.stack4'),
+  t('turn.stack5'),
+  t('turn.stack6'),
+];
+---
+
+<section class="band turn">
+  <div class="wrap turn__inner">
+    <header class="turn__head">
+      <div class="turn__headText">
+        <p class="kicker kicker--accent">{t('turn.kicker')}</p>
+        <h2 class="h2 turn__title">{t('turn.title')}</h2>
+      </div>
+      <p class="turn__lead">{t('turn.lead')}</p>
+    </header>
+
+    <div class="turn__body">
+      <ol class="turn__steps">
+        {
+          steps.map((step, i) => (
+            <li class="turn__step">
+              <span class="turn__stepIcon">
+                <Icon name={step.icon} size={20} />
+              </span>
+              <div class="turn__stepText">
+                <h3 class="h3 turn__stepTitle">
+                  <span class="mono turn__stepNum">{String(i + 1).padStart(2, '0')}</span>
+                  {step.title}
+                </h3>
+                <p class="turn__stepBody">{step.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+
+      <aside class="panel turn__stack">
+        <p class="kicker turn__stackTitle">{t('turn.stackTitle')}</p>
+        <ul class="turn__stackList">
+          {
+            stack.map((line) => (
+              <li class="mono turn__stackItem">
+                <span class="turn__stackMark" aria-hidden="true">
+                  ▸
+                </span>
+                {line}
+              </li>
+            ))
+          }
+        </ul>
+        <p class="turn__stackNote">{t('turn.stackNote')}</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<style>
+  .turn__inner {
+    padding-block: 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 42px;
+  }
+
+  .turn__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+  }
+
+  .turn__headText {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .turn__title {
+    max-width: 640px;
+  }
+
+  .turn__lead {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+    max-width: 360px;
+  }
+
+  .turn__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+  }
+
+  .turn__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px 32px;
+  }
+
+  .turn__step {
+    display: flex;
+    gap: 14px;
+  }
+
+  .turn__stepIcon {
+    color: var(--accent);
+    display: inline-flex;
+    flex: none;
+    padding-top: 2px;
+  }
+
+  .turn__stepText {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .turn__stepTitle {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .turn__stepNum {
+    font-size: 11px;
+    color: var(--faint);
+    letter-spacing: 0.08em;
+  }
+
+  .turn__stepBody {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .turn__stack {
+    background: var(--surface-2);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .turn__stackTitle {
+    color: var(--text-2);
+  }
+
+  .turn__stackList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  .turn__stackItem {
+    display: flex;
+    gap: 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--text-2);
+  }
+
+  .turn__stackMark {
+    color: var(--accent);
+    flex: none;
+  }
+
+  .turn__stackNote {
+    border-top: 1px solid var(--line-soft);
+    padding-top: 14px;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--muted-2);
+  }
+
+  @media (max-width: 1000px) {
+    .turn__body {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 860px) {
+    .turn__head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .turn__steps {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+    }
+    .turn__inner {
+      padding-block: 52px;
+    }
+  }
+</style>

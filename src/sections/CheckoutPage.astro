@@ -1,6 +1,6 @@
 ---
 import CheckoutForm, { type CatalogueEntry } from '../islands/CheckoutForm.tsx';
-import { pick, products } from '../data/catalogue';
+import { miniPcHref, pick, products } from '../data/catalogue';
 import type { Lang } from '../i18n/ui';
 import { href, useTranslations } from '../i18n/utils';
 import { commerce } from '../lib/config';
@@ -58,7 +58,7 @@ const catalogue: Record<string, CatalogueEntry> = Object.fromEntries(
       vatRate={commerce.vatRate}
       shippingCents={commerce.shippingCents}
       catalogue={catalogue}
-      browseUrl={href(lang, 'miniPc')}
+      browseUrl={miniPcHref(lang)}
       strings={{
         title: t('co.title'),
         intro: t('co.intro'),

@@ -1,4 +1,4 @@
-/* Compud design tokens — values lifted from the design canvas, not rounded. */
+/* Compud — graphite surfaces, mineral greens, precise technical typography. */
 :root {
   --bg: #0d0f11;
   --bg-deep: #0a0c0e;
@@ -16,14 +16,14 @@
   --text: #e9ecee;
   --text-2: #c6ccd1;
   --muted: #98a0a8;
-  --muted-2: #6e767d;
-  --faint: #4a5259;
+  --muted-2: #89968e;
+  --faint: #77857c;
 
-  --accent: #3ed28a;
+  --accent: #a7e8c2;
   --accent-ink: #06120c;
   --accent-bg: #0f1a15;
   --accent-line: #2a4f3c;
-  --accent-hover: #7be3b2;
+  --accent-hover: #c3f5d7;
 
   --warn: #e0a33c;
   --warn-bg: #1c1508;
@@ -53,6 +53,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 100px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -63,6 +64,8 @@ html {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }
@@ -371,3 +374,9 @@ select {
     font-size: 16px;
   }
 }
+
+/* Small material cues shared across catalogue and editorial sections. */
+::selection { background: #a7e8c2; color: #0d1711; }
+.btn--primary { box-shadow: inset 0 1px 0 #ffffff40, 0 4px 18px #a7e8c20a; }
+.btn--primary:hover { box-shadow: 0 5px 26px #a7e8c21f; }
+.band--tint { background-image: radial-gradient(ellipse at 0 0, #a7e8c206, transparent 65%); }

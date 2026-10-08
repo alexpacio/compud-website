@@ -1,0 +1,153 @@
+---
+/**
+ * Audience.astro — chi serviamo: aziende con un team di sviluppo e liberi
+ * professionisti. È la banda che qualifica il posizionamento subito sotto
+ * l'hero, prima che si parli di prodotti.
+ */
+import Icon from './Icon.astro';
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const cards = [
+  {
+    icon: 'building',
+    title: t('aud.1.title'),
+    body: t('aud.1.body'),
+    points: [t('aud.1.point1'), t('aud.1.point2'), t('aud.1.point3')],
+  },
+  {
+    icon: 'user',
+    title: t('aud.2.title'),
+    body: t('aud.2.body'),
+    points: [t('aud.2.point1'), t('aud.2.point2'), t('aud.2.point3')],
+  },
+] as const;
+---
+
+<section class="band band--tint aud">
+  <div class="wrap aud__inner">
+    <header class="aud__head">
+      <p class="kicker kicker--accent">{t('aud.kicker')}</p>
+      <h2 class="h2 aud__title">{t('aud.title')}</h2>
+      <p class="lead aud__lead">{t('aud.lead')}</p>
+    </header>
+
+    <div class="aud__grid">
+      {
+        cards.map((card) => (
+          <article class="panel aud__card">
+            <span class="aud__icon">
+              <Icon name={card.icon} size={22} />
+            </span>
+            <h3 class="h3 aud__cardTitle">{card.title}</h3>
+            <p class="aud__body">{card.body}</p>
+            <ul class="aud__points">
+              {card.points.map((point) => (
+                <li class="aud__point">
+                  <span class="aud__tick">
+                    <Icon name="check" size={16} />
+                  </span>
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .aud__inner {
+    padding-block: 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+
+  .aud__head {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .aud__title {
+    max-width: 700px;
+  }
+
+  .aud__lead {
+    max-width: 640px;
+    font-size: 16px;
+  }
+
+  .aud__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .aud__card {
+    background: var(--surface-2);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .aud__icon {
+    color: var(--accent);
+    display: inline-flex;
+  }
+
+  .aud__cardTitle {
+    font-size: 20px;
+  }
+
+  .aud__body {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  .aud__points {
+    list-style: none;
+    margin: 6px 0 0;
+    padding: 16px 0 0;
+    border-top: 1px solid var(--line-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .aud__point {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-2);
+  }
+
+  .aud__tick {
+    color: var(--accent);
+    display: inline-flex;
+    flex: none;
+    padding-top: 1px;
+  }
+
+  @media (max-width: 860px) {
+    .aud__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .aud__inner {
+      padding-block: 52px;
+    }
+  }
+</style>

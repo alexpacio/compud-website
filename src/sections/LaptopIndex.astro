@@ -1,4 +1,5 @@
 ---
+import OnSite from '../components/OnSite.astro';
 import PaymentSteps from '../components/PaymentSteps.astro';
 import ProductCard from '../components/ProductCard.astro';
 import { products } from '../data/catalogue';
@@ -36,6 +37,8 @@ const items = products.filter((product) => (product.section ?? 'miniPc') === 'la
 </section>
 
 <PaymentSteps lang={lang} />
+
+<OnSite lang={lang} />
 
 <style>
   .index__inner {

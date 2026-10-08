@@ -1,0 +1,22 @@
+{
+  "tool": "Built-in image_gen",
+  "useCase": "background-extraction",
+  "transparentBackground": true,
+  "images": [
+    {
+      "source": "01-rear-three-quarter.jpg",
+      "output": "01-rear-three-quarter-cutout.webp",
+      "prompt": "Use case: background-extraction\nAsset type: transparent product catalogue photo for a website.\nEdit target: the supplied Xiaomi Book Pro 14 blue laptop photographed from the rear three-quarter angle.\nPrimary request: remove only the entire white background and floor shadow; retain the complete laptop exactly as shown, including its partially open lid, Xiaomi logo, keyboard glimpse, hinges, black port openings, precise silhouette, blue finish, reflections, perspective and proportions.\nComposition: center the same laptop on a transparent canvas with a small even margin so the product fills most of the image. Keep the entire product visible.\nConstraints: true alpha transparency, crisp naturally antialiased edges; no white fringe, no background, no floor, no extra object, no added text, no redesign. Preserve all product pixels and details as faithfully as possible."
+    },
+    {
+      "source": "02-in-use.jpg",
+      "output": "02-open-rear-cutout.webp",
+      "prompt": "Use case: background-extraction\nAsset type: transparent laptop product catalogue cutout for a website.\nEdit target: only the blue Xiaomi Book Pro 14 laptop in the supplied lifestyle photo.\nPrimary request: isolate the complete blue laptop, removing the woman, her hands, clothes, seat, scenery and all background. Preserve the visible laptop exactly: rear lid Xiaomi wordmark, blue metal finish, thin edges, angle, perspective, proportions and visible ports. Reconstruct only the small keyboard/base area occluded by the hands, following the existing keyboard pattern and same perspective. Keep the entire laptop silhouette.\nComposition: center the isolated laptop on a true transparent canvas with small even margins, same original camera view and blue color.\nConstraints: actual alpha transparency, clean edges, no white halo, no shadows from removed objects; no person, hands, clothing, chair, background, new logo, added text, or redesign."
+    },
+    {
+      "source": "03-ports.jpg",
+      "output": "03-ports-cutout.webp",
+      "prompt": "Use case: background-extraction\nAsset type: transparent product ports detail for a laptop website gallery.\nEdit target: the supplied image of two blue Xiaomi Book Pro 14 laptop side profiles.\nPrimary request: remove only all white background, preserving both horizontal blue laptop profiles and their exact current arrangement, framing, clipped edges, dimensions and metal finish. Preserve every physical port exactly: upper profile HDMI, two USB-C and the thunderbolt symbol; lower profile headphone jack and USB-A. All black port interiors and fine details must remain opaque and unchanged.\nConstraints: true alpha transparency around the two profiles and in the empty gap between them; crisp antialiased silhouette; no white fringe, no removed black ports, no additional parts, no recomposition, no redesign, no text or watermark."
+    }
+  ]
+}
