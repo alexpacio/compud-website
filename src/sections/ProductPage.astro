@@ -3,10 +3,12 @@ import HardwareGlyph from '../components/HardwareGlyph.astro';
 import Icon from '../components/Icon.astro';
 import Video from '../components/Video.astro';
 import Configurator, { type ConfigGroup } from '../islands/Configurator.tsx';
+import OmarchyBenefits from '../components/OmarchyBenefits';
 import { defaultChoice, pick, type Product } from '../data/catalogue';
 import type { Lang } from '../i18n/ui';
 import { href, useTranslations } from '../i18n/utils';
 import { commerce, company } from '../lib/config';
+import { BUYOUT_PERCENT, isRentalProduct } from '../lib/rental';
 
 interface Props {
   lang: Lang;
@@ -59,9 +61,10 @@ const sectionLabel =
           : t('nav.miniPc');
 
 /** Attribution brand, taken from the host of the source page. */
-const sourceBrand = product.sourceUrl
+const sourceBrand = product.sourceLabel ?? (product.sourceUrl
   ? new URL(product.sourceUrl).hostname.replace(/^www\./, '').split('.')[0].toUpperCase()
-  : '';
+  : '');
+const videoNote = product.videoNote ? pick(product.videoNote, lang) : t('pdp.videoNote');
 
 const isServer = section === 'server';
 const hasSingleProduct = isServer || section === 'miniPc' || section === 'nas';
@@ -76,7 +79,7 @@ const process = [
 
 const prep = [
   { icon: 'clock', title: t('pdp.prep1.title'), body: t('pdp.prep1.body') },
-  { icon: 'list', title: t('pdp.prep2.title'), body: product.linuxNote ? pick(product.linuxNote, lang) : t('pdp.prep2.body') },
+  { icon: 'list', title: t('pdp.prep2.title'), body: product.linuxNote ? pick(product.linuxNote, lang) : t(isServer ? 'pdp.prep2.serverBody' : 'pdp.prep2.body') },
   { icon: 'shield', title: t('pdp.prep3.title'), body: t('pdp.prep3.body') },
 ] as const;
 
@@ -114,7 +117,7 @@ const prep = [
                 id="pdpMain"
                 class="pdp__img"
                 src={product.images![0]}
-                alt={product.name}
+                alt={product.imageAlts?.[0] ? pick(product.imageAlts[0], lang) : product.name}
                 fetchpriority="high"
               />
             </div>
@@ -124,8 +127,9 @@ const prep = [
                   type="button"
                   class:list={['pdp__thumbBtn', i === 0 && 'is-active']}
                   data-src={src}
+                  data-alt={product.imageAlts?.[i] ? pick(product.imageAlts[i], lang) : product.name}
                   aria-pressed={i === 0 ? "true" : "false"}
-                  aria-label={`${product.name} — ${t('pdp.photoNth', { n: i + 1 })}`}
+                  aria-label={product.imageAlts?.[i] ? pick(product.imageAlts[i], lang) : `${product.name} — ${t('pdp.photoNth', { n: i + 1 })}`}
                 >
                   <img src={src} alt="" loading="lazy" width="220" height="220" />
                 </button>
@@ -145,8 +149,9 @@ const prep = [
         product.video ? (
           <Video
             src={product.video}
-            label={`${product.name} — ${t('pdp.videoNote')}`}
-            note={t('pdp.videoNote')}
+            poster={product.videoPoster}
+            label={`${product.name} — ${videoNote}`}
+            note={videoNote}
           />
         ) : null
       }
@@ -168,6 +173,7 @@ const prep = [
         client:load
         lang={lang}
         slug={product.slug}
+        rentalAvailable={isRentalProduct(product)}
         basePriceCents={product.basePriceCents}
         vatRate={commerce.vatRate}
         groups={groups}
@@ -175,6 +181,16 @@ const prep = [
         checkoutUrl={href(lang, 'checkout')}
         strings={{
           included: t('pdp.included'),
+          rentalOnly: t('rental.only'),
+          rentalTerm: t('rental.term'),
+          months: t('rental.months'),
+          perMonth: t('rental.perMonth'),
+          rentalTotal: t('rental.total'),
+          rentNow: t('pdp.rentNow'),
+          markup: t('rental.markup'),
+          noMarkup: t('rental.noMarkup'),
+          buyout: t('rental.buyout'),
+          buyoutNote: t('rental.buyoutNote', { percent: BUYOUT_PERCENT }),
           excl: t('price.excl'),
           incl: t('price.incl', { rate: commerce.vatRate }),
           payLine: t('pdp.payLine'),
@@ -187,6 +203,8 @@ const prep = [
     </div>
   </div>
 </section>
+
+{section !== 'server' && section !== 'gpu' && <OmarchyBenefits client:load lang={lang} />}
 
 {
   (product.highlights?.length || product.details) && (
@@ -328,6 +346,8 @@ const prep = [
     btn.addEventListener('click', () => {
       const src = btn.getAttribute('data-src');
       if (main && src) main.setAttribute('src', src);
+      const alt = btn.getAttribute('data-alt');
+      if (main && alt) main.setAttribute('alt', alt);
       thumbs.forEach((b) => {
         b.classList.toggle('is-active', b === btn);
         b.setAttribute('aria-pressed', String(b === btn));
@@ -366,7 +386,7 @@ const prep = [
     position: relative;
     min-width: 0;
     min-height: 460px;
-    background: radial-gradient(ellipse at 50% 35%, #314b3c80, transparent 70%), linear-gradient(145deg, #1a231f, #0c1310);
+    background: radial-gradient(ellipse at 50% 35%, #e0ece0, transparent 70%), #f4f8f2;
     border: 1px solid var(--line);
     border-radius: var(--r-card);
     display: grid;
@@ -445,8 +465,7 @@ const prep = [
     height: auto;
     object-fit: contain;
     filter:
-      drop-shadow(0 30px 28px rgba(0, 0, 0, 0.55))
-      drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
+      drop-shadow(0 24px 24px rgba(28, 60, 38, 0.14));
   }
 
   .pdp__thumbBtn {
@@ -612,7 +631,7 @@ const prep = [
   .pdp__tagline {
     font-size: 15px;
     line-height: 1.6;
-    color: #a8b0b7;
+    color: var(--muted);
   }
 
   .pdp2__inner {

@@ -1,7 +1,20 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { Alert, Button, Card, Radio, Tag } from 'antd';
+import { ShoppingCartOutlined } from '@ant-design/icons';
+import AntProvider from '../components/AntProvider';
 import type { Lang } from '../i18n/ui';
 import { addToCart } from '../lib/cart';
 import { formatEur, withVat } from '../lib/money';
+import {
+  DEFAULT_RENTAL_MONTHS,
+  isRentalMonths,
+  monthlyRentalCents,
+  rentalBuyoutCents,
+  RENTAL_MARKUP_PERCENT,
+  RENTAL_MONTHS,
+  type RentalMonths,
+} from '../lib/rental';
+import '../styles/configurator.css';
 
 export interface ConfigOption {
   id: string;
@@ -9,22 +22,28 @@ export interface ConfigOption {
   addCents: number;
   spec: string;
 }
-
 export interface ConfigGroup {
   id: 'ram' | 'ssd' | 'os' | 'gpu' | 'psu' | 'bay';
   label: string;
   options: ConfigOption[];
-  /** Placeholder group (a used GPU has no RAM, disk or OS): keep it out of the UI. */
   hidden?: boolean;
 }
-
+type Choice = {
+  ram: string;
+  ssd: string;
+  os: string;
+  gpu?: string;
+  psu?: string;
+  bay?: string;
+};
 interface Props {
   lang: Lang;
   slug: string;
+  rentalAvailable: boolean;
   basePriceCents: number;
   vatRate: number;
   groups: ConfigGroup[];
-  defaults: { ram: string; ssd: string; os: string; gpu?: string; psu?: string; bay?: string };
+  defaults: Choice;
   checkoutUrl: string;
   strings: {
     included: string;
@@ -35,18 +54,24 @@ interface Props {
     addCart: string;
     added: string;
     shipLine: string;
+    rentalOnly: string;
+    rentalTerm: string;
+    months: string;
+    perMonth: string;
+    rentalTotal: string;
+    rentNow: string;
+    markup: string;
+    noMarkup: string;
+    buyout: string;
+    buyoutNote: string;
   };
 }
 
-type Choice = { ram: string; ssd: string; os: string; gpu?: string; psu?: string; bay?: string };
-
-/**
- * Price and configuration for one machine. The price shown here is advisory:
- * the order endpoint recomputes it from the catalogue before anything is owed.
- */
+/** Rates are advisory; the server recomputes them from the original configuration. */
 export default function Configurator({
   lang,
   slug,
+  rentalAvailable,
   basePriceCents,
   vatRate,
   groups,
@@ -55,166 +80,200 @@ export default function Configurator({
   strings,
 }: Props) {
   const [choice, setChoice] = useState<Choice>(defaults);
+  const [rentalMonths, setRentalMonths] = useState<RentalMonths>(
+    DEFAULT_RENTAL_MONTHS,
+  );
   const [added, setAdded] = useState(false);
+  useEffect(() => {
+    if (!rentalAvailable) return;
+    const requested = Number(
+      new URLSearchParams(window.location.search).get('months'),
+    );
+    if (isRentalMonths(requested)) setRentalMonths(requested);
+  }, [rentalAvailable]);
 
-  /**
-   * Placeholder groups stay out of the UI but keep their price. A group with a
-   * single real option is not a choice either, yet the buyer still needs to see
-   * it — what OS ships on the machine is part of what they are paying for — so
-   * it is rendered locked rather than dropped.
-   */
-  const shown = groups.filter((group) => !group.hidden);
-
-  const netCents = useMemo(() => {
-    return groups.reduce((sum, group) => {
-      const option = group.options.find((o) => o.id === choice[group.id]);
-      return sum + (option?.addCents ?? 0);
-    }, basePriceCents);
-  }, [basePriceCents, groups, choice]);
-
+  const configurationCents = useMemo(
+    () =>
+      groups.reduce((sum, group) => {
+        return (
+          sum +
+          (group.options.find((option) => option.id === choice[group.id])
+            ?.addCents ?? 0)
+        );
+      }, basePriceCents),
+    [basePriceCents, groups, choice],
+  );
+  const netCents = rentalAvailable
+    ? monthlyRentalCents(configurationCents, rentalMonths)
+    : configurationCents;
   const grossCents = withVat(netCents, vatRate);
-
-  const select = (group: ConfigGroup['id'], id: string) => {
-    setChoice((current) => ({ ...current, [group]: id }));
-    setAdded(false);
-  };
-
+  const period = rentalAvailable ? strings.perMonth : '';
+  const shown = groups.filter((group) => !group.hidden);
+  const item = () => ({
+    slug,
+    ...choice,
+    rentalMonths: rentalAvailable ? rentalMonths : undefined,
+    quantity: 1,
+  });
   const add = () => {
-    addToCart({ slug, ...choice, quantity: 1 });
+    addToCart(item());
     setAdded(true);
     window.setTimeout(() => setAdded(false), 2400);
   };
-
-  const buy = () => {
-    addToCart({ slug, ...choice, quantity: 1 });
+  const requestOrder = () => {
+    addToCart(item());
     window.location.href = checkoutUrl;
   };
+  const money = (cents: number) => formatEur(cents, lang, { decimals: true });
 
   return (
-    <div className="cfg">
-      {shown.map((group) => {
-        const locked = group.options.length === 1;
-        return (
+    <AntProvider lang={lang}>
+      <div className="cfg">
+        {rentalAvailable && (
+          <>
+            <Alert type="success" showIcon title={strings.rentalOnly} />
+            <fieldset className="cfg__group">
+              <legend className="cfg__legend">{strings.rentalTerm}</legend>
+              <Radio.Group
+                className="cfg__options cfg__options--terms"
+                name={`${slug}-term`}
+                value={rentalMonths}
+                aria-label={strings.rentalTerm}
+                onChange={(event) => {
+                  if (isRentalMonths(event.target.value)) {
+                    setRentalMonths(event.target.value);
+                    setAdded(false);
+                  }
+                }}
+              >
+                {RENTAL_MONTHS.map((months) => (
+                  <Radio.Button
+                    key={months}
+                    value={months}
+                    className="cfg__option"
+                  >
+                    <span className="cfg__optionLabel">
+                      {months} {strings.months}
+                    </span>
+                    <span className="cfg__optionDelta">
+                      {money(monthlyRentalCents(configurationCents, months))}
+                      {strings.perMonth}
+                    </span>
+                    <span className="cfg__optionDelta">
+                      {RENTAL_MARKUP_PERCENT[months] === 0
+                        ? strings.noMarkup
+                        : strings.markup.replace(
+                            '{percent}',
+                            String(RENTAL_MARKUP_PERCENT[months]),
+                          )}
+                    </span>
+                  </Radio.Button>
+                ))}
+              </Radio.Group>
+            </fieldset>
+          </>
+        )}
+        {shown.map((group) => (
           <fieldset className="cfg__group" key={group.id}>
-            <legend className="kicker cfg__legend">{group.label}</legend>
-            <div
-              className="cfg__options"
-              role={locked ? undefined : 'radiogroup'}
-              aria-label={group.label}
-            >
-              {group.options.map((option) => {
-                const delta =
-                  option.addCents === 0
-                    ? strings.included
-                    : `${option.addCents > 0 ? '+' : '−'}${formatEur(Math.abs(option.addCents), lang)}`;
-
-                if (locked) {
+            <legend className="cfg__legend">{group.label}</legend>
+            {group.options.length === 1 ? (
+              <div className="cfg__locked">
+                <span>{group.options[0].label}</span>
+                <Tag>{strings.included}</Tag>
+              </div>
+            ) : (
+              <Radio.Group
+                className="cfg__options"
+                name={`${slug}-${group.id}`}
+                value={choice[group.id]}
+                aria-label={group.label}
+                onChange={(event) => {
+                  setChoice((current) => ({
+                    ...current,
+                    [group.id]: event.target.value,
+                  }));
+                  setAdded(false);
+                }}
+              >
+                {group.options.map((option) => {
+                  const currentCents =
+                    group.options.find((o) => o.id === choice[group.id])
+                      ?.addCents ?? 0;
+                  const deltaCents = rentalAvailable
+                    ? monthlyRentalCents(
+                        configurationCents - currentCents + option.addCents,
+                        rentalMonths,
+                      ) -
+                      monthlyRentalCents(
+                        configurationCents - currentCents,
+                        rentalMonths,
+                      )
+                    : option.addCents;
+                  const delta =
+                    option.addCents === 0
+                      ? strings.included
+                      : `${deltaCents >= 0 ? '+' : '−'}${money(Math.abs(deltaCents))}${period}`;
                   return (
-                    <div className="cfg__option is-locked" key={option.id}>
+                    <Radio.Button
+                      value={option.id}
+                      className="cfg__option"
+                      key={option.id}
+                    >
                       <span className="cfg__optionLabel">{option.label}</span>
                       <span className="cfg__optionDelta">{delta}</span>
-                    </div>
+                    </Radio.Button>
                   );
-                }
-
-                const selected = choice[group.id] === option.id;
-                return (
-                  <button
-                    type="button"
-                    key={option.id}
-                    role="radio"
-                    aria-checked={selected}
-                    className={selected ? 'cfg__option is-selected' : 'cfg__option'}
-                    onClick={() => select(group.id, option.id)}
-                  >
-                    <span className="cfg__optionLabel">{option.label}</span>
-                    <span className="cfg__optionDelta">{delta}</span>
-                  </button>
-                );
-              })}
-            </div>
+                })}
+              </Radio.Group>
+            )}
           </fieldset>
-        );
-      })}
-
-      <div className="cfg__buy">
-        <div className="cfg__prices">
-          <div className="cfg__price">
-            <span className="cfg__priceLabel">{strings.excl}</span>
-            <span className="cfg__priceValue">{formatEur(netCents, lang)}</span>
+        ))}
+        <Card className="cfg__buy">
+          <div className="cfg__prices">
+            <div>
+              <p className="cfg__priceLabel">{strings.excl}</p>
+              <p className="cfg__priceValue">
+                {money(netCents)}
+                <small>{period}</small>
+              </p>
+            </div>
+            <div className="cfg__gross">
+              <p className="cfg__priceLabel">{strings.incl}</p>
+              <p>
+                {money(grossCents)}
+                {period}
+              </p>
+            </div>
           </div>
-          <div className="cfg__price cfg__price--secondary">
-            <span className="cfg__priceLabel">{strings.incl}</span>
-            <span className="cfg__priceGross">{formatEur(grossCents, lang, { decimals: true })}</span>
+          {rentalAvailable && (
+            <>
+              <p className="cfg__rentalTotal">
+                {rentalMonths} {strings.months} · {strings.rentalTotal}:{' '}
+                <strong>{money(netCents * rentalMonths)}</strong>
+              </p>
+              <div className="cfg__buyout">
+                <p>
+                  {strings.buyout}:{' '}
+                  <strong>
+                    {money(rentalBuyoutCents(configurationCents))}
+                  </strong>
+                </p>
+                <p>{strings.buyoutNote}</p>
+              </div>
+            </>
+          )}
+          <p className="cfg__pay">{strings.payLine}</p>
+          <div className="cfg__actions">
+            <Button type="primary" size="large" onClick={requestOrder}>
+              {rentalAvailable ? strings.rentNow : strings.buyNow}
+            </Button>
+            <Button size="large" icon={<ShoppingCartOutlined />} onClick={add}>
+              {added ? strings.added : strings.addCart}
+            </Button>
           </div>
-        </div>
-
-        <p className="cfg__pay">
-          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="#3ed28a" strokeWidth="1.4" aria-hidden="true">
-            <path d="M3 7.5l7-4 7 4M4.5 8.5v6M8.2 8.5v6M11.8 8.5v6M15.5 8.5v6M2.5 16.5h15" strokeLinecap="round" />
-          </svg>
-          {strings.payLine}
-        </p>
-
-        <div className="cfg__actions">
-          <button type="button" className="btn btn--primary cfg__primary" onClick={buy}>
-            {strings.buyNow}
-          </button>
-          <button type="button" className="btn btn--ghost" onClick={add}>
-            {added ? strings.added : strings.addCart}
-          </button>
-        </div>
-
-        <p className="mono cfg__ship">{strings.shipLine}</p>
+          <p className="cfg__ship">{strings.shipLine}</p>
+        </Card>
       </div>
-
-      <style>{`
-        .cfg { display: flex; flex-direction: column; gap: 22px; }
-        .cfg__group { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
-        .cfg__legend { padding: 0; }
-        .cfg__options {
-          display: grid; gap: 10px;
-          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        }
-        .cfg__option {
-          min-width: 0; display: flex; flex-direction: column; gap: 4px;
-          align-items: flex-start; text-align: left;
-          border: 1px solid var(--line-strong); background: var(--surface);
-          border-radius: var(--r-field); padding: 13px 14px; min-height: 62px;
-          transition: border-color 120ms ease, background-color 120ms ease;
-        }
-        .cfg__option:hover { border-color: var(--faint); }
-        .cfg__option.is-locked { cursor: default; background: var(--surface-2); border-style: dashed; }
-        .cfg__option.is-locked:hover { border-color: var(--line-strong); }
-        .cfg__option.is-selected { border-color: var(--accent); background: var(--accent-bg); }
-        .cfg__optionLabel { font-family: var(--font-mono); font-size: 14px; color: var(--text-2); }
-        .cfg__option.is-selected .cfg__optionLabel { color: var(--accent); }
-        .cfg__optionDelta { font-family: var(--font-mono); font-size: 11px; color: var(--muted-2); }
-        .cfg__buy {
-          border: 1px solid var(--line); background: var(--surface);
-          border-radius: var(--r-card); padding: 22px;
-          display: flex; flex-direction: column; gap: 16px;
-        }
-        .cfg__prices { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
-        .cfg__price { display: flex; flex-direction: column; gap: 3px; }
-        .cfg__price--secondary { align-items: flex-end; }
-        .cfg__priceLabel { font-size: 12px; color: var(--muted-2); }
-        .cfg__priceValue { font-family: var(--font-mono); font-size: 36px; font-weight: 500; line-height: 1; }
-        .cfg__priceGross { font-family: var(--font-mono); font-size: 16px; color: var(--muted); }
-        .cfg__pay {
-          display: flex; align-items: center; gap: 10px;
-          border-top: 1px solid var(--line-faint); padding-top: 14px;
-          font-size: 13px; color: var(--text-2);
-        }
-        .cfg__actions { display: flex; gap: 10px; }
-        .cfg__primary { flex: 1 1 auto; }
-        .cfg__ship { font-size: 11px; color: var(--muted-2); letter-spacing: 0.04em; }
-        @media (max-width: 520px) {
-          .cfg__options { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
-          .cfg__priceValue { font-size: 30px; }
-          .cfg__actions { flex-direction: column; }
-        }
-      `}</style>
-    </div>
+    </AntProvider>
   );
 }

@@ -2,8 +2,10 @@
  * The cart lives in localStorage: no session, no server round-trip until the
  * order is actually created. Prices are deliberately NOT stored — they are
  * recomputed from the catalogue on render and again on the server at checkout,
- * so a stale or edited cart can never buy a machine at the wrong price.
+ * so a stale or edited cart can never rent a machine at the wrong rate.
  */
+import { isRentalMonths, type RentalMonths } from './rental.ts';
+
 export interface CartItem {
   slug: string;
   ram: string;
@@ -12,16 +14,19 @@ export interface CartItem {
   gpu?: string;
   psu?: string;
   bay?: string;
+  /** Omitted for rack servers, which remain available for purchase. */
+  rentalMonths?: RentalMonths;
   quantity: number;
 }
 
-const KEY = 'compud.cart.v1';
+// Keep previous purchase carts separate from rental requests.
+const KEY = 'compud.cart.v2';
 const EVENT = 'compud:cart';
 
 export const lineKey = (
-  item: Pick<CartItem, 'slug' | 'ram' | 'ssd' | 'os' | 'gpu' | 'psu' | 'bay'>,
+  item: Pick<CartItem, 'slug' | 'ram' | 'ssd' | 'os' | 'gpu' | 'psu' | 'bay' | 'rentalMonths'>,
 ): string =>
-  [item.slug, item.ram, item.ssd, item.os, item.gpu ?? '', item.psu ?? '', item.bay ?? ''].join('|');
+  [item.slug, item.ram, item.ssd, item.os, item.gpu ?? '', item.psu ?? '', item.bay ?? '', item.rentalMonths ?? 'purchase'].join('|');
 
 export function readCart(): CartItem[] {
   if (typeof localStorage === 'undefined') return [];
@@ -32,6 +37,7 @@ export function readCart(): CartItem[] {
       if (typeof entry !== 'object' || entry === null) return [];
       const item = entry as Partial<CartItem>;
       if (typeof item.slug !== 'string') return [];
+      if (item.rentalMonths !== undefined && !isRentalMonths(item.rentalMonths)) return [];
       const quantity = Number(item.quantity);
       return [
         {
@@ -42,6 +48,7 @@ export function readCart(): CartItem[] {
           gpu: item.gpu !== undefined ? String(item.gpu) : undefined,
           psu: item.psu !== undefined ? String(item.psu) : undefined,
           bay: item.bay !== undefined ? String(item.bay) : undefined,
+          rentalMonths: item.rentalMonths,
           quantity: Number.isFinite(quantity) ? Math.min(10, Math.max(1, Math.floor(quantity))) : 1,
         },
       ];
@@ -84,6 +91,19 @@ export function removeLine(key: string): CartItem[] {
   const items = readCart().filter((line) => lineKey(line) !== key);
   writeCart(items);
   return items;
+}
+
+export function setRentalMonths(key: string, rentalMonths: RentalMonths): CartItem[] {
+  if (!isRentalMonths(rentalMonths)) return readCart();
+  const items = readCart().map((line) => (lineKey(line) === key ? { ...line, rentalMonths } : line));
+  const merged: CartItem[] = [];
+  for (const item of items) {
+    const existing = merged.find((line) => lineKey(line) === lineKey(item));
+    if (existing) existing.quantity = Math.min(10, existing.quantity + item.quantity);
+    else merged.push(item);
+  }
+  writeCart(merged);
+  return merged;
 }
 
 export function clearCart(): void {

@@ -4,8 +4,9 @@ import Stepper from '../components/Stepper.astro';
 import PaymentPanel from '../islands/PaymentPanel.tsx';
 import type { Lang } from '../i18n/ui';
 import { useTranslations } from '../i18n/utils';
-import { bank, commerce } from '../lib/config';
-import { formatDate, formatEur, toDecimalString } from '../lib/money';
+import { bank } from '../lib/config';
+import { BUYOUT_PERCENT } from '../lib/rental';
+import { formatDate, formatEur, toDecimalString, withVat } from '../lib/money';
 import type { Order } from '../lib/orders';
 
 interface Props {
@@ -23,6 +24,8 @@ const benefits = [
 ] as const;
 
 const c = order.customer;
+const hasRentals = order.lines.some((line) => line.rentalMonths !== undefined);
+const monthlyNetCents = order.lines.reduce((sum, line) => sum + (line.rentalMonths ? line.lineNetCents : 0), 0);
 ---
 
 <Stepper lang={lang} current={3} />
@@ -33,10 +36,13 @@ const c = order.customer;
       <div class="ord__intro">
         <h1 class="h2">{t('ord.title')}</h1>
         <p class="lead ord__lead">{t('ord.intro')}</p>
+        {hasRentals && <p class="lead ord__lead">{t('ord.rentalIntro')}</p>}
+        {hasRentals && <p class="lead ord__lead">{t('rental.buyoutNote', { percent: BUYOUT_PERCENT })}</p>}
       </div>
 
       <PaymentPanel
         client:load
+        lang={lang}
         reference={order.ref}
         initialStatus={order.status}
         beneficiary={bank.holder}
@@ -94,21 +100,32 @@ const c = order.customer;
                 <div class="ord__lineText">
                   <span class="ord__lineName">{line.name}</span>
                   <span class="mono ord__lineConfig">{line.configuration}</span>
+                  <span class="mono ord__lineConfig">{line.rentalMonths
+                    ? `${t('rental.term')}: ${line.rentalMonths} ${t('rental.months')}`
+                    : t('rental.purchase')}</span>
+                  {line.rentalMonths && <span class="mono ord__lineConfig">{t('rental.total')}: {formatEur(line.lineNetCents * line.rentalMonths, lang, { decimals: true })}</span>}
+                  {line.buyoutNetCents !== undefined && <span class="mono ord__lineConfig">{t('rental.buyout')}: {formatEur(line.buyoutNetCents * line.quantity, lang, { decimals: true })}</span>}
                   <span class="mono ord__lineQty">{t('co.qty')} {line.quantity}</span>
                 </div>
-                <span class="mono ord__linePrice">{formatEur(line.lineNetCents, lang)}</span>
+                <span class="mono ord__linePrice">{formatEur(line.lineNetCents, lang, { decimals: true })}{line.rentalMonths ? t('rental.perMonth') : ''}</span>
               </li>
             ))
           }
         </ul>
 
         <dl class="ord__totals">
+          {hasRentals && (
+            <div class="ord__total">
+              <dt>{t('co.monthlyTotal')}</dt>
+              <dd class="mono">{formatEur(withVat(monthlyNetCents, order.totals.vatRate), lang, { decimals: true })}{t('rental.perMonth')}</dd>
+            </div>
+          )}
           <div class="ord__total">
-            <dt>{t('co.subtotal')}</dt>
+            <dt>{t(hasRentals ? 'co.initialSubtotal' : 'co.subtotal')}</dt>
             <dd class="mono">{formatEur(order.totals.netCents, lang)}</dd>
           </div>
           <div class="ord__total">
-            <dt>{t('co.shipping')}</dt>
+            <dt>{t(hasRentals ? 'co.oneOffShipping' : 'co.shipping')}</dt>
             <dd class="mono ord__free">
               {order.totals.shippingCents === 0 ? t('co.free') : formatEur(order.totals.shippingCents, lang)}
             </dd>
@@ -124,7 +141,7 @@ const c = order.customer;
         </dl>
 
         <div class="ord__grand">
-          <span class="ord__grandLabel">{t('co.total')}</span>
+          <span class="ord__grandLabel">{t(hasRentals ? 'co.firstPayment' : 'co.total')}</span>
           <span class="ord__grandValue">{formatEur(order.totals.grossCents, lang, { decimals: true })}</span>
         </div>
       </div>

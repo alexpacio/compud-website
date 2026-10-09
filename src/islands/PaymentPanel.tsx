@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Button } from 'antd';
+import AntProvider from '../components/AntProvider';
+import type { Lang } from '../i18n/ui';
 import type { OrderStatus } from '../lib/orders';
 
 interface Props {
+  lang: Lang;
   reference: string;
   initialStatus: OrderStatus;
   beneficiary: string;
@@ -18,7 +22,10 @@ interface Props {
 
 /** IBANs are read and typed in groups of four, so show them that way. */
 const groupIban = (value: string): string =>
-  value.replace(/\s+/g, '').replace(/(.{4})/g, '$1 ').trim();
+  value
+    .replace(/\s+/g, '')
+    .replace(/(.{4})/g, '$1 ')
+    .trim();
 
 const POLL_MS = 5000;
 const STOP_AFTER_MS = 30 * 60 * 1000;
@@ -29,6 +36,7 @@ const STOP_AFTER_MS = 30 * 60 * 1000;
  * unpaid without a manual reload.
  */
 export default function PaymentPanel({
+  lang,
   reference,
   initialStatus,
   beneficiary,
@@ -52,10 +60,13 @@ export default function PaymentPanel({
     const tick = async () => {
       if (cancelled || Date.now() - startedAt.current > STOP_AFTER_MS) return;
       try {
-        const response = await fetch(`/api/orders/${reference}`, { headers: { accept: 'application/json' } });
+        const response = await fetch(`/api/orders/${reference}`, {
+          headers: { accept: 'application/json' },
+        });
         if (response.ok) {
           const payload = (await response.json()) as { status?: OrderStatus };
-          if (!cancelled && payload.status && payload.status !== 'pending') setStatus(payload.status);
+          if (!cancelled && payload.status && payload.status !== 'pending')
+            setStatus(payload.status);
         }
       } catch {
         // Offline or a blip: the next tick tries again.
@@ -73,7 +84,10 @@ export default function PaymentPanel({
     try {
       await navigator.clipboard.writeText(value);
       setCopied(id);
-      window.setTimeout(() => setCopied((current) => (current === id ? '' : current)), 2000);
+      window.setTimeout(
+        () => setCopied((current) => (current === id ? '' : current)),
+        2000,
+      );
     } catch {
       // Clipboard blocked (insecure context or denied): the value stays
       // selectable on screen, which is the fallback that always works.
@@ -94,112 +108,151 @@ export default function PaymentPanel({
   const statusMeta = paid ? strings.metaPaid : strings.metaPending;
 
   const copyButton = (id: string, value: string) => (
-    <button type="button" className="pp__copy" onClick={() => void copy(id, value)}>
-      <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
+    <Button
+      type="text"
+      size="small"
+      className="pp__copy"
+      onClick={() => void copy(id, value)}
+    >
+      <svg
+        width="13"
+        height="13"
+        viewBox="0 0 20 20"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        aria-hidden="true"
+      >
         <rect x="7" y="7" width="10" height="10" rx="2" />
         <path d="M13 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" />
       </svg>
       {copied === id ? strings.copied : strings.copy}
-    </button>
+    </Button>
   );
 
   return (
-    <div className={paid ? 'pp is-paid' : expired ? 'pp is-expired' : 'pp'}>
-      <div className="pp__head">
-        <span className="pp__status">
-          <span className="pp__dot" aria-hidden="true" />
-          {statusLabel}
-        </span>
-        <span className="mono pp__meta">{statusMeta}</span>
-      </div>
-
-      <div className="pp__body">
-        <div className="pp__pair">
-          <div className="field">
-            <span className="field__label">{strings.beneficiary}</span>
-            <span className="pp__plain">{beneficiary}</span>
-          </div>
-          <div className="field">
-            <span className="field__label">{strings.bank}</span>
-            <span className="pp__plain">{bankName}</span>
-          </div>
+    <AntProvider lang={lang}>
+      <div className={paid ? 'pp is-paid' : expired ? 'pp is-expired' : 'pp'}>
+        <div className="pp__head">
+          <span className="pp__status">
+            <span className="pp__dot" aria-hidden="true" />
+            {statusLabel}
+          </span>
+          <span className="mono pp__meta">{statusMeta}</span>
         </div>
 
-        <div className="field">
-          <div className="pp__fieldHead">
-            <span className="field__label">{strings.iban}</span>
-            {copyButton('iban', iban.replace(/\s+/g, ''))}
-          </div>
-          <span className="field__value">{groupIban(iban)}</span>
-        </div>
-
-        <div className="pp__pair">
-          <div className="field field--accent">
-            <div className="pp__fieldHead">
-              <span className="field__label">{strings.reference}</span>
-              {copyButton('ref', reference)}
+        <div className="pp__body">
+          <div className="pp__pair">
+            <div className="field">
+              <span className="field__label">{strings.beneficiary}</span>
+              <span className="pp__plain">{beneficiary}</span>
             </div>
-            <span className="field__value">{reference}</span>
+            <div className="field">
+              <span className="field__label">{strings.bank}</span>
+              <span className="pp__plain">{bankName}</span>
+            </div>
           </div>
+
           <div className="field">
             <div className="pp__fieldHead">
-              <span className="field__label">{strings.amount}</span>
-              {copyButton('amount', amountRaw)}
+              <span className="field__label">{strings.iban}</span>
+              {copyButton('iban', iban.replace(/\s+/g, ''))}
             </div>
-            <span className="field__value">{amount}</span>
+            <span className="field__value">{groupIban(iban)}</span>
           </div>
-        </div>
 
-        {bic && !bic.startsWith('[') && (
-          <div className="field">
-            <span className="field__label">{strings.bic}</span>
-            <span className="field__value">{bic}</span>
-          </div>
-        )}
-
-        <p className="pp__warning">
-          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="#e0a33c" strokeWidth="1.4" aria-hidden="true">
-            <circle cx="10" cy="10" r="7.5" />
-            <path d="M10 6.2v4.4M10 13.4v.6" strokeLinecap="round" />
-          </svg>
-          {strings.refWarning}
-        </p>
-
-        {qrDataUrl && !paid && (
-          <div className="pp__qr">
-            <img src={qrDataUrl} width={148} height={148} alt={strings.qrTitle} />
-            <div className="pp__qrText">
-              <span className="pp__qrTitle">{strings.qrTitle}</span>
-              <span className="pp__qrNote">{strings.qrNote}</span>
+          <div className="pp__pair">
+            <div className="field field--accent">
+              <div className="pp__fieldHead">
+                <span className="field__label">{strings.reference}</span>
+                {copyButton('ref', reference)}
+              </div>
+              <span className="field__value">{reference}</span>
+            </div>
+            <div className="field">
+              <div className="pp__fieldHead">
+                <span className="field__label">{strings.amount}</span>
+                {copyButton('amount', amountRaw)}
+              </div>
+              <span className="field__value">{amount}</span>
             </div>
           </div>
-        )}
 
-        {paid ? (
-          <div className="pp__paid" role="status">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <circle cx="10" cy="10" r="8" fill="#3ed28a" />
-              <path d="M6.2 10.2l2.6 2.6 5-5.2" stroke="#06120c" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          {bic && !bic.startsWith('[') && (
+            <div className="field">
+              <span className="field__label">{strings.bic}</span>
+              <span className="field__value">{bic}</span>
+            </div>
+          )}
+
+          <p className="pp__warning">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 20 20"
+              fill="none"
+              stroke="#e0a33c"
+              strokeWidth="1.4"
+              aria-hidden="true"
+            >
+              <circle cx="10" cy="10" r="7.5" />
+              <path d="M10 6.2v4.4M10 13.4v.6" strokeLinecap="round" />
             </svg>
-            <span>
-              <strong className="pp__paidTitle">{strings.paidTitle}</strong>
-              <span className="pp__paidBody">{strings.paidBody}</span>
-            </span>
-          </div>
-        ) : expired ? null : (
-          <p className="pp__watching" aria-live="polite">
-            {strings.watching}
+            {strings.refWarning}
           </p>
-        )}
-      </div>
 
-      <style>{`
+          {qrDataUrl && !paid && (
+            <div className="pp__qr">
+              <img
+                src={qrDataUrl}
+                width={148}
+                height={148}
+                alt={strings.qrTitle}
+              />
+              <div className="pp__qrText">
+                <span className="pp__qrTitle">{strings.qrTitle}</span>
+                <span className="pp__qrNote">{strings.qrNote}</span>
+              </div>
+            </div>
+          )}
+
+          {paid ? (
+            <div className="pp__paid" role="status">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                aria-hidden="true"
+              >
+                <circle cx="10" cy="10" r="8" fill="#3ed28a" />
+                <path
+                  d="M6.2 10.2l2.6 2.6 5-5.2"
+                  stroke="#06120c"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <span>
+                <strong className="pp__paidTitle">{strings.paidTitle}</strong>
+                <span className="pp__paidBody">{strings.paidBody}</span>
+              </span>
+            </div>
+          ) : expired ? null : (
+            <p className="pp__watching" aria-live="polite">
+              {strings.watching}
+            </p>
+          )}
+        </div>
+
+        <style>{`
         .pp { border: 1px solid var(--warn-line); background: var(--surface); border-radius: var(--r-card); overflow: hidden; }
         .pp.is-paid { border-color: var(--accent-line); }
         .pp.is-expired { border-color: var(--line-strong); }
         .pp__head {
           display: flex; align-items: center; justify-content: space-between; gap: 16px;
-          padding: 16px 22px; background: #1a1509; border-bottom: 1px solid var(--warn-line);
+          padding: 16px 22px; background: var(--warn-bg); border-bottom: 1px solid var(--warn-line);
         }
         .pp.is-paid .pp__head { background: var(--accent-bg); border-bottom-color: var(--accent-line); }
         .pp.is-expired .pp__head { background: var(--surface-2); border-bottom-color: var(--line-strong); }
@@ -244,7 +297,7 @@ export default function PaymentPanel({
         }
         .pp__paid svg { flex: none; }
         .pp__paidTitle { display: block; font-size: 15px; font-weight: 600; color: var(--accent); }
-        .pp__paidBody { display: block; font-size: 13px; color: #a8b0b7; margin-top: 3px; }
+        .pp__paidBody { display: block; font-size: 13px; color: var(--muted); margin-top: 3px; }
         .pp__watching { font-size: 12px; color: var(--muted-2); }
         @media (max-width: 620px) {
           .pp__pair { grid-template-columns: minmax(0, 1fr); }
@@ -252,6 +305,7 @@ export default function PaymentPanel({
           .field__value { font-size: 17px; }
         }
       `}</style>
-    </div>
+      </div>
+    </AntProvider>
   );
 }

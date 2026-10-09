@@ -1,0 +1,99 @@
+.omarchy-section {
+  padding-block: 72px;
+  background: #f2f7ef;
+  border-block: 1px solid #e0e9db;
+  scroll-margin-top: 110px;
+}
+.omarchy-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  max-width: 820px;
+  margin-bottom: 32px;
+}
+.omarchy-heading > p:first-child {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+}
+.omarchy-heading h2 {
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+}
+.omarchy-heading > p:last-child {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+.omarchy-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+.omarchy-benefit .ant-card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%;
+  padding: 24px;
+}
+.omarchy-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border-radius: 10px;
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+.omarchy-benefit h3 {
+  font-size: 16px;
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+.omarchy-benefit p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+.omarchy-benefit a {
+  margin-top: auto;
+  font-size: 11px;
+  color: var(--accent);
+}
+.omarchy-scope {
+  font-size: 13px;
+  color: var(--text-2);
+  margin-top: 24px;
+}
+.omarchy-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+.omarchy-note {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.8;
+  margin-top: 18px;
+  max-width: 960px;
+}
+@media (max-width: 1050px) {
+  .omarchy-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .omarchy-section {
+    padding-block: 52px;
+  }
+  .omarchy-grid {
+    grid-template-columns: 1fr;
+  }
+}

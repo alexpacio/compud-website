@@ -1,4 +1,6 @@
 ---
+import 'antd/dist/reset.css';
+import '../styles/ant-design.generated.css';
 import '../styles/global.css';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
@@ -46,13 +48,13 @@ const alternates: { lang: Lang; url: URL }[] = [
     <meta property="og:title" content={title} />
     {description && <meta property="og:description" content={description} />}
     <meta property="og:locale" content={lang === 'it' ? 'it_IT' : 'en_GB'} />
-    <meta name="theme-color" content="#0d0f11" />
+    <meta name="theme-color" content="#156b4d" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
     />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>

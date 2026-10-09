@@ -18,5 +18,6 @@
       "output": "03-ports-cutout.webp",
       "prompt": "Use case: background-extraction\nAsset type: transparent product ports detail for a laptop website gallery.\nEdit target: the supplied image of two blue Xiaomi Book Pro 14 laptop side profiles.\nPrimary request: remove only all white background, preserving both horizontal blue laptop profiles and their exact current arrangement, framing, clipped edges, dimensions and metal finish. Preserve every physical port exactly: upper profile HDMI, two USB-C and the thunderbolt symbol; lower profile headphone jack and USB-A. All black port interiors and fine details must remain opaque and unchanged.\nConstraints: true alpha transparency around the two profiles and in the empty gap between them; crisp antialiased silhouette; no white fringe, no removed black ports, no additional parts, no recomposition, no redesign, no text or watermark."
     }
-  ]
+  ],
+  "usage": "Legacy cutouts retained as an archive. The active catalogue uses unmodified official Xiaomi images from sources.json."
 }

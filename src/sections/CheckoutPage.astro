@@ -5,6 +5,7 @@ import type { Lang } from '../i18n/ui';
 import { href, useTranslations } from '../i18n/utils';
 import { commerce } from '../lib/config';
 import Stepper from '../components/Stepper.astro';
+import { BUYOUT_PERCENT, isRentalProduct } from '../lib/rental';
 
 interface Props {
   lang: Lang;
@@ -34,6 +35,7 @@ const catalogue: Record<string, CatalogueEntry> = Object.fromEntries(
         name: product.name,
         url,
         basePriceCents: product.basePriceCents,
+        rentalAvailable: isRentalProduct(product),
         options: {
           ram: view(product.options.ram),
           ssd: view(product.options.ssd),
@@ -99,6 +101,18 @@ const catalogue: Record<string, CatalogueEntry> = Object.fromEntries(
         sentBody: t('co.sentBody'),
         sentReopen: t('co.sentReopen'),
         privacy: t('co.privacy'),
+        rentalTerm: t('rental.term'),
+        months: t('rental.months'),
+        perMonth: t('rental.perMonth'),
+        purchase: t('rental.purchase'),
+        rentalTotal: t('rental.total'),
+        initialSubtotal: t('co.initialSubtotal'),
+        firstPayment: t('co.firstPayment'),
+        monthlyTotal: t('co.monthlyTotal'),
+        oneOffShipping: t('co.oneOffShipping'),
+        rentalPaymentNote: t('co.rentalPaymentNote'),
+        buyout: t('rental.buyout'),
+        buyoutNote: t('rental.buyoutNote', { percent: BUYOUT_PERCENT }),
       }}
     />
   </div>

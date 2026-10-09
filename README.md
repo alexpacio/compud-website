@@ -1,17 +1,52 @@
 # Compud
 
-Showcase and shop for Compud: **turnkey Linux hardware for companies and
-freelancers whose developers build software with AI tools**. Machines ship with
-Compud Linux and the development toolchain preinstalled and burn-in tested,
+Compud is a **specialist Linux system rental and sales service for local AI,
+developers, development teams and professionals**. Mini PCs, laptops and NAS ship with Omarchy (Arch Linux + Hyprland) and the
+agreed tools preinstalled and tested. Rack servers ship with **Proxmox VE only**;
+GPUs are tested hardware components,
 with preparation and shipping estimates provided for each order based on
 configuration and component availability. **On-site installation is quoted
 separately**. Italian and English, paid by **instant SEPA bank transfer** — no
 card processor is involved at any point.
 
-The positioning lives entirely in `src/i18n/ui.ts`: the `home.*`, `aud.*`,
-`turn.*`, `pay.*` and `onsite.*` groups carry the slogan, the two audiences
-(companies / freelancers), what "turnkey" includes, the ordering process and
-the on-site installation offer. Do not promise fixed preparation, shipping or
+**Mini PCs, NAS, laptops and GPUs are available only on 12, 24 or 36-month
+rentals. Rack servers remain available for purchase at their existing prices.**
+
+## Rental pricing
+
+`src/lib/rental.ts` calculates monthly rates from the original net configuration
+value in `src/data/catalogue.ts`, including all selected upgrades:
+
+| Term | Monthly rate, excluding VAT |
+| --- | --- |
+| 12 months | Original value × 1.30 ÷ 12 |
+| 24 months | Original value × 1.15 ÷ 24 |
+| 36 months | Original value ÷ 36 |
+
+Rates are rounded once to integer cents. The rental total is the rounded monthly
+rate multiplied by the term, so it may differ from the unrounded value by a few
+cents. The optional end-of-term buyout is **30% of the original configured
+value**, excluding VAT, in addition to the rental payments. It is not included
+in the first payment.
+
+Cards show the 36-month monthly rate. The configurator and cart allow all three
+terms and carry the selected term into the email request and server orders.
+The first payment covers the first monthly rental, any rack server purchases
+and one-off shipping, with VAT. Subsequent payments cover only the monthly
+rentals. Bank reconciliation tracks the first payment; recurring billing and
+the eventual buyout are handled separately. Historical purchase carts remain
+under their previous localStorage key and are not converted into rentals.
+
+The service home content lives in `src/i18n/service.ts`, with shared navigation,
+metadata and commerce strings in `src/i18n/ui.ts`. The home explains the service,
+workloads, catalogue, preparation process, rental plans, audiences, support and
+FAQs. The information structure is inspired by Fleet, with original Compud copy
+and only services supported by this catalogue. Omarchy is used on the non-server
+systems; rack servers use Proxmox VE exclusively. Omarchy benefits
+and official references are kept in `src/i18n/omarchy.ts`. The existing `compud`
+OS option IDs remain stable on non-server products. Saved server carts with
+the old default profile resolve to Proxmox VE; historical orders keep their
+persisted descriptions. Do not promise fixed preparation, shipping or
 delivery deadlines: provide estimates with the order confirmation.
 
 Built with **Astro 5** (static pages + a small on-demand island of server
@@ -24,6 +59,8 @@ npm install
 cp .env.example .env      # fill in at least the bank details
 npm run dev               # http://localhost:4322
 ```
+
+`npm test` runs the rental pricing and cart regression checks (Node 22.6+).
 
 Production:
 
@@ -85,7 +122,8 @@ watches for the money to arrive.
 - **Placeholders.** Anything in `[SQUARE BRACKETS]` — VAT number, address,
   phone, dimensions — is waiting for a real value, in `.env` or in
   `src/data/catalogue.ts`.
-- **Prices** in `src/data/catalogue.ts` are drafts, in integer cents, net of VAT.
+- **Catalogue values** in `src/data/catalogue.ts` are in integer cents, net of
+  VAT. Rental markups and the buyout percentage live in `src/lib/rental.ts`.
 
 ## Layout
 
@@ -112,7 +150,14 @@ page file per route under `src/pages/<lang>/`.
 
 ## Design
 
-The visual system — dark graphite, Space Grotesk over Archivo with JetBrains
-Mono for every number, one green accent — comes from the design canvas in
-`design/`. `src/styles/global.css` holds the tokens; component styles are
-scoped to their `.astro` file or their island.
+The UI uses **Ant Design 6** with a shared Compud theme: light surfaces, green
+accents and Inter typography. `src/lib/design-theme.ts` defines Ant Design
+tokens and `src/styles/global.css` defines corresponding Astro tokens.
+`AntProvider.tsx` supplies the theme and Italian/English locale to the React
+islands. Cards, tabs, steps, FAQ accordions, configurator radios and checkout
+controls are real Ant Design components.
+
+`npm run dev` and `npm run build` generate `src/styles/ant-design.generated.css`
+before Astro runs, so prerendered components have their styles before hydration.
+The generated CSS is ignored by Git. Node 22.6+ is required for style generation
+and the pricing tests. The older design canvas under `design/` is historical.

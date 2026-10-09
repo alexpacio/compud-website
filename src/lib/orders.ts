@@ -3,6 +3,7 @@ import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import type { Lang } from '../i18n/ui';
 import { commerce } from './config';
+import type { RentalMonths } from './rental';
 
 export type OrderStatus = 'pending' | 'paid' | 'expired' | 'cancelled';
 
@@ -14,6 +15,11 @@ export interface OrderLine {
   configuration: string;
   choice: { ram: string; ssd: string; os: string; gpu?: string; psu?: string; bay?: string };
   quantity: number;
+  /** Omitted for rack server purchases and historical purchase orders. */
+  rentalMonths?: RentalMonths;
+  /** Optional end-of-term buyout per unit, excluding VAT. */
+  buyoutNetCents?: number;
+  /** Monthly net rate for rentals; full net amount for purchases. */
   unitNetCents: number;
   lineNetCents: number;
 }

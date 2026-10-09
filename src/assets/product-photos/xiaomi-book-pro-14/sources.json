@@ -1,16 +1,81 @@
 {
   "product": "Xiaomi Book Pro 14 (2026), Core Ultra X7 358H, 32 GB / 1 TB",
-  "review": "https://www.hdblog.it/portatili/recensioni/n658317/recensione-xiaomi-book-14-pro/",
-  "specifications": "https://tradingshenzhen.com/en/mi-notebook-pro-series/xiaomi-book-pro-14-2026-intel-x7-358h-32gb-1024-gb",
-  "linuxTesting": "https://zhul.in/en/2026/04/30/xiaomi-book-pro-14-2026-on-linux/",
-  "images": {
-    "01-rear-three-quarter.jpg": "https://tradingshenzhen.com/img/cms/laptops/XiaomiBook14Pro%282026%29/tsz_xiaomibook14pro_1.jpg",
-    "02-in-use.jpg": "https://tradingshenzhen.com/img/cms/laptops/XiaomiBook14Pro%282026%29/tsz_xiaomibook14pro_4.jpg",
-    "03-ports.jpg": "https://tradingshenzhen.com/img/cms/laptops/XiaomiBook14Pro%282026%29/tsz_xiaomibook14pro_5.jpg"
-  },
-  "officialSpecifications": "https://www.mi.com/prod/xiaomi-book-pro-14/specs",
+  "primarySource": "https://www.mi.com/prod/xiaomi-book-pro-14",
   "officialOverview": "https://www.mi.com/prod/xiaomi-book-pro-14",
+  "officialSpecifications": "https://www.mi.com/prod/xiaomi-book-pro-14/specs",
+  "specifications": "https://www.mi.com/prod/xiaomi-book-pro-14/specs",
+  "overviewContentModule": "https://mishop-pc.cnbj1.mi-fds.com/mishop-pc/production/mishop_pc/xiaomi-book-pro-14/entry-1774496606913.js",
+  "specificationsContentModule": "https://mishop-pc.cnbj1.mi-fds.com/mishop-pc/production/mishop_pc/xiaomi-book-pro-14/specs/entry-1774496606913.js",
   "processorSpecifications": "https://www.intel.com/content/www/us/en/products/sku/245527/intel-core-ultra-x7-processor-358h-18m-cache-up-to-4-80-ghz/specifications.html",
-  "checkedOn": "2026-10-08",
-  "notes": "Source archive for maintainers; not served as a public website asset. Battery runtime is a manufacturer claim, not a Compud Linux result. The lifestyle cutout reconstructs only the keyboard area previously obscured by hands."
+  "checkedOn": "2026-10-09",
+  "images": {
+    "01-front-open.png": {
+      "source": "https://cdn.cnbj1.fds.api.mi-img.com/product-images/new-product-images/xiaomi-book-pro-14_20931/images/6618.png",
+      "width": 2184,
+      "height": 1028,
+      "bytes": 1235528,
+      "sha256": "b839e6fec70b17affe518c548aff7306ac99176395f0faba920ca551e613adb4",
+      "processing": "Original manufacturer PNG, unmodified"
+    },
+    "02-grey-views.png": {
+      "source": "https://cdn.cnbj1.fds.api.mi-img.com/product-images/new-product-images/xiaomi-book-pro-14_20931/images/swiper_3.png",
+      "width": 1679,
+      "height": 650,
+      "bytes": 697560,
+      "sha256": "f7a78cbc51b333bfe3cab394fb675bf9ae568ef711e646bc71233592504304ed",
+      "processing": "Original manufacturer PNG, unmodified"
+    },
+    "03-white-views.png": {
+      "source": "https://cdn.cnbj1.fds.api.mi-img.com/product-images/new-product-images/xiaomi-book-pro-14_20931/images/swiper_4.png",
+      "width": 1679,
+      "height": 650,
+      "bytes": 317779,
+      "sha256": "8318ef4fbeebd0cdd647f708fd7f8fa19caecc4fb82abc2e7677ae040905c31c",
+      "processing": "Original manufacturer PNG, unmodified"
+    },
+    "04-cooling.png": {
+      "source": "https://cdn.cnbj1.fds.api.mi-img.com/product-images/new-product-images/xiaomi-book-pro-14_20931/images/7663.png",
+      "width": 2560,
+      "height": 770,
+      "bytes": 2048088,
+      "sha256": "1de65deb4db94b6e293078831ed6d8085bada528665ca50fdfd95517db1d8da9",
+      "processing": "Original manufacturer PNG, unmodified"
+    }
+  },
+  "video": {
+    "file": "/assets/xiaomi-book-pro-14/presentation.mp4",
+    "source": "https://cdn.cnbj1.fds.api.mi-img.com/product-images/new-product-images/xiaomi-book-pro-14_20931/images/video_2.mp4",
+    "sourceBytes": 144731355,
+    "sourceSha256": "a80467e66fe6a2e17f47e09f995aa25fb47b3d07c48e4c03a7a6af783336c644",
+    "durationSeconds": 29.133333,
+    "processing": "Full official presentation transcoded from 1440p HEVC to 1080p H.264/AAC, fast-start MP4; no cuts",
+    "poster": "/images/xiaomi-book-pro-14/official/video-poster.jpg",
+    "posterFrameSeconds": 26
+  },
+  "configuration": {
+    "processor": "Core Ultra X7 358H",
+    "memory": "32 GB LPDDR5X-9600",
+    "storage": "1 TB PCIe 4.0 SSD",
+    "officialColours": [
+      "white",
+      "grey"
+    ]
+  },
+  "notes": "Assets and hardware facts come from the official Xiaomi product page and its public content modules. Promotional media illustrate the Book Pro 14 range. Manufacturer battery and HDR figures use specified laboratory conditions and are not Omarchy validation results. Compud rental rates and Omarchy compatibility checks are managed separately.",
+  "legacySources": {
+    "product": "Xiaomi Book Pro 14 (2026), Core Ultra X7 358H, 32 GB / 1 TB",
+    "review": "https://www.hdblog.it/portatili/recensioni/n658317/recensione-xiaomi-book-14-pro/",
+    "specifications": "https://tradingshenzhen.com/en/mi-notebook-pro-series/xiaomi-book-pro-14-2026-intel-x7-358h-32gb-1024-gb",
+    "linuxTesting": "https://zhul.in/en/2026/04/30/xiaomi-book-pro-14-2026-on-linux/",
+    "images": {
+      "01-rear-three-quarter.jpg": "https://tradingshenzhen.com/img/cms/laptops/XiaomiBook14Pro%282026%29/tsz_xiaomibook14pro_1.jpg",
+      "02-in-use.jpg": "https://tradingshenzhen.com/img/cms/laptops/XiaomiBook14Pro%282026%29/tsz_xiaomibook14pro_4.jpg",
+      "03-ports.jpg": "https://tradingshenzhen.com/img/cms/laptops/XiaomiBook14Pro%282026%29/tsz_xiaomibook14pro_5.jpg"
+    },
+    "officialSpecifications": "https://www.mi.com/prod/xiaomi-book-pro-14/specs",
+    "officialOverview": "https://www.mi.com/prod/xiaomi-book-pro-14",
+    "processorSpecifications": "https://www.intel.com/content/www/us/en/products/sku/245527/intel-core-ultra-x7-processor-358h-18m-cache-up-to-4-80-ghz/specifications.html",
+    "checkedOn": "2026-10-08",
+    "notes": "Source archive for maintainers; not served as a public website asset. Battery runtime is a manufacturer claim, not a Linux validation result. The lifestyle cutout reconstructs only the keyboard area previously obscured by hands."
+  }
 }

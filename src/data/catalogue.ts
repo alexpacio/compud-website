@@ -9,7 +9,7 @@ export const pick = (value: string | Localized, lang: Lang): string =>
 export interface Option {
   id: string;
   label: string | Localized;
-  /** Difference from the base price, in cents. May be negative. */
+  /** Difference from the original configured value, in cents. May be negative. */
   addCents: number;
   /** Value shown in the specification table when this option is selected. */
   spec?: string | Localized;
@@ -49,14 +49,19 @@ export interface Product {
   sku: string;
   category: string | Localized;
   tagline: Localized;
+  /** Original net value used to calculate rent and buyout; sale price for rack servers. */
   basePriceCents: number;
   /** Units on the shelf; 0 means built to order. */
   stock: number;
   glyph: Glyph;
   /** Local product photos under /public; shown instead of the vector glyph. */
   images?: string[];
+  /** Descriptive gallery captions, in the same order as images. */
+  imageAlts?: Localized[];
   /** Self-hosted MP4 under /public, shown on the product page. */
   video?: string;
+  videoPoster?: string;
+  videoNote?: string | Localized;
   /** Short selling points shown above the spec table. */
   highlights?: Localized[];
   /** Editorial cards explaining the product's main features. */
@@ -65,6 +70,7 @@ export interface Product {
   details?: Localized;
   /** Where the base specs/photos come from (shown as attribution). */
   sourceUrl?: string;
+  sourceLabel?: string;
   /** Product-specific Linux validation and delivery notes. */
   linuxNote?: Localized;
   fulfillmentNote?: Localized;
@@ -88,8 +94,8 @@ export const products: Product[] = [
     sku: 'CPD-MINI-255',
     category: 'Mini PC',
     tagline: {
-      it: 'Una postazione Linux completa in appena 128×126×52 mm: Ryzen 7 H255 a 8 core/16 thread per IDE, build e container, fino a 96 GB di RAM e 4 monitor. Con Compud Linux e toolchain pronti, inizi dai tuoi progetti. OCuLink e doppio USB4 lasciano spazio a GPU esterne, dock e storage veloce.',
-      en: 'A complete Linux workstation in just 128×126×52 mm: an 8-core/16-thread Ryzen 7 H255 for IDEs, builds and containers, up to 96 GB RAM and 4 displays. Compud Linux and the toolchain are ready so you can start with your projects. OCuLink and dual USB4 make room for external GPUs, docks and fast storage.',
+      it: 'Una postazione Linux completa in appena 128×126×52 mm: Ryzen 7 H255 a 8 core/16 thread per IDE, build e container, fino a 96 GB di RAM e 4 monitor. Con Omarchy e toolchain pronti, inizi dai tuoi progetti. OCuLink e doppio USB4 lasciano spazio a GPU esterne, dock e storage veloce.',
+      en: 'A complete Linux workstation in just 128×126×52 mm: an 8-core/16-thread Ryzen 7 H255 for IDEs, builds and containers, up to 96 GB RAM and 4 displays. Omarchy and the toolchain are ready so you can start with your projects. OCuLink and dual USB4 make room for external GPUs, docks and fast storage.',
     },
     basePriceCents: 94900,
     stock: 11,
@@ -161,17 +167,17 @@ export const products: Product[] = [
         },
       },
       {
-        value: 'Compud Linux',
+        value: 'Omarchy',
         title: { it: 'Il primo giorno è per i tuoi progetti', en: 'Spend day one on your projects' },
         body: {
-          it: 'Sistema, driver e toolchain arrivano installati e verificati dopo 48 ore di collaudo. Gli aggiornamenti transazionali con rollback offrono una via di ritorno se un aggiornamento crea problemi; per l’assistenza parli con chi ha preparato la macchina.',
-          en: 'The system, drivers and toolchain arrive installed and verified after a 48-hour burn-in. Transactional updates with rollback give you a way back if an update causes problems; support comes from the people who prepared the machine.',
+          it: 'Sistema, driver e toolchain arrivano installati e verificati dopo 48 ore di collaudo. Il profilo standard Omarchy usa snapshot di sistema per il recupero dopo un aggiornamento; per l’assistenza parli con chi ha preparato la macchina.',
+          en: 'The system, drivers and toolchain arrive installed and verified after a 48-hour burn-in. The standard Omarchy setup uses system snapshots for recovery after updates; support comes from the people who prepared the machine.',
         },
       },
     ],
     details: {
-      it: 'Il Compud Mini PC è pensato per chi sviluppa software e vuole una postazione completa senza un grande tower sulla scrivania. Gli 8 core e 16 thread del Ryzen 7 H255 affiancano IDE, build e servizi locali; la Radeon 780M gestisce la grafica integrata. Scegli RAM e SSD in base ai tuoi progetti: 16 GB per una postazione essenziale, più memoria se usi molti container, macchine virtuali o dataset contemporaneamente.\n\nIl formato compatto lascia spazio sulla scrivania, ma mantiene possibilità di espansione: due SODIMM DDR5-5600 fino a 96 GB, due SSD NVMe fino a 4 TB ciascuno e OCuLink per una GPU esterna. La rete 2,5 GbE collega la postazione a un NAS compatibile per condividere progetti e backup; Wi-Fi 7, USB4 e le uscite video completano le connessioni. L’alimentatore da 120 W è incluso.\n\nLo assembliamo dal barebone, installiamo Compud Linux e la toolchain concordata e lo collaudiamo per 48 ore. Ricevi un ambiente di lavoro già pronto, con log del collaudo e un referente tecnico che conosce la tua configurazione.',
-      en: 'The Compud Mini PC is for software developers who want a complete workstation without a large tower on the desk. The Ryzen 7 H255’s 8 cores and 16 threads handle IDEs, builds and local services, while the Radeon 780M provides integrated graphics. Choose RAM and storage around your projects: 16 GB for an essential workstation, more memory when you run many containers, virtual machines or datasets together.\n\nThe compact format frees up desk space while keeping room for expansion: two DDR5-5600 SODIMMs up to 96 GB, two NVMe SSDs up to 4 TB each and OCuLink for an external GPU. A 2.5 GbE connection links the workstation to a compatible NAS for shared projects and backups; Wi-Fi 7, USB4 and video outputs complete the connections. The 120 W power supply is included.\n\nWe assemble it from the barebone, install Compud Linux and your agreed toolchain, then burn-in test it for 48 hours. You receive a working environment ready to use, with the test log and a technical contact who knows your configuration.',
+      it: 'Il Compud Mini PC è pensato per chi sviluppa software e vuole una postazione completa senza un grande tower sulla scrivania. Gli 8 core e 16 thread del Ryzen 7 H255 affiancano IDE, build e servizi locali; la Radeon 780M gestisce la grafica integrata. Scegli RAM e SSD in base ai tuoi progetti: 16 GB per una postazione essenziale, più memoria se usi molti container, macchine virtuali o dataset contemporaneamente.\n\nIl formato compatto lascia spazio sulla scrivania, ma mantiene possibilità di espansione: due SODIMM DDR5-5600 fino a 96 GB, due SSD NVMe fino a 4 TB ciascuno e OCuLink per una GPU esterna. La rete 2,5 GbE collega la postazione a un NAS compatibile per condividere progetti e backup; Wi-Fi 7, USB4 e le uscite video completano le connessioni. L’alimentatore da 120 W è incluso.\n\nLo assembliamo dal barebone, installiamo Omarchy e la toolchain concordata e lo collaudiamo per 48 ore. Ricevi un ambiente di lavoro già pronto, con log del collaudo e un referente tecnico che conosce la tua configurazione.',
+      en: 'The Compud Mini PC is for software developers who want a complete workstation without a large tower on the desk. The Ryzen 7 H255’s 8 cores and 16 threads handle IDEs, builds and local services, while the Radeon 780M provides integrated graphics. Choose RAM and storage around your projects: 16 GB for an essential workstation, more memory when you run many containers, virtual machines or datasets together.\n\nThe compact format frees up desk space while keeping room for expansion: two DDR5-5600 SODIMMs up to 96 GB, two NVMe SSDs up to 4 TB each and OCuLink for an external GPU. A 2.5 GbE connection links the workstation to a compatible NAS for shared projects and backups; Wi-Fi 7, USB4 and video outputs complete the connections. The 120 W power supply is included.\n\nWe assemble it from the barebone, install Omarchy and your agreed toolchain, then burn-in test it for 48 hours. You receive a working environment ready to use, with the test log and a technical contact who knows your configuration.',
     },
     summary: [
       { label: 'spec.cpu', value: 'Ryzen 7 H255 · 8C/16T' },
@@ -216,7 +222,7 @@ export const products: Product[] = [
         { id: '4000', label: '4 TB', addCents: 30000, spec: '4 TB NVMe Gen4' },
       ],
       os: [
-        { id: 'compud', label: 'Compud Linux', addCents: 0, spec: 'Compud Linux · Fedora Atomic · KDE Plasma' },
+        { id: 'compud', label: 'Omarchy', addCents: 0, spec: 'Omarchy · Arch Linux · Hyprland' },
       ],
     },
   },
@@ -303,14 +309,14 @@ export const products: Product[] = [
         value: { it: 'Pronto all’uso', en: 'Ready to use' },
         title: { it: 'Dalla configurazione al primo backup', en: 'From configuration to the first backup' },
         body: {
-          it: 'Compud Linux arriva preinstallato. Con i dischi richiesti prepariamo filesystem, RAID e snapshot prima della consegna; concordiamo rete e servizi per ridurre il lavoro iniziale. Il telaio con scheda estraibile facilita gli aggiornamenti di RAM e SSD.',
-          en: 'Compud Linux arrives preinstalled. With your requested drives, we prepare the filesystem, RAID and snapshots before delivery, and agree networking and services to reduce initial setup. The slide-out board makes RAM and SSD upgrades easier.',
+          it: 'Omarchy arriva preinstallato. Con i dischi richiesti prepariamo filesystem, RAID e snapshot prima della consegna; concordiamo rete e servizi per ridurre il lavoro iniziale. Il telaio con scheda estraibile facilita gli aggiornamenti di RAM e SSD.',
+          en: 'Omarchy arrives preinstalled. With your requested drives, we prepare the filesystem, RAID and snapshots before delivery, and agree networking and services to reduce initial setup. The slide-out board makes RAM and SSD upgrades easier.',
         },
       },
     ],
     details: {
-      it: 'Il Compud NAS 5 raccoglie in un unico punto i dati che il team usa ogni giorno: dataset, modelli, documenti e backup delle postazioni. Condividere un archivio sulla rete locale semplifica l’accesso ai file e mantiene la gestione sulla tua infrastruttura. Il telaio da 199×202×252 mm trova posto in ufficio senza richiedere un rack; i cinque vani SATA e i tre slot NVMe permettono di combinare capacità e velocità.\n\nLa rete 10 GbE + 5 GbE si adatta a workstation e reti separate. Per ottenere il beneficio sui trasferimenti dimensioniamo insieme dischi, switch e collegamenti. Il Ryzen 7 255 e fino a 96 GB di DDR5 consentono di aggiungere container o VM per servizi interni, scegliendo le risorse in modo che archivio e applicazioni possano convivere. OCuLink, lo slot PCIe e due USB4 offrono ulteriori possibilità di espansione.\n\nLa base include Compud Linux su SSD di sistema da 64 GB; i dischi dati si montano su richiesta. Prepariamo il filesystem, il livello di RAID e gli snapshot in base a capacità e recupero desiderati. La capacità utile dipende dai dischi e dalla ridondanza scelti: concordiamo anche una copia di backup separata per completare la protezione dei dati.',
-      en: 'The Compud NAS 5 brings together the data your team uses every day: datasets, models, documents and workstation backups. Shared storage on the local network simplifies file access and keeps management on your own infrastructure. The 199×202×252 mm chassis fits in the office without needing a rack; five SATA bays and three NVMe slots let you combine capacity and speed.\n\nThe 10 GbE + 5 GbE connections support workstations and separate networks. We size drives, switches and connections together to make the most of file transfers. The Ryzen 7 255 and up to 96 GB DDR5 let you add containers or VMs for internal services, with resources chosen so storage and applications can coexist. OCuLink, the PCIe slot and two USB4 ports offer further expansion options.\n\nThe base includes Compud Linux on a 64 GB system SSD; data drives are fitted on request. We prepare the filesystem, RAID level and snapshots around your capacity and recovery needs. Usable capacity depends on the drives and redundancy you choose; we also agree a separate backup copy to complete data protection.',
+      it: 'Il Compud NAS 5 raccoglie in un unico punto i dati che il team usa ogni giorno: dataset, modelli, documenti e backup delle postazioni. Condividere un archivio sulla rete locale semplifica l’accesso ai file e mantiene la gestione sulla tua infrastruttura. Il telaio da 199×202×252 mm trova posto in ufficio senza richiedere un rack; i cinque vani SATA e i tre slot NVMe permettono di combinare capacità e velocità.\n\nLa rete 10 GbE + 5 GbE si adatta a workstation e reti separate. Per ottenere il beneficio sui trasferimenti dimensioniamo insieme dischi, switch e collegamenti. Il Ryzen 7 255 e fino a 96 GB di DDR5 consentono di aggiungere container o VM per servizi interni, scegliendo le risorse in modo che archivio e applicazioni possano convivere. OCuLink, lo slot PCIe e due USB4 offrono ulteriori possibilità di espansione.\n\nLa base include Omarchy su SSD di sistema da 64 GB; i dischi dati si montano su richiesta. Prepariamo il filesystem, il livello di RAID e gli snapshot in base a capacità e recupero desiderati. La capacità utile dipende dai dischi e dalla ridondanza scelti: concordiamo anche una copia di backup separata per completare la protezione dei dati.',
+      en: 'The Compud NAS 5 brings together the data your team uses every day: datasets, models, documents and workstation backups. Shared storage on the local network simplifies file access and keeps management on your own infrastructure. The 199×202×252 mm chassis fits in the office without needing a rack; five SATA bays and three NVMe slots let you combine capacity and speed.\n\nThe 10 GbE + 5 GbE connections support workstations and separate networks. We size drives, switches and connections together to make the most of file transfers. The Ryzen 7 255 and up to 96 GB DDR5 let you add containers or VMs for internal services, with resources chosen so storage and applications can coexist. OCuLink, the PCIe slot and two USB4 ports offer further expansion options.\n\nThe base includes Omarchy on a 64 GB system SSD; data drives are fitted on request. We prepare the filesystem, RAID level and snapshots around your capacity and recovery needs. Usable capacity depends on the drives and redundancy you choose; we also agree a separate backup copy to complete data protection.',
     },
     summary: [
       { label: 'spec.cpu', value: 'Ryzen 7 255 · 8C/16T' },
@@ -326,7 +332,7 @@ export const products: Product[] = [
       { label: 'spec.net', value: { it: '10 GbE + 5 GbE RJ45 · due interfacce configurabili separatamente', en: '10 GbE + 5 GbE RJ45 · two separately configurable interfaces' } },
       { label: 'spec.expand', value: 'OCuLink PCIe 4.0 ×4 · slot PCIe x16 (×4 elettrici) · 2× USB4 40 Gbps' },
       { label: 'spec.ports', value: 'HDMI 2.1 · USB-A 3.2 Gen2 ×2 · USB-A 2.0 · USB4 ×2 · OCuLink' },
-      { label: 'spec.system', value: 'Compud Linux preinstallato · snapshot ZFS · Docker · foto AI · accesso remoto' },
+      { label: 'spec.system', value: 'Omarchy preinstallato · snapshot ZFS · Docker · foto AI · accesso remoto' },
       { label: 'spec.cooling', value: 'Ventola posteriore + flusso frontale · scocca con scheda estraibile' },
       { label: 'spec.psu', value: 'Alimentatore esterno in dotazione' },
       { label: 'spec.size', value: '199 × 202 × 252 mm · 4 kg' },
@@ -345,7 +351,7 @@ export const products: Product[] = [
         { id: '4000', label: { it: '+4 TB NVMe cache', en: '+4 TB NVMe cache' }, addCents: 39000, spec: '64 GB sistema + 4 TB NVMe cache' },
       ],
       os: [
-        { id: 'compud', label: 'Compud Linux', addCents: 0, spec: 'Compud Linux · Fedora Atomic · KDE Plasma' },
+        { id: 'compud', label: 'Omarchy', addCents: 0, spec: 'Omarchy · Arch Linux · Hyprland' },
       ],
     },
   },
@@ -534,8 +540,8 @@ export const products: Product[] = [
     sku: 'CPD-G4804',
     category: { it: 'GPU usata · entry 1080p', en: 'Used GPU · entry 1080p' },
     tagline: {
-      it: 'Polaris da 4 GB per budget minimi: e-sport e retrogaming a 1080p. Usata, testata, prezzo da usato vero.',
-      en: '4 GB Polaris for minimal budgets: esports and retro gaming at 1080p. Used, tested, at a true used price.',
+      it: 'Polaris da 4 GB per budget minimi: e-sport e retrogaming a 1080p. Usata, testata, disponibile a noleggio.',
+      en: '4 GB Polaris for minimal budgets: esports and retro gaming at 1080p. Used, tested, available to rent.',
     },
     basePriceCents: 5500,
     stock: 1,
@@ -764,16 +770,28 @@ export const products: Product[] = [
       it: 'Potenza da workstation, appena 1,08 kg nello zaino. Core Ultra X7 358H a 16 core, Intel Arc B390, 32 GB LPDDR5X e SSD da 1 TB, con OLED touch 3.1K a 120 Hz e batteria da 72 Wh.',
       en: 'Workstation power at just 1.08 kg in your bag. A 16-core Core Ultra X7 358H, Intel Arc B390, 32 GB LPDDR5X and a 1 TB SSD, with a 120 Hz 3.1K OLED touchscreen and a 72 Wh battery.',
     },
-    // Compud selling price confirmed by the owner: EUR 2,990 excluding VAT.
+    // Original configured value confirmed by the owner: EUR 2,990 excluding VAT.
     basePriceCents: 299000,
     // No on-hand quantity confirmed: request availability with the order.
     stock: 0,
     glyph: 'laptop',
     images: [
-      '/images/xiaomi-book-pro-14/01-rear-three-quarter-cutout.webp',
-      '/images/xiaomi-book-pro-14/02-open-rear-cutout.webp',
-      '/images/xiaomi-book-pro-14/03-ports-cutout.webp',
+      '/images/xiaomi-book-pro-14/official/01-front-open.png',
+      '/images/xiaomi-book-pro-14/official/02-grey-views.png',
+      '/images/xiaomi-book-pro-14/official/03-white-views.png',
+      '/images/xiaomi-book-pro-14/official/04-cooling.png',
     ],
+    imageAlts: [
+      { it: 'Xiaomi Book Pro 14 aperto, vista frontale — immagine ufficiale', en: 'Xiaomi Book Pro 14 open, front view — official image' },
+      { it: 'Xiaomi Book Pro 14 grigio: coperchio, vista a tre quarti e profilo', en: 'Grey Xiaomi Book Pro 14: lid, three-quarter view and side profile' },
+      { it: 'Xiaomi Book Pro 14 bianco: coperchio, vista a tre quarti e profilo', en: 'White Xiaomi Book Pro 14: lid, three-quarter view and side profile' },
+      { it: 'Schema ufficiale del raffreddamento con camera di vapore e due ventole', en: 'Official cooling illustration with a vapour chamber and two fans' },
+    ],
+    video: '/assets/xiaomi-book-pro-14/presentation.mp4',
+    videoPoster: '/images/xiaomi-book-pro-14/official/video-poster.jpg',
+    videoNote: { it: 'Presentazione ufficiale Xiaomi · gamma Book Pro 14', en: 'Official Xiaomi presentation · Book Pro 14 range' },
+    sourceUrl: 'https://www.mi.com/prod/xiaomi-book-pro-14',
+    sourceLabel: 'Xiaomi',
     highlights: [
       {
         it: 'Core Ultra X7 358H: 16 core / 16 thread, fino a 4,8 GHz e 18 MB di cache per compilazioni, multitasking e sviluppo.',
@@ -809,8 +827,8 @@ export const products: Product[] = [
         value: '72 Wh',
         title: { it: 'Una batteria capiente, un caricatore compatto', en: 'A large battery, a compact charger' },
         body: {
-          it: 'Batteria da 72 Wh e alimentatore USB-C GaN da 100 W incluso. Xiaomi dichiara fino a 19,8 ore nei propri test: l’autonomia effettiva dipende da luminosità, carico e sistema operativo, e viene verificata nel collaudo Linux.',
-          en: 'A 72 Wh battery and an included 100 W USB-C GaN adapter. Xiaomi rates battery life at up to 19.8 hours in its tests; actual runtime depends on brightness, workload and operating system, and is checked during Linux validation.',
+          it: '72 Wh e caricatore USB-C GaN da 100 W incluso. Le 19,8 ore dichiarate da Xiaomi derivano da video locale 1080p, 150 nit, 60 Hz e rete disattivata. L’autonomia con Omarchy viene verificata sul modello scelto.',
+          en: '72 Wh and an included 100 W USB-C GaN charger. Xiaomi’s 19.8-hour figure uses local 1080p video, 150 nits, 60 Hz and no network. Runtime with Omarchy is checked on the selected model.',
         },
       },
       {
@@ -821,14 +839,22 @@ export const products: Product[] = [
           en: '40 Gbps Thunderbolt 4 for docks and fast storage, 10 Gbps USB-C, 5 Gbps USB-A, HDMI 2.1 TMDS and an audio jack. Wi-Fi 6E and Bluetooth 5.3 cover wireless connections.',
         },
       },
+      {
+        value: '10.000 mm² VC',
+        title: { it: 'Raffreddamento in un telaio sottile', en: 'Cooling inside a thin chassis' },
+        body: {
+          it: 'Xiaomi indica una camera di vapore da 10.000 mm², due ventole e tre canali d’aria. Per la versione X7 dichiara un profilo prestazionale fino a 50 W nei propri test; Compud verifica temperature e comportamento con il carico concordato.',
+          en: 'Xiaomi specifies a 10,000 mm² vapour chamber, two fans and three airflow paths. It rates the X7 performance profile at up to 50 W in its tests; Compud checks temperatures and behaviour under the agreed workload.',
+        },
+      },
     ],
     details: {
       it: 'La configurazione Core Ultra X7 della generazione 2026 combina CPU Panther Lake, grafica Arc B390 e memoria veloce in un telaio compatto. È pensata per portare con te editor, container e progetti, e tornare a una postazione completa collegando monitor e periferiche. La grafica supporta la codifica e decodifica hardware AV1 e Intel Quick Sync per i flussi video.\n\nPer l’AI locale, GPU e NPU richiedono driver e runtime compatibili: la grafica usa memoria condivisa, quindi modelli e contesto vanno dimensionati sulle risorse disponibili. Compud verifica il profilo Linux sul singolo esemplare prima della conferma; per carichi più grandi puoi usare il laptop come accesso alla tua infrastruttura remota.',
       en: 'The 2026 Core Ultra X7 configuration brings a Panther Lake CPU, Arc B390 graphics and fast memory together in a compact chassis. Take your editors, containers and projects with you, then connect monitors and peripherals for a full desk setup. Graphics supports hardware AV1 encoding and decoding and Intel Quick Sync for video workflows.\n\nLocal AI on the GPU and NPU requires compatible drivers and runtimes. Graphics uses shared memory, so models and context sizes need to fit the available resources. Compud validates the Linux profile on the actual unit before confirmation; for larger workloads, the laptop can connect you to your remote infrastructure.',
     },
     linuxNote: {
-      it: 'Configurazione Linux da validare sul singolo esemplare prima della conferma: tastiera, audio, grafica, sospensione e accelerazione AI. Non dichiariamo la piena compatibilità di GPU/NPU senza collaudo.',
-      en: 'Linux configuration to be validated on the actual unit before confirmation: keyboard, audio, graphics, suspend and AI acceleration. Full GPU/NPU compatibility is subject to testing.',
+      it: 'Configurazione Omarchy da validare sul singolo esemplare prima della conferma: tastiera, audio, grafica, sospensione e accelerazione AI. Non dichiariamo la piena compatibilità di GPU/NPU senza collaudo.',
+      en: 'Omarchy configuration to be validated on the actual unit before confirmation: keyboard, audio, graphics, suspend and AI acceleration. Full GPU/NPU compatibility is subject to testing.',
     },
     fulfillmentNote: {
       it: 'SU ORDINAZIONE · DISPONIBILITÀ E TEMPI CONFERMATI PRIMA DEL PAGAMENTO',
@@ -849,6 +875,7 @@ export const products: Product[] = [
       { label: 'spec.display', value: { it: '14,6" OLED touch · 3:2 · 3120 × 2080 · fino a 120 Hz · 258 ppi', en: '14.6" OLED touch · 3:2 · 3120 × 2080 · up to 120 Hz · 258 ppi' } },
       { label: 'spec.color', value: { it: '100% DCI-P3 · ΔE medio ≈ 0,3 · 500 nit tipici / 1600 nit picco HDR · PWM 2160 Hz', en: '100% DCI-P3 · average ΔE ≈ 0.3 · 500 nits typical / 1600 nits HDR peak · 2160 Hz PWM' } },
       { label: 'spec.size', value: { it: '316,77 × 225 × 14,95 mm · lega di magnesio + fibra di carbonio · apertura 160°', en: '316.77 × 225 × 14.95 mm · magnesium alloy + carbon fibre · 160° opening' } },
+      { label: 'spec.finish', value: { it: 'Versione X7: bianco o grigio · disponibilità da confermare', en: 'X7 version: white or grey · availability to be confirmed' } },
       { label: 'spec.weight', value: { it: 'Circa 1,08 kg', en: 'Approx. 1.08 kg' } },
       { label: 'spec.battery', value: { it: '72 Wh · USB-C · alimentatore GaN 100 W incluso', en: '72 Wh · USB-C · included 100 W GaN adapter' } },
       { label: 'spec.ports', value: { it: '1× Thunderbolt 4 (40 Gbps) · 1× USB-C 3.2 Gen2 (10 Gbps) · 1× USB-A 3.2 Gen1 (5 Gbps) · HDMI 2.1 TMDS · jack combo 3,5 mm', en: '1× Thunderbolt 4 (40 Gbps) · 1× USB-C 3.2 Gen2 (10 Gbps) · 1× USB-A 3.2 Gen1 (5 Gbps) · HDMI 2.1 TMDS · 3.5 mm combo jack' } },
@@ -856,12 +883,13 @@ export const products: Product[] = [
       { label: 'spec.keyboard', value: { it: 'Retroilluminazione a 4 livelli · corsa 1,3 mm · lettore impronte nel pulsante di accensione · layout da confermare', en: 'Four-level backlight · 1.3 mm travel · fingerprint reader in power button · layout to be confirmed' } },
       { label: 'spec.touchpad', value: { it: 'Touchpad a pressione · 139,65 × 92,80 mm · circa 129 cm²', en: 'Pressure-sensitive touchpad · 139.65 × 92.80 mm · approx. 129 cm²' } },
       { label: 'spec.audio', value: { it: '2× speaker da 2 W · Dolby Atmos · 2 microfoni · webcam 1080p', en: '2× 2 W speakers · Dolby Atmos · dual microphones · 1080p webcam' } },
-      { label: 'spec.system', value: { it: 'Profilo Compud Linux da validare prima della conferma', en: 'Compud Linux profile to be validated before confirmation' } },
+      { label: 'spec.cooling', value: { it: 'Camera di vapore 10.000 mm² · due ventole · tre canali d’aria (dati Xiaomi)', en: '10,000 mm² vapour chamber · two fans · three airflow paths (Xiaomi specifications)' } },
+      { label: 'spec.system', value: { it: 'Profilo Omarchy da validare prima della conferma', en: 'Omarchy profile to be validated before confirmation' } },
     ],
     options: {
       ram: [{ id: '32', label: '32 GB LPDDR5X-9600', addCents: 0 }],
       ssd: [{ id: '1000', label: '1 TB NVMe PCIe 4.0', addCents: 0 }],
-      os: [{ id: 'compud', label: { it: 'Compud Linux · su verifica', en: 'Compud Linux · subject to validation' }, addCents: 0 }],
+      os: [{ id: 'compud', label: { it: 'Omarchy · su verifica', en: 'Omarchy · subject to validation' }, addCents: 0 }],
     },
   },
 
@@ -901,8 +929,8 @@ export const products: Product[] = [
       },
     ],
     details: {
-      it: 'Telaio in metallo da 356×244×17,4 mm per 1,8 kg: abbastanza sottile da viaggiare, abbastanza solido per l\'uso quotidiano. A bordo Wi-Fi 6, Bluetooth 5.2, doppia USB-C Gen 2 (PD-in + DP-out), 3× USB-A, HDMI 2.0, jack combo, TF e serratura. Batteria 54,7 Wh per 5–7 ore di autonomia; ricarica Type-C. Compud Linux preinstallato (Fedora Atomic con KDE Plasma), driver e firmware aggiornati alla release stabile, profilo ventole tarato. Tastiera QWERTY con layout italiano protetto; la cover italiana è inclusa nella confezione.',
-      en: 'Metal chassis 356×244×17.4 mm at 1.8 kg: thin enough to travel, solid enough for daily use. Wi-Fi 6, Bluetooth 5.2, dual USB-C Gen 2 (PD-in + DP-out), 3× USB-A, HDMI 2.0, combo jack, TF and lock slot. 54.7 Wh battery for 5–7 hours; Type-C charging. Compud Linux preinstalled (Fedora Atomic with KDE Plasma), drivers and firmware on the stable release, fan profile tuned. QWERTY keyboard with an Italian cover included.',
+      it: 'Telaio in metallo da 356×244×17,4 mm per 1,8 kg: abbastanza sottile da viaggiare, abbastanza solido per l\'uso quotidiano. A bordo Wi-Fi 6, Bluetooth 5.2, doppia USB-C Gen 2 (PD-in + DP-out), 3× USB-A, HDMI 2.0, jack combo, TF e serratura. Batteria 54,7 Wh per 5–7 ore di autonomia; ricarica Type-C. Omarchy preinstallato (Arch Linux con Hyprland), driver e firmware aggiornati alla release stabile, profilo ventole tarato. Tastiera QWERTY con layout italiano protetto; la cover italiana è inclusa nella confezione.',
+      en: 'Metal chassis 356×244×17.4 mm at 1.8 kg: thin enough to travel, solid enough for daily use. Wi-Fi 6, Bluetooth 5.2, dual USB-C Gen 2 (PD-in + DP-out), 3× USB-A, HDMI 2.0, combo jack, TF and lock slot. 54.7 Wh battery for 5–7 hours; Type-C charging. Omarchy preinstalled (Arch Linux with Hyprland), drivers and firmware on the stable release, fan profile tuned. QWERTY keyboard with an Italian cover included.',
     },
     summary: [
       { label: 'spec.cpu', value: 'Ryzen 7 H255 · 8C/16T' },
@@ -956,8 +984,8 @@ export const products: Product[] = [
       {
         label: 'spec.system',
         value: {
-          it: 'Compud Linux · tastiera retroilluminata QWERTY · cover italiana inclusa',
-          en: 'Compud Linux · backlit QWERTY keyboard · Italian cover included',
+          it: 'Omarchy · tastiera retroilluminata QWERTY · cover italiana inclusa',
+          en: 'Omarchy · backlit QWERTY keyboard · Italian cover included',
         },
       },
     ],
@@ -965,7 +993,7 @@ export const products: Product[] = [
       ram: [{ id: '24', label: '24 GB', addCents: 0, spec: '24 GB LPDDR5-6400 (12 GB×2)' }],
       ssd: [{ id: '512', label: '512 GB', addCents: 0, spec: '512 GB NVMe Gen3' }],
       os: [
-        { id: 'compud', label: 'Compud Linux', addCents: 0, spec: 'Compud Linux · Fedora Atomic · KDE Plasma' },
+        { id: 'compud', label: 'Omarchy', addCents: 0, spec: 'Omarchy · Arch Linux · Hyprland' },
       ],
     },
   },
@@ -1298,8 +1326,7 @@ export const products: Product[] = [
         },
       ],
       os: [
-        { id: 'compud', label: 'Compud Linux', addCents: 0, spec: 'Compud Linux · Fedora Atomic · KDE Plasma' },
-        { id: 'proxmox', label: 'Proxmox VE', addCents: 0, spec: 'Proxmox VE 8' },
+        { id: 'proxmox', label: 'Proxmox VE', addCents: 0, spec: 'Proxmox VE' },
       ],
     },
   },
@@ -1332,7 +1359,7 @@ export const serversHref = (lang: Lang): string =>
 export const optionById = (list: Option[], id: string): Option =>
   list.find((o) => o.id === id) ?? list[0]!;
 
-/** Net price of a product with the given option ids, in cents. */
+/** Original configured net value in cents; rental rates are calculated in lib/rental.ts. */
 export function configuredPriceCents(product: Product, choice: ProductChoice): number {
   const groups: (keyof Product['options'])[] = ['ram', 'ssd', 'os', 'gpu', 'psu', 'bay'];
   return groups.reduce((sum, group) => {

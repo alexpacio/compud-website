@@ -1,0 +1,167 @@
+.cfg {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.cfg__group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.cfg__legend {
+  padding: 0;
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: var(--text-2);
+  font-weight: 600;
+}
+.cfg__options.ant-radio-group {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+}
+.cfg__options--terms.ant-radio-group {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.cfg__options .cfg__option.ant-radio-button-wrapper {
+  height: auto;
+  min-height: 66px;
+  padding: 14px;
+  line-height: 1.5;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  white-space: normal;
+}
+.cfg__options .ant-radio-button-wrapper::before {
+  display: none;
+}
+.cfg__options .ant-radio-button-wrapper-checked {
+  background: var(--accent-bg);
+}
+.cfg__options .cfg__option.ant-radio-button-wrapper-checked {
+  border-color: var(--accent);
+}
+.cfg__option > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cfg__optionLabel {
+  font-size: 13px;
+  font-weight: 550;
+}
+.cfg__optionDelta {
+  font-size: 10px;
+  color: var(--muted);
+}
+.cfg__locked {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 13px;
+}
+.cfg__locked .ant-tag {
+  margin: 0;
+}
+.cfg__buy.ant-card {
+  background: #f8faf7;
+}
+.cfg__buy .ant-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 24px;
+}
+.cfg__prices {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+}
+.cfg__priceLabel {
+  font-size: 11px;
+  color: var(--muted);
+}
+.cfg__priceValue {
+  font-size: 36px;
+  font-weight: 650;
+  letter-spacing: -0.04em;
+  line-height: 1.25;
+}
+.cfg__priceValue small {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--muted);
+  margin-left: 4px;
+  letter-spacing: 0;
+}
+.cfg__gross {
+  color: var(--muted);
+  text-align: right;
+  font-size: 13px;
+}
+.cfg__rentalTotal {
+  color: var(--muted);
+  font-size: 11px;
+}
+.cfg__rentalTotal strong {
+  color: var(--text-2);
+  font-weight: 500;
+}
+.cfg__buyout {
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+  display: grid;
+  gap: 8px;
+}
+.cfg__buyout > p:first-child {
+  font-size: 12px;
+}
+.cfg__buyout > p:last-child {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.cfg__pay {
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.cfg__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.cfg__actions .ant-btn:first-child {
+  flex: 1 1 auto;
+}
+.cfg__ship {
+  font-size: 10px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+@media (max-width: 560px) {
+  .cfg__options .cfg__option.ant-radio-button-wrapper {
+    padding: 12px 10px;
+  }
+  .cfg__optionLabel {
+    font-size: 12px;
+  }
+  .cfg__options--terms .cfg__optionDelta {
+    font-size: 9px;
+  }
+  .cfg__buy .ant-card-body {
+    padding: 20px;
+  }
+  .cfg__priceValue {
+    font-size: 32px;
+  }
+}

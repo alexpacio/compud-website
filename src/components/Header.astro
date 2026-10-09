@@ -1,5 +1,4 @@
 ---
-import { miniPcHref, nasHref, serversHref } from '../data/catalogue';
 import { company } from '../lib/config';
 import type { Lang } from '../i18n/ui';
 import { href, useTranslations, type RouteName } from '../i18n/utils';
@@ -14,15 +13,15 @@ interface Props {
   active?: 'miniPc' | 'nas' | 'laptop' | 'gpu' | 'servers' | null;
   compact?: boolean;
 }
-const { lang, route, param, active = null, compact = false } = Astro.props;
+const { lang, route, param, compact = false } = Astro.props;
 const t = useTranslations(lang);
 
-const links: { key: 'miniPc' | 'nas' | 'laptop' | 'gpu' | 'servers'; label: string; url: string }[] = [
-  { key: 'miniPc', label: t('nav.miniPc'), url: miniPcHref(lang) },
-  { key: 'nas', label: t('nav.nas'), url: nasHref(lang) },
-  { key: 'laptop', label: t('nav.laptop'), url: href(lang, 'laptop') },
-  { key: 'gpu', label: t('nav.gpu'), url: href(lang, 'gpu') },
-  { key: 'servers', label: t('nav.servers'), url: serversHref(lang) },
+const home = href(lang, 'home');
+const links = [
+  { label: lang === 'it' ? 'Il servizio' : 'The service', url: `${home}#servizio` },
+  { label: lang === 'it' ? 'Catalogo' : 'Catalogue', url: `${home}#catalogo` },
+  { label: lang === 'it' ? 'Noleggio' : 'Rental', url: `${home}#noleggio` },
+  { label: 'FAQ', url: `${home}#faq` },
 ];
 ---
 
@@ -46,11 +45,11 @@ const links: { key: 'miniPc' | 'nas' | 'laptop' | 'gpu' | 'servers'; label: stri
     <div class="header__left">
       <a class="brand" href={href(lang, 'home')} aria-label="Compud">
         <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
-          <rect x="1" y="1" width="24" height="24" rx="3" stroke="#3ed28a" stroke-width="1.5"></rect>
+          <rect x="1" y="1" width="24" height="24" rx="3" stroke="var(--accent)" stroke-width="1.5"></rect>
           <rect x="7.5" y="7.5" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1.5"></rect>
           <path
             d="M10 1v5M16 1v5M10 20v5M16 20v5M1 10h5M1 16h5M20 10h5M20 16h5"
-            stroke="#3ed28a"
+            stroke="var(--accent)"
             stroke-width="1.5"></path>
         </svg>
         <span class="brand__word">Compud</span>
@@ -58,9 +57,9 @@ const links: { key: 'miniPc' | 'nas' | 'laptop' | 'gpu' | 'servers'; label: stri
 
       {
         !compact && (
-          <nav class="nav" aria-label={t('nav.miniPc')}>
+          <nav class="nav" aria-label={lang === 'it' ? 'Navigazione principale' : 'Main navigation'}>
             {links.map((link) => (
-              <a href={link.url} class:list={['nav__link', { 'is-active': active === link.key }]}>
+              <a href={link.url} class="nav__link">
                 {link.label}
               </a>
             ))}
@@ -79,6 +78,7 @@ const links: { key: 'miniPc' | 'nas' | 'laptop' | 'gpu' | 'servers'; label: stri
         )
       }
       <LangSwitch lang={lang} route={route} param={param} />
+      {!compact && <a class="btn btn--primary header__cta" href={`${home}#contatti`}>{lang === 'it' ? 'Parliamone' : 'Let’s talk'}</a>}
       {
         !compact && (
           <a class="carthandle" href={href(lang, 'checkout')} aria-label={t('nav.cart')}>
@@ -178,6 +178,8 @@ const links: { key: 'miniPc' | 'nas' | 'laptop' | 'gpu' | 'servers'; label: stri
     gap: 16px;
   }
 
+  .header__cta { padding: 10px 17px; font-size: 12px; }
+
   .header__secure {
     display: inline-flex;
     align-items: center;
@@ -224,4 +226,5 @@ const links: { key: 'miniPc' | 'nas' | 'laptop' | 'gpu' | 'servers'; label: stri
       font-size: 19px;
     }
   }
+  @media (max-width: 480px) { .header__cta { display: none; } }
 </style>

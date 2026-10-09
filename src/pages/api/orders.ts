@@ -11,6 +11,7 @@ import { href } from '../../i18n/utils';
 import type { Lang } from '../../i18n/ui';
 import { createOrder, type Customer, type OrderLine } from '../../lib/orders';
 import { vatOf } from '../../lib/money';
+import { isRentalMonths, isRentalProduct, monthlyRentalCents, rentalBuyoutCents } from '../../lib/rental';
 
 export const prerender = false;
 
@@ -34,6 +35,7 @@ interface RawItem {
   psu?: unknown;
   bay?: unknown;
   quantity?: unknown;
+  rentalMonths?: unknown;
 }
 
 /**
@@ -58,6 +60,14 @@ export const POST: APIRoute = async ({ request }) => {
   for (const raw of rawItems) {
     const product = productBySlug(text(raw.slug, 80));
     if (!product) return json({ error: 'unknown_product', slug: raw.slug }, 400);
+    const rentalAvailable = isRentalProduct(product);
+    if (rentalAvailable && !isRentalMonths(raw.rentalMonths)) {
+      return json({ error: 'invalid_rental_term', slug: product.slug }, 400);
+    }
+    if (!rentalAvailable && raw.rentalMonths !== undefined) {
+      return json({ error: 'rental_unavailable', slug: product.slug }, 400);
+    }
+    const rentalMonths = isRentalMonths(raw.rentalMonths) ? raw.rentalMonths : undefined;
 
     const quantity = Math.floor(Number(raw.quantity));
     if (!Number.isFinite(quantity) || quantity < 1 || quantity > 10) {
@@ -72,7 +82,10 @@ export const POST: APIRoute = async ({ request }) => {
     if (product.options.gpu) choice.gpu = optionById(product.options.gpu, text(raw.gpu, 20)).id;
     if (product.options.psu) choice.psu = optionById(product.options.psu, text(raw.psu, 20)).id;
     if (product.options.bay) choice.bay = optionById(product.options.bay, text(raw.bay, 20)).id;
-    const unitNetCents = configuredPriceCents(product, choice);
+    const configurationCents = configuredPriceCents(product, choice);
+    const unitNetCents = rentalMonths !== undefined
+      ? monthlyRentalCents(configurationCents, rentalMonths)
+      : configurationCents;
     const configurationParts = [
       pick(optionById(product.options.ram, choice.ram).label, lang),
       pick(optionById(product.options.ssd, choice.ssd).label, lang),
@@ -93,6 +106,8 @@ export const POST: APIRoute = async ({ request }) => {
       configuration,
       choice,
       quantity,
+      rentalMonths,
+      buyoutNetCents: rentalMonths !== undefined ? rentalBuyoutCents(configurationCents) : undefined,
       unitNetCents,
       lineNetCents: unitNetCents * quantity,
     });
@@ -119,6 +134,8 @@ export const POST: APIRoute = async ({ request }) => {
   if (missing.length > 0) return json({ error: 'missing_fields', fields: missing }, 400);
   if (!EMAIL.test(customer.email)) return json({ error: 'invalid_email' }, 400);
 
+  // The transfer covers the first monthly rental plus any purchases and
+  // one-off shipping. The optional buyout is not due at checkout.
   const netCents = lines.reduce((sum, line) => sum + line.lineNetCents, 0);
   const shippingCents = commerce.shippingCents;
   const vatCents = vatOf(netCents + shippingCents, commerce.vatRate);

@@ -1,9 +1,10 @@
 ---
 import HardwareGlyph from './HardwareGlyph.astro';
-import { pick, type Product } from '../data/catalogue';
+import { configuredPriceCents, defaultChoice, pick, type Product } from '../data/catalogue';
 import type { Lang } from '../i18n/ui';
 import { href, useTranslations } from '../i18n/utils';
 import { formatEur } from '../lib/money';
+import { DEFAULT_RENTAL_MONTHS, isRentalProduct, monthlyRentalCents } from '../lib/rental';
 
 interface Props {
   lang: Lang;
@@ -11,6 +12,9 @@ interface Props {
 }
 const { lang, product } = Astro.props;
 const t = useTranslations(lang);
+const rentalAvailable = isRentalProduct(product);
+const configurationCents = configuredPriceCents(product, defaultChoice(product));
+const displayedCents = rentalAvailable ? monthlyRentalCents(configurationCents, DEFAULT_RENTAL_MONTHS) : configurationCents;
 const url =
   product.section === 'nas'
     ? href(lang, 'nasProduct', product.slug)
@@ -62,8 +66,9 @@ const badge =
 
     <div class="pcard__foot">
       <div class="pcard__price">
-        <span class="pcard__priceLabel">{t('price.excl')}</span>
-        <span class="pcard__priceValue">{formatEur(product.basePriceCents, lang)}</span>
+        <span class="pcard__priceLabel">{rentalAvailable ? `${t('rental.from')} · ` : ''}{t('price.excl')}</span>
+        <span class="pcard__priceValue">{formatEur(displayedCents, lang, { decimals: rentalAvailable || displayedCents % 100 !== 0 })}{rentalAvailable && <small>{t('rental.perMonth')}</small>}</span>
+        {rentalAvailable && <span class="pcard__priceLabel">{t('rental.cardTerm', { months: DEFAULT_RENTAL_MONTHS })}</span>}
       </div>
       <a class="btn btn--primary pcard__cta" href={url}>{product.section === 'gpu' ? (lang === 'it' ? 'Dettagli' : 'Details') : (lang === 'it' ? 'Configura' : 'Configure')}</a>
     </div>
@@ -83,7 +88,7 @@ const badge =
 
   .pcard:hover, .pcard:focus-within {
     border-color: #628773;
-    box-shadow: 0 18px 48px #00000030;
+    box-shadow: 0 12px 32px #193e2410;
   }
 
   .pcard__media {
@@ -94,7 +99,7 @@ const badge =
     align-items: center;
     justify-content: center;
     height: 210px;
-    background: radial-gradient(ellipse at 50% 35%, #34483c80, transparent 70%), linear-gradient(145deg, #1b2420, #101613);
+    background: radial-gradient(ellipse at 50% 35%, #e0ece0, transparent 70%), #f4f8f2;
     border-bottom: 1px solid var(--line);
     overflow: hidden;
     isolation: isolate;
@@ -130,8 +135,7 @@ const badge =
     padding: 12px;
     transition: transform .6s cubic-bezier(.2,.7,.3,1);
     filter:
-      drop-shadow(0 18px 16px rgba(0, 0, 0, 0.5))
-      drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
+      drop-shadow(0 18px 16px rgba(28, 60, 38, 0.14));
   }
 
   .pcard:hover .pcard__img { transform: translateY(-5px) scale(1.035); }
@@ -209,6 +213,12 @@ const badge =
   .pcard__priceLabel {
     font-size: 11px;
     color: var(--muted-2);
+  }
+
+  .pcard__priceValue small {
+    font-size: 12px;
+    color: var(--muted-2);
+    margin-left: 3px;
   }
 
   .pcard__priceValue {

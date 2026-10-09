@@ -18,11 +18,11 @@ const t = useTranslations(lang);
       <div class="footer__about">
         <div class="brand">
           <svg width="22" height="22" viewBox="0 0 26 26" fill="none" aria-hidden="true">
-            <rect x="1" y="1" width="24" height="24" rx="3" stroke="#3ed28a" stroke-width="1.5"></rect>
+            <rect x="1" y="1" width="24" height="24" rx="3" stroke="var(--accent)" stroke-width="1.5"></rect>
             <rect x="7.5" y="7.5" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1.5"></rect>
             <path
               d="M10 1v5M16 1v5M10 20v5M16 20v5M1 10h5M1 16h5M20 10h5M20 16h5"
-              stroke="#3ed28a"
+              stroke="var(--accent)"
               stroke-width="1.5"></path>
           </svg>
           <span class="brand__word">Compud</span>
@@ -40,11 +40,12 @@ const t = useTranslations(lang);
       </div>
 
       <div class="footer__col">
-        <p class="kicker">{t('foot.support')}</p>
+        <p class="kicker">{lang === 'it' ? 'Il servizio' : 'The service'}</p>
+        <a href={`${href(lang, 'home')}#come-funziona`}>{lang === 'it' ? 'Come funziona' : 'How it works'}</a>
+        <a href={`${href(lang, 'home')}#noleggio`}>{lang === 'it' ? 'Noleggio e riscatto' : 'Rental and buyout'}</a>
+        <a href={`${href(lang, 'home')}#faq`}>FAQ</a>
         <a href={`${href(lang, 'home')}#onsite`}>{t('foot.onsite')}</a>
-        <span>{t('foot.shipping')}</span>
-        <span>{t('foot.rma')}</span>
-        <span>{t('foot.howPay')}</span>
+        <a href={`${href(lang, 'home')}#supporto`}>{t('foot.rma')}</a>
       </div>
 
       <div class="footer__col footer__col--mono">
@@ -136,7 +137,7 @@ const t = useTranslations(lang);
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    border-top: 1px solid #16191c;
+    border-top: 1px solid var(--line);
     padding-top: 22px;
     font-size: 11px;
     color: var(--faint);

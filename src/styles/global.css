@@ -1,47 +1,47 @@
-/* Compud — graphite surfaces, mineral greens, precise technical typography. */
+/* Compud — Ant Design spacing and controls, with a light Linux service identity. */
 :root {
-  --bg: #0d0f11;
-  --bg-deep: #0a0c0e;
-  --bg-band: #101316;
-  --surface: #131619;
-  --surface-2: #15181b;
-  --surface-3: #181c20;
-  --surface-4: #1f2429;
+  --bg: #ffffff;
+  --bg-deep: #f5f7f3;
+  --bg-band: #f7f9f7;
+  --surface: #ffffff;
+  --surface-2: #f7f9f7;
+  --surface-3: #edf3ed;
+  --surface-4: #e6eee7;
 
-  --line: #23282d;
-  --line-strong: #2a2f35;
-  --line-soft: #1b1f23;
-  --line-faint: #1f2429;
+  --line: #dbe4de;
+  --line-strong: #c7d5cb;
+  --line-soft: #edf0eb;
+  --line-faint: #e5ebe4;
 
-  --text: #e9ecee;
-  --text-2: #c6ccd1;
-  --muted: #98a0a8;
-  --muted-2: #89968e;
-  --faint: #77857c;
+  --text: #182822;
+  --text-2: #35483d;
+  --muted: #607168;
+  --muted-2: #6c7d71;
+  --faint: #6c7d71;
 
-  --accent: #a7e8c2;
-  --accent-ink: #06120c;
-  --accent-bg: #0f1a15;
-  --accent-line: #2a4f3c;
-  --accent-hover: #c3f5d7;
+  --accent: #156b4d;
+  --accent-ink: #ffffff;
+  --accent-bg: #eef6ed;
+  --accent-line: #c3ddc8;
+  --accent-hover: #21835e;
 
-  --warn: #e0a33c;
-  --warn-bg: #1c1508;
-  --warn-line: #574220;
+  --warn: #99691c;
+  --warn-bg: #fff9e9;
+  --warn-line: #e5d8b6;
 
-  --danger: #e06c5b;
+  --danger: #cc443c;
 
-  --r-chip: 3px;
-  --r-btn: 4px;
-  --r-field: 5px;
-  --r-panel: 6px;
-  --r-card: 8px;
+  --r-chip: 6px;
+  --r-btn: 8px;
+  --r-field: 8px;
+  --r-panel: 12px;
+  --r-card: 16px;
 
   --page: 1200px;
-  --gutter: 120px;
+  --gutter: 64px;
 
-  --font-display: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif;
-  --font-body: Archivo, 'Helvetica Neue', Helvetica, sans-serif;
+  --font-display: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
 }
 
@@ -204,7 +204,7 @@ select {
 .lead {
   font-size: 17px;
   line-height: 1.6;
-  color: #a8b0b7;
+  color: var(--muted);
 }
 
 .muted {
@@ -376,7 +376,4 @@ select {
 }
 
 /* Small material cues shared across catalogue and editorial sections. */
-::selection { background: #a7e8c2; color: #0d1711; }
-.btn--primary { box-shadow: inset 0 1px 0 #ffffff40, 0 4px 18px #a7e8c20a; }
-.btn--primary:hover { box-shadow: 0 5px 26px #a7e8c21f; }
-.band--tint { background-image: radial-gradient(ellipse at 0 0, #a7e8c206, transparent 65%); }
+::selection { background: #d4eacf; color: #182822; }
